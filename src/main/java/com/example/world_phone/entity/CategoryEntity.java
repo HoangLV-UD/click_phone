@@ -16,10 +16,6 @@ public class CategoryEntity {
     private Long id;
 
     @Basic
-    @Column(name = "PARENT_ID")
-    private String parentId;
-
-    @Basic
     @Column(name = "NAME")
     private String name;
 
@@ -76,15 +72,6 @@ public class CategoryEntity {
     public void setNote(String note) {
         this.note = note;
     }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
 
 
     public void setCreateDate(Timestamp createDate) {

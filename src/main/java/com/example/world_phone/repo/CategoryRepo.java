@@ -11,7 +11,9 @@ import java.util.List;
 @Repository
 public interface CategoryRepo extends JpaRepository<CategoryEntity, Long> {
 
-    @Query("select o from CategoryEntity o where o.deleteFlag = false and o.parentId is null order by o.createDate asc ")
-    List<CategoryEntity> findCategoryParent();
-    
+    //@Query("select o from CategoryEntity o where o.deleteFlag = false  order by o.createDate asc ")
+    List<CategoryEntity> findByDeleteFlagIsFalseOrderByCreateDateAsc();
+
+
+    List<CategoryEntity> findByIdAndDeleteFlagIsFalse(Long id);
 }
