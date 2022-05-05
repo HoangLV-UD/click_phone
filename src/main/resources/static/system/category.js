@@ -4,10 +4,8 @@ function onAdd(elm){
     $('#error')[0].style.display = 'none'
     $('#categoryName')[0].value= ''
     $('#addCategory')[0].style.display = 'unset';
-    $('#parentId')[0].value = parentId;
     $('#levelCategory')[0].value = level;
     $('#categoryId')[0].value = null;
-
     let atbRequied = $('#atbRequied')[0];
     let containerAtb = $('#containerAtb')[0];
     containerAtb.innerHTML = '';
@@ -71,48 +69,24 @@ function closeModalCategory(){
 }
 
 function saveCategory(){
-    let parentId = $('#parentId')[0].value
-    let level = $('#levelCategory')[0].value
-    let categoryName = $('#categoryName')[0].value
-    let categoryId = $('#categoryId')[0].value
-    let atbName = $('.atbName');
-    let atbValue = $('.atbValue');
-    let attributes = [];
-    for(let i=0;i<atbName.length;i++){
-        if(atbName[i].value.trim().length > 0){
-            attributes.push({
-                name: atbName[i].value,
-                value: atbValue[i].value
-            })
-        }
-    }
 
-    console.log(attributes)
-    if(attributes.length == 0){
-        toastDanger("Lỗi", "Vui lòng nhập ít nhất 1 thuộc tính");
+    let categoryName = $('#categoryName')[0].val
+    if(categoryName.length === 0){
+        toastDanger("Lỗi", "Vui lòng nhập tên hãng");
         return;
     }
-
-    console.log(atbName)
-    console.log(atbValue)
-    console.log(parentId)
-    console.log(level)
-    console.log(categoryName)
 
     $.ajax({
         url: '/category',
         method: 'POST',
         data: JSON.stringify({
-            categoryId: categoryId,
-            categoryName: categoryName,
-            parentId: parentId,
-            attributes: attributes
+            categoryName: categoryName
         }),
         contentType: 'application/json',
         success: function (datas) {
             console.log(datas)
             $('#error')[0].style.display = 'none'
-            window.location.href = '/category?message=success&level=' + level;
+            window.location.href = '/category';
         },
         error: function (error) {
             $('#error')[0].style.display = 'unset'
