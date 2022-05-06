@@ -1,9 +1,11 @@
 package com.example.world_phone.service.impl;
 
+import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.dto.request.staff.StaffAddRequestDTO;
 import com.example.world_phone.dto.request.staff.StaffEditRequestDTO;
 import com.example.world_phone.dto.respone.staff.StaffResponeDto;
 import com.example.world_phone.entity.StaffEntity;
+import com.example.world_phone.exception.WorldPhoneExp;
 import com.example.world_phone.repo.StaffRepo;
 import com.example.world_phone.service.IStaffService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class StaffServiceImpl implements IStaffService {
     private static final String DEFAULT_PASSWORD = "$2a$10$VvjMsczCmbmSM3L7usA85.e1pmfaeJERrSY1swgFBqe6h.sN3EKqa"; // default password 0123456789
 
@@ -75,7 +79,7 @@ public class StaffServiceImpl implements IStaffService {
     public String addStaff(StaffAddRequestDTO staff) {
         StaffEntity entity = new StaffEntity();
         if (staffRepo.findByEmail(staff.getEmail()).size() != 0) {
-            return "Email đã tồn tại";
+            throw new WorldPhoneExp(ConstansErrorCode.STAFF_EMAIL);
         }
         entity.setFullName(staff.getFullName());
         entity.setEmail(staff.getEmail());
@@ -90,7 +94,7 @@ public class StaffServiceImpl implements IStaffService {
         try {
             staffRepo.save(entity);
         } catch (Exception e) {
-            System.out.println("Add staff error");
+            log.error(e.getMessage());
         }
 
         return "ok";
@@ -110,7 +114,7 @@ public class StaffServiceImpl implements IStaffService {
             entity = staffRepo.save(entity);
 
         } catch (Exception e) {
-            System.out.println("edit staff error");
+            log.error(e.getMessage());
         }
         return "ok";
     }
@@ -139,6 +143,7 @@ public class StaffServiceImpl implements IStaffService {
             try {
                 staffRepo.save(entity);
             } catch (Exception e) {
+                log.error(e.getMessage());
 
             }
 
