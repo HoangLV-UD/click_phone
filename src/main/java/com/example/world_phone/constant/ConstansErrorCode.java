@@ -12,4 +12,9 @@ public interface ConstansErrorCode {
     String LOGIN_EMAIL_NOT_EXITS = "WP-LG-005";
 
     String STAFF_EMAIL = "WP-LG-006";
+
+    String SUPPLIER_NOT_EXIST = "WP-LG-007";
+
+    String SUPPLIER_PHONE = "WP-LG-008";
+
 }

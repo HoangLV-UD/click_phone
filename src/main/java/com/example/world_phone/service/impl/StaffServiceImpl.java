@@ -144,7 +144,6 @@ public class StaffServiceImpl implements IStaffService {
                 staffRepo.save(entity);
             } catch (Exception e) {
                 log.error(e.getMessage());
-
             }
 
             return true;
