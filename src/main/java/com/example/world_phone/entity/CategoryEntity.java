@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -40,6 +41,35 @@ public class CategoryEntity {
     @Basic
     @Column(name = "DELETE_FLAG")
     private boolean deleteFlag;
+
+    @OneToMany(mappedBy = "category")
+    private List<ProductEntity> products;
+
+
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifierDate() {
+        return modifierDate;
+    }
+
+    public void setModifierDate(Date modifierDate) {
+        this.modifierDate = modifierDate;
+    }
+
+    public List<ProductEntity> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<ProductEntity> products) {
+        this.products = products;
+    }
 
     public Long getId() {
         return id;
@@ -112,4 +142,5 @@ public class CategoryEntity {
     public int hashCode() {
         return Objects.hash(id, name, status, note, createDate, modifierDate, createBy, modifierBy, deleteFlag);
     }
+
 }
