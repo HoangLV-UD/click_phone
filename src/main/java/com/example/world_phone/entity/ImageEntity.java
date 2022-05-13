@@ -12,7 +12,7 @@ public class ImageEntity extends BaseEntity{
     private Long id;
 
     @Column(name = "link_image")
-    private String ling_image;
+    private String link_image;
 
     @ManyToOne()
     @JoinColumn(name = "PRODUCT_ID", referencedColumnName = "ID")
@@ -27,11 +27,11 @@ public class ImageEntity extends BaseEntity{
     }
 
     public String getLing_image() {
-        return ling_image;
+        return link_image;
     }
 
     public void setLing_image(String ling_image) {
-        this.ling_image = ling_image;
+        this.link_image = ling_image;
     }
 
     public ProductEntity getProductEntity() {
@@ -47,11 +47,11 @@ public class ImageEntity extends BaseEntity{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImageEntity that = (ImageEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(ling_image, that.ling_image) && Objects.equals(productEntity, that.productEntity);
+        return Objects.equals(id, that.id) && Objects.equals(link_image, that.link_image) && Objects.equals(productEntity, that.productEntity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ling_image, productEntity);
+        return Objects.hash(id, link_image, productEntity);
     }
 }

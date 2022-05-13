@@ -17,4 +17,9 @@ public interface ConstansErrorCode {
 
     String SUPPLIER_PHONE = "WP-LG-008";
 
+    String PRODUCT_NOT_EXIST = "WP-LG-009";
+
+    String PRODUCT_NOT_ATTRIBUTE = "WP-LG-010";
+
+    String ROM_NOT_EXIST = "WP-LG-011";
 }

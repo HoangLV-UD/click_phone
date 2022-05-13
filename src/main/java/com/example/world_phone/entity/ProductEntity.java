@@ -28,10 +28,10 @@ public class ProductEntity extends BaseEntity{
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID")
     private CategoryEntity category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "productEntity")
     private List<ImageEntity> imageEntities;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "productEntity")
     private List<RomEntity> romEntities;
 
     public Long getId() {
