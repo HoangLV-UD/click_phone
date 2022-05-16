@@ -12,11 +12,13 @@ import java.util.List;
 @Repository
 public interface ProductRepo extends JpaRepository<ProductEntity, Long> {
 
-    @Query("select o from ProductEntity o where o.deleteFlag = false and o.status = '1'")
+    @Query("select o from ProductEntity o where o.deleteFlag = false and o.status = 'ON'")
     List<ProductEntity> findAll();
 
     @Query("select o from ProductEntity o where o.deleteFlag = false and o.status = '1' and o.name LIKE %:keyword%")
     List<ProductEntity> findByName(@Param("keyword") String name);
+
+    ProductEntity findByIdAndDeleteFlagIsFalse(Long id);
 
     List<ProductEntity> findByCategoryAndDeleteFlagIsFalse(CategoryEntity categoryEntity);
 }

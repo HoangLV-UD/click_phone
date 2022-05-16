@@ -2,6 +2,7 @@ package com.example.world_phone.repo;
 
 import com.example.world_phone.entity.SupplierEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface SupplierRepo extends JpaRepository<SupplierEntity, Long> {
 
     List<SupplierEntity> findByDeleteFlagIsFalse();
 
+    @Query("select o from SupplierEntity  o where o.deleteFlag = false and o.status = '1'")
+    List<SupplierEntity> findAll();
 
     Optional<SupplierEntity> findByName(String name);
 
