@@ -11,5 +11,5 @@ import java.util.List;
 public interface ImageRepo extends JpaRepository<ImageEntity, Long> {
 
     @Query("SELECT o from ImageEntity o where o.deleteFlag = false and o.productEntity.id = ?1")
-    List<ImageEntity> findAll(Long id);
+    List<ImageEntity> findByProductEntity(Long id);
 }

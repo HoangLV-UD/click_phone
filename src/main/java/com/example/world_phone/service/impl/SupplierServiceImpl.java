@@ -37,6 +37,15 @@ public class SupplierServiceImpl implements ISupplierService {
     }
 
     @Override
+    public List<SupplierResponseDTO> findAll() {
+        List<SupplierEntity> entityList = supplierRepo.findAll();
+        List<SupplierResponseDTO> dtoList = new ArrayList<>();
+        for (SupplierEntity a : entityList){
+            dtoList.add(modelMapper.map(a,SupplierResponseDTO.class));
+        }
+        return dtoList;    }
+
+    @Override
     public Integer findByEmail(String email) {
         Optional<SupplierEntity> s = supplierRepo.findByEmail(email);
         if(s.isPresent()){

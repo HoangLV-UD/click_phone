@@ -17,6 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -45,8 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
+        http.authorizeRequests().antMatchers("/login/**", "/assets/**").permitAll();
         http.authorizeRequests().antMatchers("/staff").hasAnyAuthority("ROLE_ADMIN")
                 .and().exceptionHandling().accessDeniedPage("/");
+        http.authorizeRequests().anyRequest().authenticated();
         http.formLogin()
                 .loginProcessingUrl("/login-check")
                 .loginPage("/login")
@@ -70,5 +74,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().and() //
                 .rememberMe().rememberMeParameter("remember")
                 .tokenValiditySeconds(24 * 60 * 60); // 24h
+    }
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        return new InMemoryTokenRepositoryImpl();
     }
 }

@@ -2,6 +2,7 @@ package com.example.world_phone.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "product", schema = "world_phone", catalog = "")
@@ -23,6 +24,10 @@ public class ProductEntity extends BaseEntity{
     @Basic
     @Column(name = "STATUS")
     private String status;
+
+    @Basic
+    @Column(name = "NOTE")
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID")
@@ -80,5 +85,26 @@ public class ProductEntity extends BaseEntity{
 
     public void setImageEntities(List<ImageEntity> imageEntities) {
         this.imageEntities = imageEntities;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductEntity that = (ProductEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(image_key, that.image_key) && Objects.equals(status, that.status) && Objects.equals(note, that.note) && Objects.equals(category, that.category) && Objects.equals(imageEntities, that.imageEntities) && Objects.equals(romEntities, that.romEntities);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, image_key, status, note, category, imageEntities, romEntities);
     }
 }

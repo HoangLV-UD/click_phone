@@ -10,6 +10,9 @@ public interface ISupplierService {
 
     List<SupplierResponseDTO> findAllByDeleteFlagFalse();
 
+    List<SupplierResponseDTO> findAll();
+
+
     Integer findByEmail(String email);
     Integer findByPhone(String phone);
 

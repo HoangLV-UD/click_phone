@@ -22,4 +22,11 @@ public interface ConstansErrorCode {
     String PRODUCT_NOT_ATTRIBUTE = "WP-LG-010";
 
     String ROM_NOT_EXIST = "WP-LG-011";
+
+    String CATEGORY_NOT_EXIST = "WP-LG-012";
+
+    String ATTRIBUTE_NOT_EXIST = "WP-LG-013";
+
+    String PRODUCT_ERROR_CREATE = "WP-LG-014";
+
 }

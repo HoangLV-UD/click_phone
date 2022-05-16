@@ -1,5 +1,8 @@
-package com.example.world_phone.dto.respone.product;
+package com.example.world_phone.dto.request.product;
 
+
+import com.example.world_phone.dto.request.attribute.AttributeRequestAdd;
+import com.example.world_phone.dto.request.rom.RomRequestAdd;
 import com.example.world_phone.dto.respone.attribute.AttributeRespone;
 import com.example.world_phone.dto.respone.rom.RomRespone;
 import lombok.AllArgsConstructor;
@@ -14,12 +17,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductResponse {
-    private Long id;
+public class ProductRequestAdd {
 
     private String nameProduct;
 
-    private String imageProduct;
+    private Long categoryId;
+
 
     private String note;
 
@@ -27,11 +30,9 @@ public class ProductResponse {
 
     private String create_By;
 
-    private String status;
-
     private List<String> image;
 
-    private AttributeRespone attributeRespone;
+    private AttributeRequestAdd attributeRequestAdd;
 
-    private List<RomRespone> romRespones;
+    private List<RomRequestAdd> romRequestAdds;
 }

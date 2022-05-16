@@ -1,9 +1,11 @@
 package com.example.world_phone.entity;
 
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
+@ToString
 @Entity
 @Table(name = "staff", schema = "world_phone", catalog = "")
 public class StaffEntity extends BaseEntity implements Serializable{
