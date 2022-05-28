@@ -9,4 +9,6 @@ public interface AttributeRepo extends JpaRepository<AttributeEntity, Long> {
 
 
     List<AttributeEntity> findByProductId(Long id);
+
+    AttributeEntity findByIdAndDeleteFlagIsFalse(Long id);
 }

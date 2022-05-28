@@ -68,10 +68,7 @@
                                 <thead>
                                 <tr class="text-center">
                                     <th>STT</th>
-                                    <th class="text-center">
-                                        <input type="checkbox" class="form-check-input" id="chk-add-all-product"
-                                               onclick="onClickCheckAllProductAdd(this)"/>
-                                    </th>
+                                    <th>Đặt sản phẩm</th>
                                     <th>Ảnh sản phẩm</th>
                                     <th>Chức năng</th>
                                     <th>Tên sản phẩm</th>
@@ -86,12 +83,7 @@
                                     <tr>
                                         <td class="text-center" th:text="${theCount.index + 1}">STT</td>
                                         <td class="text-center border-1">
-                                            <input type="checkbox"
-                                                   th:if="${product.status == 'ON'}"
-                                                   class="form-check-input chk-add-product"
-                                                   th:data-id="${product.id}"
-                                                   onclick="onClickCheckProductAdd(this)"
-                                                   th:id="${'for-' + product.id}"/>
+                                            <button th:onclick="|addOrderProduct(${product.id})|" th:title="'Thêm sản phẩm để đặt'" type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                         </td>
                                         <td class="text-center">
                                             <img th:src="${product.getImageProduct()}" th:title="${product.getNameProduct()}"
@@ -104,6 +96,12 @@
                                                class="btn btn-primary btn-sm waves-effect waves-light"
                                                onclick="onClickEditProduct(this)">
                                                 Chỉnh sửa
+                                            </a>
+
+                                            <a href="#" th:data-id="${product.id}"
+                                               class="btn btn-danger btn-sm waves-effect waves-light"
+                                               onclick="onClickDeleteProduct(this)">
+                                                Xóa sản phẩm
                                             </a>
                                         </td>
                                         <td class="text-wrap">
@@ -413,6 +411,8 @@
                                         <div class="col-lg-7">
                                             <input type="text" id="ip-edit-product-name" placeholder="Tên sản phẩm...."
                                                    class="form-control"/>
+                                            <input hidden type="text" id="ip-edit-product-id"/>
+                                            <input hidden type="text" id="ip-edit-product-attributeId"/>
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
@@ -599,6 +599,9 @@
                     <button type="button" data-id="" class="btn btn-success waves-effect waves-light"
                             id="btn-submit-edit-product" onclick="onClickUpdateProduct(this)">Cập nhật
                     </button>
+                    <button type="button" data-id="" class="btn btn-warning waves-effect waves-light"
+                            id="btn-submit-edit-product-status" onclick="onClickUpdateProductStatus(this)">Ngừng kinh doanh
+                    </button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -665,31 +668,36 @@
                                 <thead>
                                 <tr class="text-center" style="overflow-y: auto">
                                     <th colspan="1" class="border-1">Sản phẩm</th>
+                                    <th colspan="1" class="border-1">Chức năng</th>
+                                    <th colspan="1" class="border-1">Màu</th>
+                                    <th colspan="1" class="border-1">Bộ nhớ trong</th>
                                     <th colspan="1" class="border-1">Số lượng đặt</th>
                                 </tr>
                                 </thead>
                                 <tbody id="bodyAddProductOrderInvoice">
-                                <tr class="tr-order-title" data-top="true">
-                                    <td colspan="2" class="text-center">
-                                        Sản phẩm tồn kho dưới 20 sản phẩm
-                                    </td>
-                                </tr>
-<!--                                <th:block th:each="product, theCount : ${lstProducts}"-->
-<!--                                          th:if="${product.status == 'ON'}">-->
-<!--                                    <tr th:data-id-product="${'for-' + product.id}"-->
-<!--                                        th:data-id="${product.productId}"-->
-<!--                                        th:data-top="${#lists.contains(productLimitQuantity, product.productId)}"-->
-<!--                                        class="tr-order-edit-product">-->
-<!--                                        <td class="text-left text-wrap border-1">-->
-<!--                                            <label th:for="${'for-' + product.productId}"-->
-<!--                                                   th:text="${product.productName}"></label>-->
-<!--                                        </td>-->
-<!--                                        <td colspan="1" class="ip-edit-quantity text-end border-1">-->
-<!--                                            <input class="form-control-sm quantity-product" type="number" data-min="1"-->
-<!--                                                   value="0" onchange="onChangeQuantity(this)"/>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-<!--                                </th:block>-->
+                                    <tr>
+                                        <td>a</td>
+                                        <td>
+                                            <a href="#modal-edit-product"
+                                               data-bs-toggle="modal"
+                                               class="btn btn-primary btn-sm waves-effect waves-light"
+                                               >
+                                                Chỉnh sửa
+                                            </a>
+
+                                            <a href="#"
+                                               class="btn btn-danger btn-sm waves-effect waves-light"
+                                              >
+                                                Xóa sản phẩm
+                                            </a>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>c</td>
+                                        <td>c</td>
+                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>

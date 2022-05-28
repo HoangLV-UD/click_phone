@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class RomRespone {
+    private String id;
     private String name;
     private List<ProductPropertyRespone> productPropertyResponeList;
 }

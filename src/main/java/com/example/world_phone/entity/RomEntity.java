@@ -57,4 +57,12 @@ public class RomEntity extends BaseEntity{
     public void setProductEntity(ProductEntity productEntity) {
         this.productEntity = productEntity;
     }
+
+    public List<ProductPropertyEntity> getProductProperties() {
+        return productProperties;
+    }
+
+    public void setProductProperties(List<ProductPropertyEntity> productProperties) {
+        this.productProperties = productProperties;
+    }
 }
