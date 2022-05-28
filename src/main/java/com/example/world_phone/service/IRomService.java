@@ -10,4 +10,6 @@ public interface IRomService {
     List<RomRespone> findByProduct(Long id);
 
     String createRom(List<RomRequestAdd> romRequestAdds, ProductEntity entity);
+
+    String createRomWithProductEdit(List<RomRequestAdd> romRequestAdds, ProductEntity entity);
 }

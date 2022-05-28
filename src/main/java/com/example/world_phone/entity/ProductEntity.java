@@ -39,6 +39,7 @@ public class ProductEntity extends BaseEntity{
     @OneToMany(mappedBy = "productEntity")
     private List<RomEntity> romEntities;
 
+
     public Long getId() {
         return id;
     }
@@ -93,6 +94,14 @@ public class ProductEntity extends BaseEntity{
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public List<RomEntity> getRomEntities() {
+        return romEntities;
+    }
+
+    public void setRomEntities(List<RomEntity> romEntities) {
+        this.romEntities = romEntities;
     }
 
     @Override

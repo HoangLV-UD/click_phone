@@ -1,6 +1,8 @@
 package com.example.world_phone.dto.respone.product;
 
 import com.example.world_phone.dto.respone.attribute.AttributeRespone;
+import com.example.world_phone.dto.respone.category.CategoryResponeDto;
+import com.example.world_phone.dto.respone.image.ImageRespone;
 import com.example.world_phone.dto.respone.rom.RomRespone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +23,8 @@ public class ProductResponse {
 
     private String imageProduct;
 
+    private CategoryResponeDto categoryResponeDto;
+
     private String note;
 
     private Date create_Date;
@@ -29,7 +33,7 @@ public class ProductResponse {
 
     private String status;
 
-    private List<String> image;
+    private List<ImageRespone> image;
 
     private AttributeRespone attributeRespone;
 

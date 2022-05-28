@@ -111,36 +111,132 @@ function addImagePreview(image) {
 }
 
 function onClickUpdateProduct(e) {
-    // get element mã sản phẩm
-    let getElementProductCode = document.getElementById('ip-edit-product-code');
     // get element tên sản phẩm
     let getElementProductName = document.getElementById('ip-edit-product-name');
-    // get element giá bán
-    let getElementProductPrice = document.getElementById('ip-edit-product-price');
-    // get element thương hiệu
-    let getElementProduuctBrand = document.getElementById('ip-edit-product-brand');
-    // get element trạng thái kinh doanh
-    let getElementProductStatus = document.getElementById('ip-edit-product-status');
-    // get element danh mục sản phẩm
-    let getElementProductCategory = document.getElementById('ip-edit-product-category');
-    // get element thuộc tính sản phẩm
-    let getElementProductProperty = document.getElementById('product-edit-property');
+
+    // get element he dieu hanh
+    let getElementProductOs = document.getElementById('ip-edit-product-os');
+
+    // get element man hinh
+    let getElementProductScreen = document.getElementById('ip-edit-product-screen');
+
+    // get element chip
+    let getElementProductChip = document.getElementById('ip-edit-product-chip');
+
+    //get element cam truoc
+    let getElementProductCamTruoc = document.getElementById('ip-edit-product-cam_truoc')
+
+    //get element cam sau
+    let getElementProductCamSau = document.getElementById('ip-edit-product-cam_sau')
+
+    //get element sim
+    let getElementProductSim = document.getElementById('ip-edit-product-sim')
+
+    //get element pin sac
+    let getElementProductPin = document.getElementById('ip-edit-product-pin')
+
     // get mô tả chi tiết sản phẩm
     let productDescription = CKEDITOR.instances['productEditDescription'].getData();
-    let objectProduct = validateObjectProduct(
-        getElementProductCode,
+
+    // get element danh muc
+    let productCategory = document.getElementById('ip-edit-product-category').value;
+
+    // get element ram
+    let productRam = document.getElementById('ip-edit-product-ram').value;
+
+    // get element rom
+    let formRom8Gb = {};
+    let formRom32Gb = {};
+    let formRom64Gb = {};
+    let formRom16Gb = {};
+    let formRom128Gb = {};
+    let formRom256Gb = {};
+    let formRom512Gb = {};
+    let romRequestAdds = [];
+    let check = 0
+    for (let i = 0; i <= 6; i++) {
+        if(document.getElementById('rom' + i).checked && i === 0){
+            formRom8Gb = {
+                "nameRom" : document.getElementById('edit-rom' + i).value
+            }
+            romRequestAdds.push(formRom8Gb)
+            check++;
+        }
+        if(document.getElementById('edit-rom' + i).checked && i === 1){
+            formRom16Gb = {
+                "nameRom" : document.getElementById('edit-rom' + i).value
+            }
+            romRequestAdds.push(formRom16Gb)
+
+            check++;
+        }
+        if(document.getElementById('edit-rom' + i).checked && i === 2){
+            formRom32Gb = {
+                "nameRom" : document.getElementById('edit-rom' + i).value
+
+            }
+            romRequestAdds.push(formRom32Gb)
+
+            check++;
+        }
+        if(document.getElementById('edit-rom' + i).checked && i === 3){
+            formRom64Gb = {
+                "nameRom" : document.getElementById('edit-rom' + i).value
+
+            }
+            romRequestAdds.push(formRom64Gb)
+
+            check++;
+        }
+        if(document.getElementById('edit-rom' + i).checked && i === 4){
+            formRom128Gb = {
+                "nameRom" : document.getElementById('edit-rom' + i).value
+
+            }
+            check++;
+            romRequestAdds.push(formRom128Gb)
+
+        }
+        if(document.getElementById('edit-rom' + i).checked && i === 5){
+            formRom256Gb = {
+                "nameRom" : document.getElementById('edit-rom' + i).value
+
+            }
+            romRequestAdds.push(formRom256Gb)
+
+            check++;
+        }
+        if(document.getElementById('edit-rom' + i).checked && i === 6){
+            formRom512Gb = {
+                "nameRom" : document.getElementById('edit-rom' + i).value
+
+            }
+            romRequestAdds.push(formRom512Gb)
+
+            check++;
+        }
+    }
+    let objectProduct = validateObjectProductEdit(
         getElementProductName,
-        getElementProductPrice,
-        getElementProduuctBrand,
-        getElementProductStatus,
-        getElementProductCategory,
+        getElementProductOs,
+        getElementProductScreen,
+        getElementProductCamSau,
+        getElementProductCamTruoc,
+        getElementProductPin,
+        getElementProductChip,
+        getElementProductSim,
+        productCategory,
+        productRam,
         productDescription,
         dataImageUploadEdit,
-        getElementProductProperty,
+        check,
+        romRequestAdds
     );
     console.log(objectProduct);
+    delete objectProduct.image;
+
     if (objectProduct !== null && objectProduct !== undefined) {
-        objectProduct["productId"] = e.dataset.id
+        objectProduct["idProduct"] = e.dataset.id
         $.ajax({
             url: '/api/product',
             method: 'PUT',
@@ -307,12 +403,6 @@ function onClickSaveProduct() {
             }
         })
     }
-
-
-
-
-
-
 }
 function onRoleChange() {
     const role = $('select.roleFilter').val();
@@ -384,7 +474,6 @@ function validateObjectProduct(
         productSim= getElementProductSim.value;
     }
 
-
     // get mô tả chi tiết sản phẩm
     if (productDescription !== null && productDescription !== undefined) {
         productDescription = (productDescription + '').substring(3);
@@ -399,7 +488,7 @@ function validateObjectProduct(
         toastDanger('Lỗi', 'Vui lòng nhập tên sản phẩm');
         return;
     }
-    if (productName.length < 10 || productName.length > 100) {
+    if (productName.length < 5 || productName.length > 100) {
         console.log('Tên sản phẩm chỉ từ 10 đến 100 ký tự');
         toastDanger('Lỗi', 'Tên sản phẩm chỉ từ 10 đến 100 ký tự');
         return;
@@ -501,6 +590,179 @@ function validateObjectProduct(
     };
 }
 
+function validateObjectProductEdit(
+    getElementProductName,
+    getElementProductOs,
+    getElementProductScreen,
+    getElementProductCamSau,
+    getElementProductCamTruoc,
+    getElementProductPin,
+    getElementProductChip,
+    getElementProductSim,
+    productCategory,
+    productRam,
+    productDescription,
+    productImages,
+    check,
+    romRequestAdds
+) {
+    let productOs, productName, productScreen, productCamSau,
+        productChip, productPin, productCamTruoc, productSim;
+
+    // get tên sản phẩm
+    if (getElementProductName !== null && getElementProductName !== undefined) {
+        productName = getElementProductName.value;
+    }
+    // get os
+    if (getElementProductOs !== null && getElementProductOs !== undefined) {
+        productOs = getElementProductOs.value;
+    }
+    // get screen
+    if (getElementProductScreen !== null && getElementProductScreen !== undefined) {
+        productScreen = getElementProductScreen.value;
+    }
+    // get cam sau
+    if (getElementProductCamSau !== null && getElementProductCamSau !== undefined) {
+        productCamSau = getElementProductCamSau.value
+    }
+    // get cam truoc
+    if (getElementProductCamTruoc !== null && getElementProductCamTruoc !== undefined) {
+        productCamTruoc = getElementProductCamTruoc.value;
+    }
+
+    // get pin
+    if (getElementProductPin !== null && getElementProductPin !== undefined) {
+        productPin = getElementProductPin.value;
+    }
+
+    // get chip
+    if (getElementProductChip !== null && getElementProductChip !== undefined) {
+        productChip = getElementProductChip.value;
+    }
+
+
+    // get sim
+    if (getElementProductSim !== null && getElementProductSim !== undefined) {
+        productSim= getElementProductSim.value;
+    }
+
+    // get mô tả chi tiết sản phẩm
+    if (productDescription !== null && productDescription !== undefined) {
+        productDescription = (productDescription + '').substring(3);
+        productDescription = (productDescription + '').substring(0, productDescription.length - 5);
+    }
+
+
+
+    // validate tên sản phẩm
+    if (productName === null || productName === undefined || productName === '') {
+        console.log('Vui lòng nhập tên sản phẩm');
+        toastDanger('Lỗi', 'Vui lòng nhập tên sản phẩm');
+        return;
+    }
+    if (productName.length < 5 || productName.length > 100) {
+        console.log('Tên sản phẩm chỉ từ 10 đến 100 ký tự');
+        toastDanger('Lỗi', 'Tên sản phẩm chỉ từ 10 đến 100 ký tự');
+        return;
+    }
+
+    // validate hệ điều hành
+    if (productOs === null || productOs === undefined || productOs === '') {
+        console.log('Vui lòng nhập hệ điều hành');
+        toastDanger('Lỗi', 'Vui lòng nhập hệ điều hành');
+        return;
+    }
+
+    // validate screen
+    if (productScreen === null || productScreen === undefined || productScreen === '') {
+        console.log('Vui lòng nhập loại màn hình');
+        toastDanger('Lỗi', 'Vui lòng nhập loại màn hình');
+        return;
+    }
+
+    // validate cam trước
+    if (productCamTruoc === null || productCamTruoc === undefined || productCamTruoc === '') {
+        console.log('Vui lòng nhập dạng cam trước');
+        toastDanger('Lỗi', 'Vui lòng nhập dạng cam trước');
+        return;
+    }
+
+    // validate cam sau
+    if (productCamSau === null || productCamSau === undefined || productCamSau === '') {
+        console.log('Vui lòng nhập dạng cam sau');
+        toastDanger('Lỗi', 'Vui lòng nhập dạng cam sau');
+        return;
+    }
+    // validate chip
+    if (productChip === null || productChip === undefined || productChip === '') {
+        console.log('Vui lòng nhập dạng chip');
+        toastDanger('Lỗi', 'Vui lòng nhập dạng chip');
+        return;
+    }
+    // validate pin
+    if (productPin === null || productPin === undefined || productPin === '') {
+        console.log('Vui lòng nhập dạng pin');
+        toastDanger('Lỗi', 'Vui lòng nhập dạng pin');
+        return;
+    }
+
+    // validate sim
+    if (productSim === null || productSim === undefined || productSim === '') {
+        console.log('Vui lòng nhập dạng sim');
+        toastDanger('Lỗi', 'Vui lòng nhập dạng sim');
+        return;
+    }
+
+    // validate loại sản phẩm & thuộc tính sản phẩm
+    if (productCategory === null || productCategory === undefined || productCategory === '') {
+        console.log('Vui lòng chọn danh mục sản phẩm');
+        toastDanger('Lỗi', 'Vui lòng chọn danh mục sản phẩm');
+        return;
+    }
+
+    // validate mô tả chi tiết sản phẩm
+    if (productDescription === null || productDescription === undefined || productDescription === '') {
+        console.log('Vui lòng nhập mô tả chi tiết sản phẩm');
+        toastDanger('Lỗi', 'Vui lòng nhập mô tả chi tiết sản phẩm');
+        return;
+    }
+
+    // validate hình ảnh sản phẩm
+    if (productImages === null || productImages === undefined || productImages.length === 0) {
+        console.log('Vui lòng chọn hình ảnh sản phẩm');
+        toastDanger('Lỗi', 'Vui lòng chọn hình ảnh sản phẩm');
+        return;
+    }
+
+    if(check === 0){
+        console.log('Vui lòng chọn dung lượng');
+        toastDanger('Lỗi', 'Vui lòng chọn dung lượng');
+        return;
+    }
+
+
+
+
+    return {
+        "nameProduct": productName,
+        "categoryId" : productCategory,
+        "note": productDescription,
+        "image": productImages,
+        "attributeRequestedit": {
+            "operatingSystem" : productOs,
+            "screen" : productScreen,
+            "chip" : productChip,
+            "camTruoc" : productCamTruoc,
+            "camSau" : productCamSau,
+            "sim" : productSim,
+            "pin" : productPin,
+            "ram" : productRam,
+            "id" : $('#ip-edit-product-attributeId').val()
+        },
+        romRequestAdds
+    };
+}
+
 
 
 function onClickAddProduct() {
@@ -515,9 +777,16 @@ function onClickEditProduct(e) {
     if (getElementButtonEditProduct !== null) {
         getElementButtonEditProduct.dataset.id = id
     }
+    let getElementButtonEditProduct1 = document.getElementById('btn-submit-edit-product-status');
+    if (getElementButtonEditProduct1 !== null) {
+        getElementButtonEditProduct1.dataset.id = id
+    }
 
     // get element tên sản phẩm
     let getElementProductName = document.getElementById('ip-edit-product-name');
+
+    //get element id attribute
+    let getElementAttributeID = document.getElementById('ip-edit-product-attributeId');
 
     // get element he dieu hanh
     let getElementProductOs = document.getElementById('ip-edit-product-os');
@@ -541,7 +810,7 @@ function onClickEditProduct(e) {
     let getElementProductPin = document.getElementById('ip-edit-product-pin')
 
     // get mô tả chi tiết sản phẩm
-    let productDescription = CKEDITOR.instances['productAddDescription'].getData();
+    let productDescription = CKEDITOR.instances['productEditDescription'].getData();
 
     // get element danh muc
     let productCategory = document.getElementById('ip-edit-product-category');
@@ -553,23 +822,73 @@ function onClickEditProduct(e) {
         method: 'GET',
         success: function (data) {
             console.log(data)
-            if (getElementProductCode !== null) {
-                getElementProductCode.value = data.productCode;
+
+            // set rom cho check box
+            for (let i = 0; i < 7; i++) {
+                $("#edit-rom" + i).prop('checked', false);
+                for (let j = 0; j < data.romRespones.length; j++) {
+                    if($("#edit-rom" + i).val() === data.romRespones[j].name){
+                        $("#edit-rom" + i).prop('checked', true);
+                        break;
+                    }
+                }
             }
+
+            $("#ip-edit-product-id").val(data.id);
+            if(data.status === "ON"){
+                document.getElementById("btn-submit-edit-product-status").innerHTML = "Ngừng kinh doanh"
+            }else {
+                document.getElementById("btn-submit-edit-product-status").innerHTML = "Kinh doanh lại"
+
+            }
+
+
+
             if (getElementProductName !== null) {
-                getElementProductName.value = data.productName;
+                getElementProductName.value = data.nameProduct;
             }
-            if (getElementProductPrice !== null) {
-                getElementProductPrice.value = data.productPrice;
+            if(getElementProductOs !== null){
+                getElementProductOs.value = data.attributeRespone.operatingSystem;
             }
-            if (getElementProduuctBrand !== null) {
-                getElementProduuctBrand.value = data.productBrand;
+
+            if (getElementProductScreen !== null) {
+                getElementProductScreen.value = data.attributeRespone.screen;
             }
-            if (getElementProductStatus !== null) {
-                getElementProductStatus.checked = data.productStatus === 'ON';
+
+            if (getElementProductChip !== null) {
+                getElementProductChip.value = data.attributeRespone.chip;
             }
-            if (data.lstImages !== null && data.lstImages !== undefined) {
-                dataImageUploadEdit = data.lstImages
+
+            if (getElementProductCamTruoc !== null) {
+                getElementProductCamTruoc.value = data.attributeRespone.camTruoc;
+            }
+
+            if (getElementProductCamSau !== null) {
+                getElementProductCamSau.value = data.attributeRespone.camSau;
+            }
+
+            if (getElementProductSim !== null) {
+                getElementProductSim.value = data.attributeRespone.sim;
+            }
+
+            if (getElementProductPin !== null) {
+                getElementProductPin.value = data.attributeRespone.pin;
+            }
+
+            if (productCategory !== null) {
+                $('#ip-edit-product-category').val(data.categoryResponeDto.categoryId).change();
+            }
+            if(productRam !== null){
+                $('#ip-edit-product-ram').val(data.attributeRespone.ram).change();
+            }
+            if(getElementAttributeID != null){
+                getElementAttributeID.value = data.attributeRespone.id;
+            }
+
+
+
+            if(data.imageProduct !== null && data.imageProduct !== undefined){
+                dataImageUploadEdit = data.imageProduct;
                 sizeImage = 0;
                 let previewUpload = document.getElementById('previewUpload')
                 let carouselIndicators = document.getElementById('carousel-indicators')
@@ -577,30 +896,114 @@ function onClickEditProduct(e) {
                     previewUpload.innerHTML = ''
                     carouselIndicators.innerHTML = ''
                 }
-                for (let i = 0; i < data.lstImages.length; i++) {
-                    addImagePreview(data.lstImages[i])
+                addImagePreview(data.imageProduct)
+                if (data.image.length > 0){
+                    for (let i = 0; i < data.image.length; i++) {
+                        addImagePreview(data.image[i].img_link);
+                    }
                 }
             }
-            CKEDITOR.instances['productEditDescription'].setData(data.productDescription)
-            if (getElementProductCategory !== null) {
-                getElementProductCategory.value = data.productCategory;
-                getElementProductCategory.dataset.id = id
-                $('#ip-edit-product-category').change();
-                $.ajax({
-                    url: '/product/property/edit?category=' + data.productCategory + '&product=' + id,
-                    method: 'GET',
-                    success: function (html) {
-                        if (getElementProductProperty !== null) {
-                            getElementProductProperty.innerHTML = html;
-                        }
-                    }
-                })
-            }
+
+            CKEDITOR.instances['productEditDescription'].setData(data.note);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR)
         }
     })
+}
+
+function onClickDeleteProduct(e) {
+    let id = e.dataset.id;
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success mx-2',
+            cancelButton: 'btn btn-danger mx-2'
+        },
+        buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+        title: `Bạn chắc chắn muốn xoá <br> sản phẩm này chứ?`,
+        text: "Chú ý không thể hoàn tác sau khi thực hiện tác vụ này!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Vâng, tôi chắc chắn!',
+        cancelButtonText: 'Không, huỷ bỏ tác vụ!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            swalWithBootstrapButtons.fire(
+                'Đã xoá thành công!',
+                'Dữ liệu đã bị xoá.',
+                'success'
+            ).then(
+                $.ajax({
+                    url: `/api/product/` + id,
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        window.location.href = "/product";
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            );
+        } else if (
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                'Đã huỷ tác vụ',
+                'Dữ liệu được bảo toàn :)',
+                'error'
+            )
+        }
+    })
+}
+
+function onClickUpdateProductStatus(e) {
+    let id = e.dataset.id;
+    var check = document.getElementById("btn-submit-edit-product-status").innerText;
+    if(check === "Ngừng kinh doanh"){
+        $.ajax({
+            url: `/api/product/status/` + id + `/OFF`,
+            type: 'PUT',
+            contentType: 'application/json',
+            success: function (result) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Cập nhật thành công',
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                    timer: 3000
+                }).then(()=> window.location.reload());
+            },
+            error: function (error) {
+                toastDanger('Thất bại', 'Lỗi hệ thống')
+            }
+        })
+    }else {
+        $.ajax({
+            url: `/api/product/status/` + id + `/ON`,
+            type: 'PUT',
+            contentType: 'application/json',
+            success: function (result) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Cập nhật thành công',
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                    timer: 3000
+                }).then(()=> window.location.reload());
+            },
+            error: function (error) {
+                toastDanger('Thất bại', 'Lỗi hệ thống')
+            }
+        })
+    }
+
+
 }
 
 function onStatusChange(element) {
@@ -616,6 +1019,7 @@ function onStatusChange(element) {
         tag.parent().parent().show();
     }
 }
+
 
 function onClickCheckAllProductAdd(e) {
     let getChk = document.getElementsByClassName('chk-add-product')
@@ -652,26 +1056,6 @@ function enableCheckBox() {
         getChkAll.checked = countChecked === countChk
 }
 
-function onClickOrderInvoice() {
-    $('.tr-order-add-product').hide();
-    $('.tr-order-title').hide();
-    $('.quantity-product').val(0);
-    let count = 0;
-    $('.chk-add-product').each((index, product) => {
-        if (product.checked) {
-            count++;
-            // $('.tr-order-add-product').show();
-            // console.log($('.tr-order-add-product').show())
-            // console.log($('.tr-order-add-product[data-id-product="' + product.id + '"]'))
-            // console.log($('.tr-order-add-product[data-id-product="' + product.id + '"]').show())
-            $('.tr-order-add-product[data-id-product="' + product.id + '"]').show()
-        }
-    })
-    if (count === 0) {
-        $('.tr-order-add-product[data-top="true"]').show();
-        $('.tr-order-title').show();
-    }
-}
 
 
 function onChangeQuantity(e) {
@@ -774,4 +1158,20 @@ function onClickSubmitAddOrderInvoice() {
         }
     })
     console.log(obj);
+}
+
+function addOrderProduct(id){
+        $.ajax({
+            url: '/api/product/' + id,
+            method: 'GET',
+            success: function (data) {
+                toastSuccess("Thêm sản phẩm thành công");
+               // $('#bodyAddProductOrderInvoice').innerHTML+=
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR)
+            }
+        })
+
 }

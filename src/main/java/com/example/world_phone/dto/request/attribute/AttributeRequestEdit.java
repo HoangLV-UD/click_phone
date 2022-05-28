@@ -1,20 +1,16 @@
-package com.example.world_phone.dto.respone.attribute;
-
+package com.example.world_phone.dto.request.attribute;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AttributeRespone {
-    private String id;
+public class AttributeRequestEdit {
+    private Long id;
 
     private String operatingSystem; // he dieu hanh
 

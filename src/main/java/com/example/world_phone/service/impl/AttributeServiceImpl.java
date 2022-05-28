@@ -2,6 +2,7 @@ package com.example.world_phone.service.impl;
 
 import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.dto.request.attribute.AttributeRequestAdd;
+import com.example.world_phone.dto.request.attribute.AttributeRequestEdit;
 import com.example.world_phone.dto.respone.attribute.AttributeRespone;
 import com.example.world_phone.entity.AttributeEntity;
 import com.example.world_phone.entity.ProductEntity;
@@ -48,12 +49,31 @@ public class AttributeServiceImpl implements IAttributeService {
         return "ok";
     }
 
+    @Override
+    public String updateAttribute(AttributeRequestEdit edit) {
+        if(edit.getId() == null){
+            throw  new WorldPhoneExp(ConstansErrorCode.ATTRIBUTE_NOT_EXIST);
+        }
+        AttributeEntity entity = attributeRepo.findByIdAndDeleteFlagIsFalse(edit.getId());
+        if(entity == null){
+            throw  new WorldPhoneExp(ConstansErrorCode.ATTRIBUTE_NOT_EXIST);
+        }
+        Long productId = entity.getProductId();
+        entity = mapToEntityEdit(edit);
+        entity.setProductId(productId);
+
+
+        attributeRepo.save(entity);
+        return "ok";
+    }
+
 
     private AttributeRespone mapToDto(AttributeEntity a){
         if(a == null){
             throw new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_ATTRIBUTE);
         }else {
             AttributeRespone b = new AttributeRespone();
+            b.setId(String.valueOf(a.getId()));
             b.setChip(a.getChip());
             b.setCamSau(a.getCamSau());
             b.setCamTruoc(a.getCamTruoc());
@@ -71,6 +91,29 @@ public class AttributeServiceImpl implements IAttributeService {
             throw new WorldPhoneExp(ConstansErrorCode.ATTRIBUTE_NOT_EXIST);
         }
         AttributeEntity entity = new AttributeEntity();
+        entity.setCamSau(x.getCamSau());
+        entity.setCamTruoc(x.getCamTruoc());
+        entity.setChip(x.getChip());
+        entity.setDeleteFlag(false);
+        entity.setPin(x.getPin());
+        entity.setRam(x.getRam());
+        entity.setOperatingSystem(x.getOperatingSystem());
+        entity.setScreen(x.getScreen());
+        entity.setSim(x.getSim());
+        entity.setCreateBy((String) sessionUtil.getObject("username"));
+        entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
+        entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
+        entity.setModifierBy((String) sessionUtil.getObject("username"));
+        return entity;
+
+    }
+
+    private AttributeEntity mapToEntityEdit(AttributeRequestEdit x){
+        if(x == null){
+            throw new WorldPhoneExp(ConstansErrorCode.ATTRIBUTE_NOT_EXIST);
+        }
+        AttributeEntity entity = new AttributeEntity();
+        entity.setId(x.getId());
         entity.setCamSau(x.getCamSau());
         entity.setCamTruoc(x.getCamTruoc());
         entity.setChip(x.getChip());
