@@ -10,11 +10,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
 public class ProductApi {
     private final IProductService productService;
+
+    private final HttpServletRequest request;
+
+    @GetMapping() // yêu cầu ass java 5
+    public ResponseEntity<?> getByName(){
+        String name = request.getParameter("name");
+        System.out.println(name);
+        ProductResponse response = productService.getName(name);
+        if(response == null){
+            return ResponseEntity.badRequest().body(String.valueOf(new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST)));
+        }
+        return ResponseEntity.ok().body(response);
+    }
 
     @PostMapping()
     public ResponseEntity<?> add(@RequestBody ProductRequestAdd productRequestAdd){

@@ -1106,68 +1106,103 @@ function onClickSubmitAddOrderInvoice() {
     if (getNote !== null && getNote !== undefined) {
         note = getNote.value;
     }
-    let lstDetails = [];
+     let lstDetails = [];
     let getTrProduct = document.getElementsByClassName('tr-order-add-product');
     if (getTrProduct !== null && getTrProduct !== undefined) {
         for (const $tr of getTrProduct) {
-            let idProduct = $tr.dataset.id;
-            let quantity;
-            let getQuantity = $tr.getElementsByClassName('quantity-product');
-            if (getQuantity !== null && getQuantity !== undefined) {
-                quantity = getQuantity[0].value;
-                if (quantity === null || quantity === undefined || !Number(quantity) || Number(quantity) < 1) {
-                    // toastDanger('Lỗi', 'Vui lòng nhập số lượng đặt lớn hơn 0');
-                    // return;
-                } else {
-                    lstDetails.push({
-                        "productId": idProduct,
-                        "quantity": quantity
-                    })
-                }
+            console.log($tr.childNodes[5].childNodes[1].value); // lấy màu của sản phẩm
+            console.log($tr.childNodes[7].childNodes[0].value); // lấy id của rom
+            console.log($tr.childNodes[9].childNodes[0].value); // lấy số lượng của sản phẩm
+            if($tr.childNodes[9].childNodes[0].value <= 0){
+                toastDanger("Lỗi", "Vui lòng nhập số lượng lớn hơn 0");
+                return;
             }
+            lstDetails.push({
+                "romId" : $tr.childNodes[7].childNodes[0].value,
+                "quantityInvoice" : $tr.childNodes[9].childNodes[0].value,
+                "colorId" : $tr.childNodes[5].childNodes[1].value
+            });
         }
     }
+
+
+    console.log(lstDetails);
+
     if (lstDetails.length === 0) {
         toastDanger('Lỗi', 'Vui lòng nhập số lượng ít nhất 1 sản phẩm');
         return;
     }
-    let obj = {
-        "code": orderCode,
-        "date": orderDate,
-        "supplierId": idSupplier,
-        "note": note,
-        "details": lstDetails
-    }
+    let orderInvoice = {
+        "note" : note,
+        "receiveDate" : orderDate,
+        "suppliderId" : idSupplier,
+        "orderCode" : orderCode,
+        "detailRequest" : lstDetails
+    };
+
     $.ajax({
         url: '/api/order-invoice',
         method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(obj),
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(orderInvoice),
         success: function (data) {
             toastSuccess('Thành công', 'Đã tạo mới hoá đơn đặt hàng NCC');
             $('.btn-close').click();
         },
         error: function (error) {
-            if (error.responseJSON.vn === null || error.responseJSON.vn === undefined) {
-                let message = error.responseJSON.message + '';
-                message = message.substring(message.indexOf(':') + 1)
-                toastDanger('Lỗi', message);
-                return;
-            }
-            toastDanger('Lỗi', error.responseJSON.vn);
+            toastDanger('Lỗi', error);
         }
     })
     console.log(obj);
 }
+
 
 function addOrderProduct(id){
         $.ajax({
             url: '/api/product/' + id,
             method: 'GET',
             success: function (data) {
-                toastSuccess("Thêm sản phẩm thành công");
-               // $('#bodyAddProductOrderInvoice').innerHTML+=
+                toastSuccess("Thành công","Thêm sản phẩm để đặt thành công");
+                console.log(data);
+                const selectTemp = document.getElementById("romProduct");
+                const selectColor = document.getElementById("color");
+                for (let i = 0; i < data.romRespones.length; i++) {
+                        selectTemp.innerHTML+='<option value="'+data.romRespones[i].id+'" >'+data.romRespones[i].name+'</option>'
+                }
+                document.getElementById("sptemp").setAttribute("hidden", true);
+                selectColor.removeAttribute("id");
+                selectColor.removeAttribute("hidden");
+                selectTemp.removeAttribute("id");
+                selectTemp.removeAttribute("hidden");
+                document.getElementById("bodyAddProductOrderInvoice").innerHTML+='<tr class="tr-order-add-product">\n' +
+                    '                                        <td>'+ data.nameProduct+'</td>\n' +
+                    '                                        <td>\n' +
+                    '                                            <a onclick="copy_row(this)" type="button" \n' +
+                    '                                               class="btn btn-primary btn-sm waves-effect waves-light"\n' +
+                    '                                               >\n' +
+                    '                                                +1\n' +
+                    '                                            </a>\n' +
+                    '                                            <a onclick="delete_row(this)" href="#"\n' +
+                    '                                               class="btn btn-danger btn-sm waves-effect waves-light"\n' +
+                    '                                              >\n' +
+                    '                                                Xóa\n' +
+                    '                                            </a>\n' +
+                    '                                        </td>\n' +
+                    '                                        <td> \n' +
+                                                                selectColor.outerHTML +
+                    '                                        </td>\n' +
+                    '                                        <td>' + selectTemp.outerHTML +'</td>\n' +
+                    '                                        <td colspan="1" class="ip-edit-quantity text-end border-1"><input class="form-control-sm quantity-product" type="number" data-min="1"\n' +
+                    '                                                   value="0" onchange="onChangeQuantity(this)"/></td>\n' +
+                    '                                    </tr>';
 
+                selectTemp.setAttribute("id", "romProduct");
+                selectTemp.setAttribute("hidden", true);
+                selectColor.setAttribute("hidden", true);
+                selectColor.setAttribute("id", "color");
+                while (selectTemp.firstChild) {
+                    selectTemp.firstChild.remove();
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR)
@@ -1175,3 +1210,14 @@ function addOrderProduct(id){
         })
 
 }
+
+function delete_row(e) {
+    e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+}
+
+function copy_row(e){
+    var tr = e.parentNode.parentNode.cloneNode(true);
+    console.log(tr);
+    document.getElementById("bodyAddProductOrderInvoice").innerHTML+=tr.outerHTML;
+}
+

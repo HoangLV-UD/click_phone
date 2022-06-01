@@ -32,6 +32,10 @@ public class ProductPropertyEntity extends BaseEntity{
     @JoinColumn(name = "ROM_ID", referencedColumnName = "ID")
     private RomEntity romEntity;
 
+    @ManyToOne
+    @JoinColumn(name = "colorID", referencedColumnName = "ID")
+    private ColorEntity colorEntity;
+
     public Long getId() {
         return id;
     }
@@ -78,5 +82,13 @@ public class ProductPropertyEntity extends BaseEntity{
 
     public void setRomEntity(RomEntity romEntity) {
         this.romEntity = romEntity;
+    }
+
+    public ColorEntity getColorEntity()  {
+        return colorEntity;
+    }
+
+    public void setColorEntity(ColorEntity colorEntity) {
+        this.colorEntity = colorEntity;
     }
 }

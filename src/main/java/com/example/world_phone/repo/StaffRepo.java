@@ -21,7 +21,7 @@ public interface StaffRepo extends JpaRepository<StaffEntity, Long> {
 
 
     // Find staff by email
-    List<StaffEntity> findByEmail(String email);
+    List<StaffEntity> findByEmailAndDeleteFlagIsFalse(String email);
 
     // Find staff by phoneNumber
     List<StaffEntity> findByPhoneNumber(String phoneNumber);

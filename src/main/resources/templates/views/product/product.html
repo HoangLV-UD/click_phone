@@ -46,7 +46,6 @@
             <div class="row justify-content-end">
                 <a href="#modalAddOrderInvoice" type="button"
                    class="btn btn-primary col-auto mb-3 waves-effect waves-light mx-3"
-                   onclick="onClickOrderInvoice()"
                    data-bs-toggle="modal">
                     <i class="fas fa-plus me-2"></i>
                     Đặt NCC
@@ -83,7 +82,7 @@
                                     <tr>
                                         <td class="text-center" th:text="${theCount.index + 1}">STT</td>
                                         <td class="text-center border-1">
-                                            <button th:onclick="|addOrderProduct(${product.id})|" th:title="'Thêm sản phẩm để đặt'" type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
+                                            <button th:onclick="|addOrderProduct('${product.id}')|" th:title="'Thêm sản phẩm để đặt'" type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                         </td>
                                         <td class="text-center">
                                             <img th:src="${product.getImageProduct()}" th:title="${product.getNameProduct()}"
@@ -629,6 +628,16 @@
                     <div class="col-lg-4">
                         <div class="mb-3">
                             <label for="ip-order-invoice-date">
+                                Mã đơn hàng:
+                            </label>
+                        </div>
+                        <div class="mb-3 input-group" id="datepicker1">
+                            <input type="text" class="form-control"
+                                   id="ip-order-invoice-code"
+                                   placeholder="Vui lòng nhập mã đơn hàng"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ip-order-invoice-date">
                                 Hẹn ngày nhận:
                             </label>
                         </div>
@@ -675,28 +684,11 @@
                                 </tr>
                                 </thead>
                                 <tbody id="bodyAddProductOrderInvoice">
-                                    <tr>
-                                        <td>a</td>
-                                        <td>
-                                            <a href="#modal-edit-product"
-                                               data-bs-toggle="modal"
-                                               class="btn btn-primary btn-sm waves-effect waves-light"
-                                               >
-                                                Chỉnh sửa
-                                            </a>
-
-                                            <a href="#"
-                                               class="btn btn-danger btn-sm waves-effect waves-light"
-                                              >
-                                                Xóa sản phẩm
-                                            </a>
-                                        </td>
-                                        <td>
-
-                                        </td>
-                                        <td>c</td>
-                                        <td>c</td>
-                                    </tr>
+                                <tr id="sptemp" class="tr-order-title" data-top="true">
+                                    <td colspan="5" class="text-center">
+                                        Chưa có sản phẩm nào
+                                    </td>
+                                </tr>
 
                                 </tbody>
                             </table>
@@ -713,7 +705,14 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    <select id="romProduct" hidden class="form-control"></select>
 
+    <select hidden id="color" class="form-control">
+        <option th:each="color : ${listColor}"
+                th:value="${color.getId()}"
+                th:text="${color.getName()}">
+        </option>
+    </select>
     <script th:src="@{'/assets/ckeditor/ckeditor.js'}"></script>
 
     <script th:src="@{/assets/js/product_006.js}"></script>

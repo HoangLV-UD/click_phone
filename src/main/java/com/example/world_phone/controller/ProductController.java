@@ -2,9 +2,11 @@ package com.example.world_phone.controller;
 
 import com.example.world_phone.dto.respone.category.CategoryDTO;
 import com.example.world_phone.dto.respone.category.CategoryResponeDto;
+import com.example.world_phone.dto.respone.color.ColorRespone;
 import com.example.world_phone.dto.respone.product.ProductResponse;
 import com.example.world_phone.dto.respone.supplier.SupplierResponseDTO;
 import com.example.world_phone.service.ICategoryService;
+import com.example.world_phone.service.IColorService;
 import com.example.world_phone.service.IProductService;
 import com.example.world_phone.service.ISupplierService;
 import com.example.world_phone.until.SessionUtil;
@@ -29,15 +31,19 @@ public class ProductController {
 
     private final SessionUtil sessionUtil;
 
+    private final IColorService colorService;
+
     @GetMapping()
     public String index(Model model){
 
         List<CategoryResponeDto> categoryDTOList = categoryService.getAllCategory();
         List<SupplierResponseDTO> supplierResponseDTOS = supplierService.findAll();
         List<ProductResponse> productResponseList = productService.findAll();
+        List<ColorRespone> colorRespones = colorService.findAll();
         model.addAttribute("listCategory", categoryDTOList);
         model.addAttribute("listSupplier", supplierResponseDTOS);
         model.addAttribute("listProduct", productResponseList);
+        model.addAttribute("listColor", colorRespones);
         return "/views/product/product";
     }
 

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "category", schema = "world_phone", catalog = "")
-public class CategoryEntity {
+public class CategoryEntity extends BaseEntity{
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,42 +26,14 @@ public class CategoryEntity {
     @Basic
     @Column(name = "NOTE")
     private String note;
-    @Basic
-    @Column(name = "CREATE_DATE")
-    private Date createDate;
-    @Basic
-    @Column(name = "MODIFIER_DATE")
-    private Date modifierDate;
-    @Basic
-    @Column(name = "CREATE_BY")
-    private String createBy;
-    @Basic
-    @Column(name = "MODIFIER_BY")
-    private String modifierBy;
-    @Basic
-    @Column(name = "DELETE_FLAG")
-    private boolean deleteFlag;
+
+
 
     @OneToMany(mappedBy = "category")
     private List<ProductEntity> products;
 
 
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getModifierDate() {
-        return modifierDate;
-    }
-
-    public void setModifierDate(Date modifierDate) {
-        this.modifierDate = modifierDate;
-    }
 
     public List<ProductEntity> getProducts() {
         return products;
@@ -101,46 +73,6 @@ public class CategoryEntity {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-
-    public void setCreateDate(Timestamp createDate) {
-        this.createDate = createDate;
-    }
-
-
-    public void setModifierDate(Timestamp modifierDate) {
-        this.modifierDate = modifierDate;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
-    public String getModifierBy() {
-        return modifierBy;
-    }
-
-    public void setModifierBy(String modifierBy) {
-        this.modifierBy = modifierBy;
-    }
-
-    public boolean isDeleteFlag() {
-        return deleteFlag;
-    }
-
-    public void setDeleteFlag(boolean deleteFlag) {
-        this.deleteFlag = deleteFlag;
-    }
-
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, status, note, createDate, modifierDate, createBy, modifierBy, deleteFlag);
     }
 
 }
