@@ -2,6 +2,7 @@ package com.example.world_phone.entity;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "color", schema = "world_phone")
@@ -14,6 +15,13 @@ public class ColorEntity extends BaseEntity{
     @Basic
     @Column(name = "value_color")
     private String valueColor;
+
+
+    @OneToMany(mappedBy = "colorEntity")
+    private List<ProductPropertyEntity> productProperties;
+
+    @OneToMany(mappedBy = "colorEntity")
+    private List<InvoiceOrderDetailEntity> invoiceOrderDetailEntities;
 
     public Long getId() {
         return id;
@@ -29,5 +37,21 @@ public class ColorEntity extends BaseEntity{
 
     public void setValueColor(String valueColor) {
         this.valueColor = valueColor;
+    }
+
+    public List<ProductPropertyEntity> getProductProperties() {
+        return productProperties;
+    }
+
+    public void setProductProperties(List<ProductPropertyEntity> productProperties) {
+        this.productProperties = productProperties;
+    }
+
+    public List<InvoiceOrderDetailEntity> getInvoiceOrderDetailEntities() {
+        return invoiceOrderDetailEntities;
+    }
+
+    public void setInvoiceOrderDetailEntities(List<InvoiceOrderDetailEntity> invoiceOrderDetailEntities) {
+        this.invoiceOrderDetailEntities = invoiceOrderDetailEntities;
     }
 }

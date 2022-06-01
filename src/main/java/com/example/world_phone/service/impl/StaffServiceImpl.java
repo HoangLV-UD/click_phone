@@ -78,7 +78,7 @@ public class StaffServiceImpl implements IStaffService {
     @Override
     public String addStaff(StaffAddRequestDTO staff) {
         StaffEntity entity = new StaffEntity();
-        if (staffRepo.findByEmail(staff.getEmail()).size() != 0) {
+        if (staffRepo.findByEmailAndDeleteFlagIsFalse(staff.getEmail()).size() != 0) {
             throw new WorldPhoneExp(ConstansErrorCode.STAFF_EMAIL);
         }
         entity.setFullName(staff.getFullName());
@@ -153,7 +153,7 @@ public class StaffServiceImpl implements IStaffService {
 
     @Override
     public Integer findByEmail(String email) {
-        List<StaffEntity> list = staffRepo.findByEmail(email);
+        List<StaffEntity> list = staffRepo.findByEmailAndDeleteFlagIsFalse(email);
         if (list.isEmpty()) return 0;
         else return list.size();
     }
@@ -167,7 +167,7 @@ public class StaffServiceImpl implements IStaffService {
 
     @Override
     public StaffEntity getByEmail(String email) {
-        List<StaffEntity> list = staffRepo.findByEmail(email);
+        List<StaffEntity> list = staffRepo.findByEmailAndDeleteFlagIsFalse(email);
         return list.isEmpty() ? null : list.get(0);
     }
 

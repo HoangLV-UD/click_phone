@@ -2,6 +2,8 @@ package com.example.world_phone.service.impl;
 
 
 import com.example.world_phone.entity.StaffEntity;
+import com.example.world_phone.until.CookieUtil;
+import com.example.world_phone.until.SessionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,10 @@ public class StaffDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private final HttpSession session;
 
+    private final CookieUtil cookieUtil;
+
+    private final SessionUtil sessionUtil;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         StaffEntity staffEntity = staffService.getByEmail(email);
@@ -37,6 +43,9 @@ public class StaffDetailsServiceImpl implements UserDetailsService {
 
         // Add info logged user to Session
         session.setAttribute("user", staffEntity);
+//        cookieUtil.add("username", staffEntity.getEmail(), 168); //7 days
+//        sessionUtil.addObject("username", staffEntity.getPassword());
+//        log.info("Login to " + staffEntity.getEmail() + " account successfully!");
 
         List<String> roleNames = new ArrayList<>();
         roleNames.add(staffEntity.getRole());

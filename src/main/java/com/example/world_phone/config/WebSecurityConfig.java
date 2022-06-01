@@ -1,6 +1,7 @@
 package com.example.world_phone.config;
 
 import com.example.world_phone.entity.StaffEntity;
+import com.example.world_phone.filter.CustomerAuthenticationFilter;
 import com.example.world_phone.service.impl.StaffDetailsServiceImpl;
 import com.example.world_phone.service.impl.StaffServiceImpl;
 import com.example.world_phone.until.CookieUtil;
@@ -14,9 +15,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -31,7 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private StaffDetailsServiceImpl staffDetailsService;
-    private final StaffServiceImpl staffService;
 
     private final SessionUtil sessionUtil;
 
@@ -46,11 +48,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        CustomerAuthenticationFilter customerAuthenticationFilter = new CustomerAuthenticationFilter(authenticationManagerBean());
+//        customerAuthenticationFilter.setFilterProcessesUrl("/login-check");
         http.csrf().disable();
+        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
         http.authorizeRequests().antMatchers("/login/**", "/assets/**").permitAll();
         http.authorizeRequests().antMatchers("/staff").hasAnyAuthority("ROLE_ADMIN")
                 .and().exceptionHandling().accessDeniedPage("/");
         http.authorizeRequests().anyRequest().authenticated();
+
         http.formLogin()
                 .loginProcessingUrl("/login-check")
                 .loginPage("/login")
@@ -64,12 +71,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     log.info("Login to " + username + " account successfully!");
                     System.out.println(request.getContextPath());
                     response.sendRedirect("/staff");
-
                     System.out.println(username + " config");
                     cookieUtil.add("username", username, 168); //7 days
                     sessionUtil.addObject("username", username);
                 })
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login?status=logout");
+        //http.addFilter(customerAuthenticationFilter);
 
         http.authorizeRequests().and() //
                 .rememberMe().rememberMeParameter("remember")

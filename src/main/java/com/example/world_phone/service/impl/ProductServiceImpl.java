@@ -112,8 +112,6 @@ public class ProductServiceImpl implements IProductService {
             return "false";
         }
         entity.setName(requestEdit.getNameProduct());
-        entity.setCreateBy((String) sessionUtil.getObject("username"));
-        entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy((String) sessionUtil.getObject("username"));
         productRepo.save(entity);
@@ -149,6 +147,38 @@ public class ProductServiceImpl implements IProductService {
         }
         response.setRomRespones(romRespones);
         return response;
+    }
+
+    @Override
+    public ProductResponse getName(String name) {
+        List<ProductEntity> entities = productRepo.findByName(name);
+        if(entities.size() == 0){
+            throw new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST);
+        }
+        ProductResponse response = mapToRespone(entities.get(0));
+        List<RomEntity> romEntityList = entities.get(0).getRomEntities();
+        List<RomRespone> romRespones = new ArrayList<>();
+        for (RomEntity r: romEntityList
+        ) {
+            RomRespone romRespone = new RomRespone();
+            romRespone.setName(r.getName());
+            romRespone.setId(String.valueOf(r.getId()));
+            List<ProductPropertyRespone> productPropertyResponeList = new ArrayList<>();
+            for (ProductPropertyEntity p: r.getProductProperties()
+            ) {
+                ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
+                productPropertyRespone.setQuantity(p.getQuantity());
+                productPropertyRespone.setPrice(p.getPrice());
+                productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
+                productPropertyRespone.setColor(p.getColor());
+                productPropertyResponeList.add(productPropertyRespone);
+            }
+            romRespone.setProductPropertyResponeList(productPropertyResponeList);
+            romRespones.add(romRespone);
+        }
+        response.setRomRespones(romRespones);
+        return response;
+
     }
 
     @Override

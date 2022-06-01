@@ -1,6 +1,8 @@
 package com.example.world_phone.constant;
 
 public interface ConstansErrorCode {
+    String ERROR_DATA_REQUEST = "WP-000-001";
+
     String CATEGORY_NAME = "WP-LG-001";
 
     String CATEGORY_ID = "WP-LG-002";
@@ -28,5 +30,13 @@ public interface ConstansErrorCode {
     String ATTRIBUTE_NOT_EXIST = "WP-LG-013";
 
     String PRODUCT_ERROR_CREATE = "WP-LG-014";
+
+    String PRODUCT_NOT_FOUNT = "WP-LG-015";
+
+    String VOUCHER_DATE_NOT_PAST = "WP-LG-016";
+
+    String INVOICE_NOT_DETAIL = "WP-LG-017";
+
+    String COLOR_NOT_EXIST = "WP-LG-018";
 
 }

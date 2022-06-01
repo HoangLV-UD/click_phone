@@ -16,6 +16,8 @@ public interface IProductService {
 
     ProductResponse getProduct(Long id);
 
+    ProductResponse getName(String name);
+
     String deleteProduct(Long id);
 
     String editStatusProduct(Long id, String value);
