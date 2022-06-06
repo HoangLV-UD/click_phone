@@ -8,6 +8,9 @@ import java.util.List;
 
 @Repository
 public interface StaffRepo extends JpaRepository<StaffEntity, Long> {
+
+    StaffEntity findByIdAndDeleteFlagIsFalse(Long id);
+
     List<StaffEntity> findAllByDeleteFlagIsTrue();
 
     // Staffs not deleted

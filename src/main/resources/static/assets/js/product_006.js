@@ -817,6 +817,20 @@ function onClickEditProduct(e) {
 
     // get element ram
     let productRam = document.getElementById('ip-edit-product-ram');
+
+    let romDetail = document.getElementById("rom-product-detail");
+    while (romDetail.lastElementChild) {
+        romDetail.removeChild(romDetail.lastElementChild);
+    }
+
+    let colorRom = document.getElementById("color-rom");
+    while (colorRom.lastElementChild) {
+        colorRom.removeChild(colorRom.lastElementChild);
+    }
+
+    $("#product-detai-qty").val("");
+    $("#product-detai-priceString").val("");
+    $("#product-detai-price").val("");
     $.ajax({
         url: '/api/product/' + id,
         method: 'GET',
@@ -829,19 +843,31 @@ function onClickEditProduct(e) {
                 for (let j = 0; j < data.romRespones.length; j++) {
                     if($("#edit-rom" + i).val() === data.romRespones[j].name){
                         $("#edit-rom" + i).prop('checked', true);
+                        romDetail.innerHTML+='<option value="'+data.romRespones[j].id+'" >'+data.romRespones[j].name+' GB</option>'
                         break;
                     }
                 }
             }
-
-            $("#ip-edit-product-id").val(data.id);
-            if(data.status === "ON"){
-                document.getElementById("btn-submit-edit-product-status").innerHTML = "Ngừng kinh doanh"
+            if(data.romRespones[0].productPropertyResponeList.length > 0){
+                for (let i = 0; i < data.romRespones[0].productPropertyResponeList.length; i++) {
+                    colorRom.innerHTML+='<option value="'+data.romRespones[0].productPropertyResponeList[i].colorId+'" >'+data.romRespones[0].productPropertyResponeList[i].colorName+'</option>'
+                }
+                $("#product-detai-qty").val(data.romRespones[0].productPropertyResponeList[0].quantity);
+                $("#product-detai-priceString").val(data.romRespones[0].productPropertyResponeList[0].priceString);
+                $("#product-detai-price").val(data.romRespones[0].productPropertyResponeList[0].price);
+                $("#name-product-detail").val(data.nameProduct);
+                console.log(data.romRespones[0].productPropertyResponeList[0].status);
+                $("#btn-submit-edit-product-detail-status").val("");
+                if(data.romRespones[0].productPropertyResponeList[0].status === 'ON'){
+                    document.getElementById("btn-submit-edit-product-detail-status").innerHTML += "Ngừng kinh doanh"
+                }else {
+                    document.getElementById("btn-submit-edit-product-detail-status").innerHTML += "Kinh doanh lại"
+                }
+                document.getElementById("updateDetail").style.display = "block";
             }else {
-                document.getElementById("btn-submit-edit-product-status").innerHTML = "Kinh doanh lại"
 
+                document.getElementById("updateDetail").style.display = "none";
             }
-
 
 
             if (getElementProductName !== null) {
@@ -962,7 +988,7 @@ function onClickDeleteProduct(e) {
 
 function onClickUpdateProductStatus(e) {
     let id = e.dataset.id;
-    var check = document.getElementById("btn-submit-edit-product-status").innerText;
+    var check = document.getElementById("btn-submit-edit-product-detail-status").innerText;
     if(check === "Ngừng kinh doanh"){
         $.ajax({
             url: `/api/product/status/` + id + `/OFF`,
@@ -1020,26 +1046,6 @@ function onStatusChange(element) {
     }
 }
 
-
-function onClickCheckAllProductAdd(e) {
-    let getChk = document.getElementsByClassName('chk-add-product')
-    for (const chk of getChk) {
-        if (!chk.parentElement.parentElement.hidden) {
-            chk.checked = e.checked
-        }
-    }
-}
-
-function onClickCheckProductAdd(e) {
-    if (!e.checked) {
-        let getChkAll = document.getElementById('chk-add-all-product');
-        if (getChkAll !== null && getChkAll !== undefined) {
-            getChkAll.checked = false;
-        }
-    } else {
-        enableCheckBox();
-    }
-}
 
 function enableCheckBox() {
     let getChkAll = document.getElementById('chk-add-all-product');
@@ -1211,6 +1217,126 @@ function addOrderProduct(id){
 
 }
 
+function changeColor(){
+    document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "";
+    var romId = $("#rom-product-detail").find(":selected").val();
+    console.log(romId);
+    var colorId = $("#color-rom").find(":selected").val();
+    var status = document.getElementById("btn-submit-edit-product-detail-status").innerText;
+    console.log(colorId);
+    var request = {
+        "romId" : romId,
+        "colorId" : colorId
+    }
+    $.ajax({
+        url : "api/product-property",
+        method : "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(request),
+        success : function (data) {
+            console.log(data)
+            if(data.status === 'ON'){
+                document.getElementById("btn-submit-edit-product-detail-status").innerHTML += "Ngừng kinh doanh"
+            }else {
+                document.getElementById("btn-submit-edit-product-detail-status").innerHTML += "Kinh doanh lại"
+            }
+            $("#product-detai-qty").val(data.quantity);
+            $("#product-detai-price").val(data.price);
+            $("#product-detai-priceString").val(data.priceString);
+        },
+        error : function (error) {
+            console.log(error)
+        }
+    })
+
+}
+
+function changeRom(){
+    document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "";
+    var romId = $("#rom-product-detail").find(":selected").val();
+    console.log(romId);
+
+    var request = {
+        "romId" : romId
+    }
+    let colorRom = document.getElementById("color-rom");
+    while (colorRom.lastElementChild) {
+        colorRom.removeChild(colorRom.lastElementChild);
+    }
+    $.ajax({
+        url : "api/product-property",
+        method : "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(request),
+        success : function (data) {
+            console.log(data)
+            if(data[0].status === 'ON'){
+                document.getElementById("btn-submit-edit-product-detail-status").innerHTML += "Ngừng kinh doanh"
+            }else {
+                document.getElementById("btn-submit-edit-product-detail-status").innerHTML += "Kinh doanh lại"
+            }
+            $("#product-detai-qty").val(data[0].quantity);
+            $("#product-detai-price").val(data[0].price);
+            $("#product-detai-priceString").val(data[0].priceString);
+            for (var  i = 0; i < data.length; i++){
+                colorRom.innerHTML+='<option value="'+data[i].colorId+'" >'+data[i].colorName+'</option>'
+            }
+
+        },
+        error : function (error) {
+            console.log(error)
+        }
+    })
+
+}
+
+function onClickUpdateProductStatusDetail() {
+    var romId = $("#rom-product-detail").find(":selected").val();
+    var colorId = $("#color-rom").find(":selected").val();
+
+}
+
+function updateDetail(){
+    if($("#product-detai-price").val().length === 0){
+        toastDanger("Lỗi", "Không được để trống giá")
+        return;
+    }
+    if($("#product-detai-qty").val().length === 0){
+        toastDanger("Lỗi", "Không được để trống số lượng")
+        return;
+    }
+    var romId = $("#rom-product-detail").find(":selected").val();
+    console.log(romId);
+    var colorId = $("#color-rom").find(":selected").val();
+    console.log(colorId);
+
+    var request = {
+        "romId" : romId,
+        "colorId" : colorId,
+        "quantity" : $("#product-detai-qty").val(),
+        "price" : $("#product-detai-price").val()
+    }
+    $.ajax({
+        url : "api/product-property",
+        method : "PUT",
+        contentType: 'application/json',
+        data: JSON.stringify(request),
+        success : function (data) {
+            console.log(data)
+            $("#product-detai-qty").val(data.quantity);
+            $("#product-detai-price").val(data.price);
+            $("#product-detai-priceString").val(data.priceString)
+            $("#product-detai-priceString").val(data.priceString);
+            toastSuccess("Thành công", "Cập nhập thành công");
+        },
+        error : function (error) {
+            console.log(error)
+            toastDanger("Thất bại", "Lỗi hệ thống");
+        }
+    })
+}
+
+
 function delete_row(e) {
     e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
 }
@@ -1219,5 +1345,9 @@ function copy_row(e){
     var tr = e.parentNode.parentNode.cloneNode(true);
     console.log(tr);
     document.getElementById("bodyAddProductOrderInvoice").innerHTML+=tr.outerHTML;
+}
+
+function onclickDetail(){
+    $('#modal-edit-product').modal('hide');
 }
 

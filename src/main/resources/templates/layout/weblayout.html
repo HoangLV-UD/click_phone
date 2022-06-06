@@ -274,5 +274,106 @@
     }
     connect();
 </script>
+<script>
+    $('#btnChangePassword1').click(function () {
+        var oldPass = $('#old-pass').val();
+        var newPass = $('#new-pass').val();
+        var confirmPass = $('#confirm-pass').val();
+        var id = $('#iduser').val();
+        if(oldPass.length === 0){
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+            Toast.fire({
+                icon: 'error',
+                title: 'Vui lòng nhập mật khẩu cũ'
+            })
+            return;
+        }
+        if(confirmPass.length === 0 || newPass.length === 0){
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+            Toast.fire({
+                icon: 'error',
+                title: 'Vui lòng nhập mật khẩu mới'
+            })
+            return;
+        }
+
+        if(confirmPass !== newPass){
+            $('#confirm-pass').val('');
+            $('#new-pass').val('');
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+            Toast.fire({
+                icon: 'error',
+                title: 'Mật khẩu xác nhận chưa giống nhau'
+            })
+            return;
+        }
+        console.log(id);
+        $.ajax({
+            url: '/api/staff/change-password/' + id + '/' + oldPass + '/' + newPass,
+            type: 'PUT',
+            success: function (result) {
+                console.log(result)
+                $('.modal-add-staff').modal('hide');
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Đổi mật khẩu thành công',
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                    timer: 2000
+                }).then(()=> window.location.reload());
+            },
+            error: function (error) {
+                console.log(error)
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+                Toast.fire({
+                    icon: 'error',
+                    title: error.responseText
+                })
+            }
+        })
+
+     })
+</script>
 </body>
 </html>

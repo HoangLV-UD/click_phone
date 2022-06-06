@@ -23,7 +23,6 @@ public class ProductRequestAdd {
 
     private Long categoryId;
 
-
     private String note;
 
     private Date create_Date;

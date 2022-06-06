@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ProductPropertyRespone {
+    private String id;
+    private String romId;
+    private String colorId;
     private long price;
     private String priceString;
     private long quantity;
-    private String color;
+    private String colorName;
+    private String status;
 }

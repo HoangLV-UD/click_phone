@@ -24,10 +24,6 @@ public class ProductPropertyEntity extends BaseEntity{
     @Column(name = "QUANTITY")
     private long quantity;
 
-    @Basic
-    @Column(name = "COLOR")
-    private String color;
-
     @ManyToOne
     @JoinColumn(name = "ROM_ID", referencedColumnName = "ID")
     private RomEntity romEntity;
@@ -68,13 +64,6 @@ public class ProductPropertyEntity extends BaseEntity{
         this.quantity = quantity;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
 
     public RomEntity getRomEntity() {
         return romEntity;

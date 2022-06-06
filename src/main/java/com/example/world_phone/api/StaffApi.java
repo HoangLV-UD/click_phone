@@ -3,15 +3,21 @@ package com.example.world_phone.api;
 import com.example.world_phone.dto.request.staff.StaffAddRequestDTO;
 import com.example.world_phone.dto.request.staff.StaffEditRequestDTO;
 import com.example.world_phone.dto.respone.staff.StaffResponeDto;
+import com.example.world_phone.entity.StaffEntity;
+import com.example.world_phone.repo.StaffRepo;
 import com.example.world_phone.service.IStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/staff")
 public class StaffApi {
 
+    @Autowired
+    private StaffRepo staffRepo;
 
     @Autowired
     private IStaffService staffService;
@@ -32,7 +38,7 @@ public class StaffApi {
     }
 
     @PostMapping
-    public ResponseEntity addStaff(@RequestBody StaffAddRequestDTO staff) {
+    public ResponseEntity<?> addStaff(@RequestBody StaffAddRequestDTO staff) {
         String status = staffService.addStaff(staff);
         if (status.equalsIgnoreCase("ok")) {
             return ResponseEntity.ok().body(staff);
@@ -41,13 +47,13 @@ public class StaffApi {
     }
 
     @PutMapping
-    public ResponseEntity updateStaff(@RequestBody StaffEditRequestDTO staff) {
+    public ResponseEntity<?> updateStaff(@RequestBody StaffEditRequestDTO staff) {
         staffService.editStaff(staff);
         return ResponseEntity.ok().body(staff);
     }
 
     @PutMapping("/status/{id}/{status}")
-    public ResponseEntity deleteStaff(@PathVariable("id") String id, @PathVariable("status") String status) {
+    public ResponseEntity<?> deleteStaff(@PathVariable("id") String id, @PathVariable("status") String status) {
         if (staffService.changeStatusStaff(id, status)) {
             return ResponseEntity.ok("oke");
         }
@@ -55,10 +61,21 @@ public class StaffApi {
     }
 
     @PutMapping("/delete/{id}")
-    public ResponseEntity deleteStaff(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteStaff(@PathVariable("id") String id) {
         if (staffService.deleteStaff(id)) {
             return ResponseEntity.ok("oke");
         }
         return ResponseEntity.badRequest().body("fail");
+    }
+
+    @PutMapping("change-password/{id}/{oldpass}/{newpass}")
+    public ResponseEntity<?> changePass(@PathVariable("id") Long id,
+                                        @PathVariable("oldpass") String oldpass,
+                                        @PathVariable("newpass") String newpass){
+        String check = staffService.changePass(id, oldpass, newpass);
+        if(check.equals("ok")){
+            return ResponseEntity.ok().body("ok");
+        }
+        return ResponseEntity.badRequest().body("a");
     }
 }

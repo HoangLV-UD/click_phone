@@ -50,4 +50,6 @@ public interface IStaffService {
 
     // save staff
     StaffEntity saveStaff(StaffEntity staffEntity);
+
+    String changePass(Long id, String oldPass, String newPass);
 }

@@ -11,6 +11,8 @@ import com.example.world_phone.service.IStaffService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class StaffServiceImpl implements IStaffService {
 
     @Autowired
     private StaffRepo staffRepo;
+
+    private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
 
     @Override
@@ -174,6 +178,18 @@ public class StaffServiceImpl implements IStaffService {
     @Override
     public StaffEntity saveStaff(StaffEntity staffEntity) {
         return null;
+    }
+
+    @Override
+    public String changePass(Long id, String oldPass, String newPass) {
+        BCryptPasswordEncoder pass = new BCryptPasswordEncoder();
+        StaffEntity entity = staffRepo.findByIdAndDeleteFlagIsFalse(id);
+        if(!pass.matches(oldPass, entity.getPassword())){
+            return new WorldPhoneExp(ConstansErrorCode.STAFF_NOT_MATCHES_PASS).getErrorMessage().getVn();
+        }
+        entity.setPassword(encoder.encode(newPass));
+        staffRepo.save(entity);
+        return "ok";
     }
 
 
