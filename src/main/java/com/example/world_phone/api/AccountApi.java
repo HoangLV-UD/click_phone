@@ -25,16 +25,9 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 public class AccountApi {
 
-    @Autowired
-    private HttpServletRequest req;
 
-    @Autowired
-    private final HttpSession session;
 
     private final StaffServiceImpl staffService;
-    private final SessionUtil sessionUtil;
-
-    private final ModelMapper modelMapper = new ModelMapper();
 
     private String message;
 

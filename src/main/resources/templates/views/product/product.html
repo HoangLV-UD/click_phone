@@ -74,7 +74,7 @@
                                     <th>Trạng thái</th>
                                     <th>Người thêm</th>
                                     <th>Ngày thêm</th>
-                                    
+
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -82,10 +82,13 @@
                                     <tr>
                                         <td class="text-center" th:text="${theCount.index + 1}">STT</td>
                                         <td class="text-center border-1">
-                                            <button th:onclick="|addOrderProduct('${product.id}')|" th:title="'Thêm sản phẩm để đặt'" type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
+                                            <button th:onclick="|addOrderProduct('${product.id}')|"
+                                                    th:title="'Thêm sản phẩm để đặt'" type="button"
+                                                    class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                         </td>
                                         <td class="text-center">
-                                            <img th:src="${product.getImageProduct()}" th:title="${product.getNameProduct()}"
+                                            <img th:src="${product.getImageProduct()}"
+                                                 th:title="${product.getNameProduct()}"
                                                  height="25px"
                                                  style="cursor: pointer" onclick="zoomImageProduct(this)"/>
                                         </td>
@@ -196,7 +199,8 @@
                                             <span>Màn hình</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Dynamic AMOLED 2X6.8" class="form-control" id="ip-add-product-screen">
+                                            <input placeholder="Dynamic AMOLED 2X6.8" class="form-control"
+                                                   id="ip-add-product-screen">
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
@@ -212,7 +216,8 @@
                                             <span>Camera sau</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Chính 108 MP & Phụ 12 MP, 10 MP, 10 MP" class="form-control" id="ip-add-product-cam_sau">
+                                            <input placeholder="Chính 108 MP & Phụ 12 MP, 10 MP, 10 MP"
+                                                   class="form-control" id="ip-add-product-cam_sau">
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
@@ -220,7 +225,8 @@
                                             <span>Camera trước</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="40 MP" class="form-control" id="ip-add-product-cam_truoc">
+                                            <input placeholder="40 MP" class="form-control"
+                                                   id="ip-add-product-cam_truoc">
                                         </div>
                                     </div>
 
@@ -234,7 +240,8 @@
                                                 <span>Chip</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="Snapdragon 8 Gen 1 8 nhân" class="form-control" id="ip-add-product-chip">
+                                                <input placeholder="Snapdragon 8 Gen 1 8 nhân" class="form-control"
+                                                       id="ip-add-product-chip">
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
@@ -299,7 +306,8 @@
                                                 <span>Sim</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="2 Nano SIM hoặc 1 Nano SIM + 1 eSIMHỗ trợ 5G" class="form-control" id="ip-add-product-sim">
+                                                <input placeholder="2 Nano SIM hoặc 1 Nano SIM + 1 eSIMHỗ trợ 5G"
+                                                       class="form-control" id="ip-add-product-sim">
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
@@ -307,7 +315,8 @@
                                                 <span>Pin, sạc</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="5000 mAh45 W" class="form-control" id="ip-add-product-pin">
+                                                <input placeholder="5000 mAh45 W" class="form-control"
+                                                       id="ip-add-product-pin">
                                             </div>
                                         </div>
                                     </div>
@@ -433,7 +442,8 @@
                                             <span>Màn hình</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Dynamic AMOLED 2X6.8" class="form-control" id="ip-edit-product-screen">
+                                            <input placeholder="Dynamic AMOLED 2X6.8" class="form-control"
+                                                   id="ip-edit-product-screen">
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
@@ -441,7 +451,8 @@
                                             <span>Hệ điều hành</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Android 12" class="form-control" id="ip-edit-product-os">
+                                            <input placeholder="Android 12" class="form-control"
+                                                   id="ip-edit-product-os">
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
@@ -449,7 +460,8 @@
                                             <span>Camera sau</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Chính 108 MP & Phụ 12 MP, 10 MP, 10 MP" class="form-control" id="ip-edit-product-cam_sau">
+                                            <input placeholder="Chính 108 MP & Phụ 12 MP, 10 MP, 10 MP"
+                                                   class="form-control" id="ip-edit-product-cam_sau">
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
@@ -457,7 +469,8 @@
                                             <span>Camera trước</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="40 MP" class="form-control" id="ip-edit-product-cam_truoc">
+                                            <input placeholder="40 MP" class="form-control"
+                                                   id="ip-edit-product-cam_truoc">
                                         </div>
                                     </div>
 
@@ -471,7 +484,8 @@
                                                 <span>Chip</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="Snapdragon 8 Gen 1 8 nhân" class="form-control" id="ip-edit-product-chip">
+                                                <input placeholder="Snapdragon 8 Gen 1 8 nhân" class="form-control"
+                                                       id="ip-edit-product-chip">
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
@@ -495,37 +509,48 @@
                                                 <span>Bộ nhớ trong</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input class="form-check-input" type="checkbox" value="8" id="edit-rom0">
-                                                <label class="form-check-label" for="edit-rom0" style="margin-right: 50px">
+                                                <input class="form-check-input" type="checkbox" value="8"
+                                                       id="edit-rom0">
+                                                <label class="form-check-label" for="edit-rom0"
+                                                       style="margin-right: 50px">
                                                     8 GB
                                                 </label>
 
-                                                <input class="form-check-input" type="checkbox" value="16" id="edit-rom1">
+                                                <input class="form-check-input" type="checkbox" value="16"
+                                                       id="edit-rom1">
                                                 <label class="form-check-label" for="edit-rom1">
                                                     16 GB
                                                 </label>
                                                 <br>
-                                                <input class="form-check-input" type="checkbox" value="32" id="edit-rom2">
-                                                <label class="form-check-label" for="edit-rom2" style="margin-right: 43px">
+                                                <input class="form-check-input" type="checkbox" value="32"
+                                                       id="edit-rom2">
+                                                <label class="form-check-label" for="edit-rom2"
+                                                       style="margin-right: 43px">
                                                     32 GB
                                                 </label>
 
-                                                <input class="form-check-input" type="checkbox" value="64" id="edit-rom3">
+                                                <input class="form-check-input" type="checkbox" value="64"
+                                                       id="edit-rom3">
                                                 <label class="form-check-label" for="edit-rom3">
                                                     64 GB
                                                 </label>
                                                 <br>
-                                                <input class="form-check-input" type="checkbox" value="128" id="edit-rom4">
-                                                <label class="form-check-label" for="edit-rom4" style="margin-right: 35px">
+                                                <input class="form-check-input" type="checkbox" value="128"
+                                                       id="edit-rom4">
+                                                <label class="form-check-label" for="edit-rom4"
+                                                       style="margin-right: 35px">
                                                     128 GB
                                                 </label>
 
-                                                <input class="form-check-input" type="checkbox" value="256" id="edit-rom5">
-                                                <label class="form-check-label" for="edit-rom5" style="margin-right: 20px">
+                                                <input class="form-check-input" type="checkbox" value="256"
+                                                       id="edit-rom5">
+                                                <label class="form-check-label" for="edit-rom5"
+                                                       style="margin-right: 20px">
                                                     256 GB
                                                 </label>
 
-                                                <input class="form-check-input" type="checkbox" value="512" id="edit-rom6">
+                                                <input class="form-check-input" type="checkbox" value="512"
+                                                       id="edit-rom6">
                                                 <label class="form-check-label" for="edit-rom6">
                                                     512 GB
                                                 </label>
@@ -536,7 +561,8 @@
                                                 <span>Sim</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="2 Nano SIM hoặc 1 Nano SIM + 1 eSIMHỗ trợ 5G" class="form-control" id="ip-edit-product-sim">
+                                                <input placeholder="2 Nano SIM hoặc 1 Nano SIM + 1 eSIMHỗ trợ 5G"
+                                                       class="form-control" id="ip-edit-product-sim">
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
@@ -544,7 +570,8 @@
                                                 <span>Pin, sạc</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="5000 mAh45 W" class="form-control" id="ip-edit-product-pin">
+                                                <input placeholder="5000 mAh45 W" class="form-control"
+                                                       id="ip-edit-product-pin">
                                             </div>
                                         </div>
                                     </div>
@@ -595,11 +622,114 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Đóng</button>
+                    <a href="#modal-edit-product-detail" id="updateDetail" data-bs-toggle="modal" class="btn btn-primary btn-sm waves-effect waves-light" onclick="onclickDetail()">Chỉnh sửa chi tiết</a>
                     <button type="button" data-id="" class="btn btn-success waves-effect waves-light"
                             id="btn-submit-edit-product" onclick="onClickUpdateProduct(this)">Cập nhật
                     </button>
                     <button type="button" data-id="" class="btn btn-warning waves-effect waves-light"
-                            id="btn-submit-edit-product-status" onclick="onClickUpdateProductStatus(this)">Ngừng kinh doanh
+                            id="btn-submit-edit-product-status" onclick="onClickUpdateProductStatus(this)">Ngừng kinh
+                        doanh
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+<!--    modal edit chi tiết-->
+    <div id="modal-edit-product-detail" class="modal fade show" style="display: block;" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0">Sửa sản phẩm chi tiết</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#info-product-edit1" role="tab">
+                                <span class="d-none d-md-block">Thông tin sản phẩm chi tiết</span>
+                                <span class="d-block d-md-none">
+                                    <i class="mdi mdi-home-variant h5"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active p-3" id="info-product-edit1" role="tabpanel">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3 row">
+                                        <div class="col-lg-5">
+                                            Tên sản phẩm
+                                        </div>
+                                        <div class="col-lg-7">
+                                            <input type="text" id="name-product-detail" readonly
+                                                   class="form-control"/>
+<!--                                            <input hidden type="text" id="ip-edit-product-id"/>-->
+<!--                                            <input hidden type="text" id="ip-edit-product-attributeId"/>-->
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <div class="col-lg-5">
+                                            Bộ nhớ trong
+                                        </div>
+                                        <div class="col-lg-7">
+                                            <select id="rom-product-detail" class="form-control select2" onchange="changeRom()">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 row">
+                                        <div class="col-lg-5">
+                                            <span>Color</span>
+                                        </div>
+                                        <div class="col-lg-7">
+                                            <select id="color-rom" class="form-control select2" onchange="changeColor()">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div style="margin-left: 50px">
+                                        <div class="mb-3 row">
+                                            <div class="col-lg-5">
+                                                <span>Số lượng</span>
+                                            </div>
+                                            <div class="col-lg-7">
+                                                <input class="form-control"
+                                                       id="product-detai-qty">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <div class="col-lg-5">
+                                                <span>Giá hiển thị</span>
+                                            </div>
+                                            <div class="col-lg-7">
+                                                <input class="form-control" readonly id="product-detai-priceString">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <div class="col-lg-5">
+                                                <span>Giá dạng số</span>
+                                            </div>
+                                            <div class="col-lg-7">
+                                                <input class="form-control" id="product-detai-price">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Đóng</button>
+                    <button  onclick="updateDetail()" class="btn btn-primary btn-sm waves-effect waves-light" >Cập nhật chi tiết</button>
+                    <button type="button" class="btn btn-warning waves-effect waves-light"
+                            id="btn-submit-edit-product-detail-status" onclick="onClickUpdateProductStatusDetail(this)">
                     </button>
                 </div>
             </div><!-- /.modal-content -->

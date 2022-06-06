@@ -137,9 +137,13 @@ public class ProductServiceImpl implements IProductService {
             ) {
                 ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
                 productPropertyRespone.setQuantity(p.getQuantity());
+                productPropertyRespone.setId(String.valueOf(p.getId()));
+                productPropertyRespone.setRomId(String.valueOf(p.getRomEntity().getId()));
+                productPropertyRespone.setColorId(String.valueOf(p.getColorEntity().getId()));
                 productPropertyRespone.setPrice(p.getPrice());
+                productPropertyRespone.setStatus(p.getStatus());
                 productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
-                productPropertyRespone.setColor(p.getColor());
+                productPropertyRespone.setColorName(p.getColorEntity().getValueColor());
                 productPropertyResponeList.add(productPropertyRespone);
             }
             romRespone.setProductPropertyResponeList(productPropertyResponeList);
@@ -148,6 +152,7 @@ public class ProductServiceImpl implements IProductService {
         response.setRomRespones(romRespones);
         return response;
     }
+
 
     @Override
     public ProductResponse getName(String name) {
@@ -170,7 +175,8 @@ public class ProductServiceImpl implements IProductService {
                 productPropertyRespone.setQuantity(p.getQuantity());
                 productPropertyRespone.setPrice(p.getPrice());
                 productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
-                productPropertyRespone.setColor(p.getColor());
+                productPropertyRespone.setColorName(p.getColorEntity().getValueColor());
+                productPropertyRespone.setStatus(p.getStatus());
                 productPropertyResponeList.add(productPropertyRespone);
             }
             romRespone.setProductPropertyResponeList(productPropertyResponeList);
@@ -228,27 +234,6 @@ public class ProductServiceImpl implements IProductService {
 
             List<ImageEntity> imageEntities = imageRepo.findByProductEntity(response.getId());
             List<ImageRespone> imageProduct = new ArrayList<>();
-            List<RomEntity> romEntityList = x.getRomEntities();
-            List<RomRespone> romRespones = new ArrayList<>();
-            for (RomEntity r: romEntityList
-                 ) {
-                RomRespone romRespone = new RomRespone();
-                romRespone.setName(r.getName());
-                romRespone.setId(String.valueOf(r.getId()));
-                List<ProductPropertyRespone> productPropertyResponeList = new ArrayList<>();
-                for (ProductPropertyEntity p: r.getProductProperties()
-                     ) {
-                    ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
-                    productPropertyRespone.setQuantity(p.getQuantity());
-                    productPropertyRespone.setPrice(p.getPrice());
-                    productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
-                    productPropertyRespone.setColor(p.getColor());
-                    productPropertyResponeList.add(productPropertyRespone);
-                }
-                romRespone.setProductPropertyResponeList(productPropertyResponeList);
-                romRespones.add(romRespone);
-            }
-
             for (ImageEntity a: imageEntities
                  ) {
                 ImageRespone imageRespone = new ImageRespone();
@@ -256,9 +241,6 @@ public class ProductServiceImpl implements IProductService {
                 imageRespone.setId(String.valueOf(a.getId()));
                 imageProduct.add(imageRespone);
             }
-
-
-            response.setRomRespones(romRespones);
             response.setImage(imageProduct);
             response.setAttributeRespone(attributeService.findByProductId(response.getId()));
             response.setRomRespones(romService.findByProduct(x.getId()));

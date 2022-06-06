@@ -39,4 +39,6 @@ public interface ConstansErrorCode {
 
     String COLOR_NOT_EXIST = "WP-LG-018";
 
+    String STAFF_NOT_MATCHES_PASS = "WP-LG-019";
+
 }
