@@ -836,7 +836,6 @@ function onClickEditProduct(e) {
         method: 'GET',
         success: function (data) {
             console.log(data)
-
             // set rom cho check box
             for (let i = 0; i < 7; i++) {
                 $("#edit-rom" + i).prop('checked', false);
@@ -865,7 +864,6 @@ function onClickEditProduct(e) {
                 }
                 document.getElementById("updateDetail").style.display = "block";
             }else {
-
                 document.getElementById("updateDetail").style.display = "none";
             }
 

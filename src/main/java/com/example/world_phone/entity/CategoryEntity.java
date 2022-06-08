@@ -1,12 +1,8 @@
 package com.example.world_phone.entity;
 
-import lombok.*;
-
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+
 
 @Entity
 @Table(name = "category", schema = "world_phone", catalog = "")

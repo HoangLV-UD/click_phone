@@ -29,7 +29,7 @@ public class ProductPropertyEntity extends BaseEntity{
     private RomEntity romEntity;
 
     @ManyToOne
-    @JoinColumn(name = "colorID", referencedColumnName = "ID")
+    @JoinColumn(name = "COLOR_ID", referencedColumnName = "ID")
     private ColorEntity colorEntity;
 
     public Long getId() {
