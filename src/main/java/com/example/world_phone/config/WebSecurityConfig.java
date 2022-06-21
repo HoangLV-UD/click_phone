@@ -48,10 +48,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        CustomerAuthenticationFilter customerAuthenticationFilter = new CustomerAuthenticationFilter(authenticationManagerBean());
-//        customerAuthenticationFilter.setFilterProcessesUrl("/login-check");
+        //CustomerAuthenticationFilter customerAuthenticationFilter = new CustomerAuthenticationFilter(authenticationManagerBean());
+      //  customerAuthenticationFilter.setFilterProcessesUrl("/login-check");
         http.csrf().disable();
-        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+       // http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests().antMatchers("/login/**", "/assets/**").permitAll();
         http.authorizeRequests().antMatchers("/staff").hasAnyAuthority("ROLE_ADMIN")
@@ -76,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     sessionUtil.addObject("username", username);
                 })
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login?status=logout");
-        //http.addFilter(customerAuthenticationFilter);
+       // http.addFilter(customerAuthenticationFilter);
 
         http.authorizeRequests().and() //
                 .rememberMe().rememberMeParameter("remember")

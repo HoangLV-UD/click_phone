@@ -57,6 +57,7 @@ public class CustomerAuthenticationFilter extends UsernamePasswordAuthentication
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
         Map<String, String> tokens = new HashMap<String, String>();
+        System.out.println(access_token);
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
         response.setContentType("application/json");

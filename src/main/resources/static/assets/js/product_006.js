@@ -987,6 +987,7 @@ function onClickDeleteProduct(e) {
 function onClickUpdateProductStatus(e) {
     let id = e.dataset.id;
     var check = document.getElementById("btn-submit-edit-product-detail-status").innerText;
+    console.log(check);
     if(check === "Ngừng kinh doanh"){
         $.ajax({
             url: `/api/product/status/` + id + `/OFF`,

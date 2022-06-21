@@ -172,7 +172,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-3">
                                             Tên sản phẩm
                                         </div>
                                         <div class="col-lg-7">
@@ -181,8 +181,8 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
-                                            Danh mục sản phẩm
+                                        <div class="col-lg-3">
+                                            Danh mục
                                         </div>
                                         <div class="col-lg-7">
                                             <select id="ip-add-product-category" class="form-control select2"
@@ -193,26 +193,46 @@
                                                 </option>
                                             </select>
                                         </div>
+                                        <div class="col-lg-2">
+                                            <button onclick="openCategory()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
+                                        </div>
                                     </div>
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-3">
                                             <span>Màn hình</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Dynamic AMOLED 2X6.8" class="form-control"
-                                                   id="ip-add-product-screen">
+                                            <select id="ip-add-product-screen" class="form-control select2"
+                                                    data-status="add">
+                                               <th:block th:each="screen : ${listScreen}">
+                                                   <option th:value="${screen.id}" th:text="${screen.getName()}"></option>
+                                               </th:block>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <button onclick="openScreen()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-3">
                                             <span>Hệ điều hành</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Android 12" class="form-control" id="ip-add-product-os">
+                                            <select id="ip-add-product-os" class="form-control select2"
+                                                    data-status="add">
+                                                <th:block th:each="os : ${listOs}">
+                                                    <option th:value="${os.id}" th:text="${os.getName()}"></option>
+                                                </th:block>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <button onclick="openOS()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-3">
                                             <span>Camera sau</span>
                                         </div>
                                         <div class="col-lg-7">
@@ -221,7 +241,7 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-3">
                                             <span>Camera trước</span>
                                         </div>
                                         <div class="col-lg-7">
@@ -236,7 +256,7 @@
                                     <div id="product-add-property">
 
                                         <div class="mb-3 row">
-                                            <div class="col-lg-5">
+                                            <div class="col-lg-3">
                                                 <span>Chip</span>
                                             </div>
                                             <div class="col-lg-7">
@@ -245,23 +265,24 @@
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
-                                            <div class="col-lg-5">
+                                            <div class="col-lg-3">
                                                 <span>Ram</span>
                                             </div>
                                             <div class="col-lg-7">
                                                 <select id="ip-add-product-ram" class="form-control select2"
                                                         data-status="add">
-                                                    <option value="2">2 GB</option>
-                                                    <option value="3">3 GB</option>
-                                                    <option value="4">4 GB</option>
-                                                    <option value="6">6 GB</option>
-                                                    <option value="8">8 GB</option>
-                                                    <option value="12">12 GB</option>
+                                                    <th:block th:each="ram : ${listRam}">
+                                                        <option th:value="${ram.id}" th:text="${ram.getName()}"></option>
+                                                    </th:block>
                                                 </select>
+
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <button onclick="openRam()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
-                                            <div class="col-lg-5">
+                                            <div class="col-lg-3">
                                                 <span>Bộ nhớ trong</span>
                                             </div>
                                             <div class="col-lg-7">
@@ -302,7 +323,7 @@
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
-                                            <div class="col-lg-5">
+                                            <div class="col-lg-3">
                                                 <span>Sim</span>
                                             </div>
                                             <div class="col-lg-7">
@@ -311,7 +332,7 @@
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
-                                            <div class="col-lg-5">
+                                            <div class="col-lg-3">
                                                 <span>Pin, sạc</span>
                                             </div>
                                             <div class="col-lg-7">
@@ -736,6 +757,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+
     <div class="modal fade" id="modal-zoom-image" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -746,6 +768,9 @@
             </div>
         </div>
     </div>
+
+
+
 
     <div id="modalAddOrderInvoice" class="modal fade show" style="display: block;" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -835,6 +860,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
     <select id="romProduct" hidden class="form-control"></select>
 
     <select hidden id="color" class="form-control">
@@ -846,6 +872,7 @@
     <script th:src="@{'/assets/ckeditor/ckeditor.js'}"></script>
 
     <script th:src="@{/assets/js/product_006.js}"></script>
+    <script th:src="@{/system/attribute_screen.js}"></script>
 
 </div>
 <div layout:fragment="script">
