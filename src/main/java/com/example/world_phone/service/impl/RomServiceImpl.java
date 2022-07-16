@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +31,12 @@ public class RomServiceImpl implements IRomService {
     @Override
     public List<RomRespone> findByProduct(Long id) {
         List<RomEntity> romEntityList = romRepo.findByProductEntity(id);
-        return null;
+        List<RomRespone> romRespones = new ArrayList<>();
+        for (RomEntity r: romEntityList
+             ) {
+            romRespones.add(new RomRespone(String.valueOf(r.getId()), r.getName(), null));
+        }
+        return romRespones;
     }
 
     @Override
@@ -79,7 +85,7 @@ public class RomServiceImpl implements IRomService {
 
     public  RomEntity mapToEntity(RomRequestAdd a){
         RomEntity entity = new RomEntity();
-        entity.setStatus("1");
+        entity.setStatus("ON");
         entity.setCreateBy((String) sessionUtil.getObject("username"));
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));

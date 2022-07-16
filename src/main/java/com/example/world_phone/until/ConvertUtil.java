@@ -13,7 +13,17 @@ import java.util.Locale;
 
 @Component
 public class ConvertUtil {
+    private static ConvertUtil convertUtil;
 
+    private ConvertUtil() {
+    }
+
+    public static ConvertUtil get() {
+        if (convertUtil == null) {
+            convertUtil = new ConvertUtil();
+        }
+        return convertUtil;
+    }
 
     public Date convertToDateViaSqlTimestamp(LocalDateTime dateToConvert) {
         return java.sql.Timestamp.valueOf(dateToConvert);
@@ -34,4 +44,8 @@ public class ConvertUtil {
             throw new WorldPhoneExp(ConstansErrorCode.ERROR_DATA_REQUEST);
         }
     }
+
+
+
+
 }

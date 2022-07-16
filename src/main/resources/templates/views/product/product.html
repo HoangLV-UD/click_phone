@@ -233,20 +233,18 @@
                                     </div>
                                     <div class="mb-3 row">
                                         <div class="col-lg-3">
-                                            <span>Camera sau</span>
+                                            <span>Camera</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Chính 108 MP & Phụ 12 MP, 10 MP, 10 MP"
-                                                   class="form-control" id="ip-add-product-cam_sau">
+                                            <select id="ip-add-product-cam" class="form-control select2"
+                                                    data-status="add">
+                                                <th:block th:each="cam : ${listCam}">
+                                                    <option th:value="${cam.id}" th:text="${cam.nameSau} + ' || ' + ${cam.getNameTruoc()}"></option>
+                                                </th:block>
+                                            </select>
                                         </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <div class="col-lg-3">
-                                            <span>Camera trước</span>
-                                        </div>
-                                        <div class="col-lg-7">
-                                            <input placeholder="40 MP" class="form-control"
-                                                   id="ip-add-product-cam_truoc">
+                                        <div class="col-lg-2">
+                                            <button onclick="openCam()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                         </div>
                                     </div>
 
@@ -260,8 +258,15 @@
                                                 <span>Chip</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="Snapdragon 8 Gen 1 8 nhân" class="form-control"
-                                                       id="ip-add-product-chip">
+                                                <select id="ip-add-product-chip" class="form-control select2"
+                                                        data-status="add">
+                                                    <th:block th:each="chip : ${listChip}">
+                                                        <option th:value="${chip.id}" th:text="${chip.getName()}"></option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <button onclick="openChip()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
@@ -272,7 +277,7 @@
                                                 <select id="ip-add-product-ram" class="form-control select2"
                                                         data-status="add">
                                                     <th:block th:each="ram : ${listRam}">
-                                                        <option th:value="${ram.id}" th:text="${ram.getName()}"></option>
+                                                        <option th:value="${ram.id}" th:text="${ram.getName()} + ' GB'"></option>
                                                     </th:block>
                                                 </select>
 
@@ -324,20 +329,18 @@
                                         </div>
                                         <div class="mb-3 row">
                                             <div class="col-lg-3">
-                                                <span>Sim</span>
+                                                <span>Pin</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="2 Nano SIM hoặc 1 Nano SIM + 1 eSIMHỗ trợ 5G"
-                                                       class="form-control" id="ip-add-product-sim">
+                                                <select id="ip-add-product-pin" class="form-control select2"
+                                                        data-status="add">
+                                                    <th:block th:each="pin : ${listPin}">
+                                                        <option th:value="${pin.id}" th:text="${pin.getName()} + ' mAh'"></option>
+                                                    </th:block>
+                                                </select>
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <div class="col-lg-3">
-                                                <span>Pin, sạc</span>
-                                            </div>
-                                            <div class="col-lg-7">
-                                                <input placeholder="5000 mAh45 W" class="form-control"
-                                                       id="ip-add-product-pin">
+                                            <div class="col-lg-2">
+                                                <button onclick="openPin()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -434,7 +437,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-3">
                                             Tên sản phẩm
                                         </div>
                                         <div class="col-lg-7">
@@ -445,8 +448,8 @@
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
-                                            Danh mục sản phẩm
+                                        <div class="col-lg-3">
+                                            Danh mục
                                         </div>
                                         <div class="col-lg-7">
                                             <select id="ip-edit-product-category" class="form-control select2"
@@ -457,76 +460,100 @@
                                                 </option>
                                             </select>
                                         </div>
+                                        <div class="col-lg-2">
+                                            <button onclick="openCategory()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
+                                        </div>
                                     </div>
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-3">
                                             <span>Màn hình</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Dynamic AMOLED 2X6.8" class="form-control"
-                                                   id="ip-edit-product-screen">
+                                            <select id="ip-edit-product-screen" class="form-control select2"
+                                                    data-status="add">
+                                                <th:block th:each="screen : ${listScreen}">
+                                                    <option th:value="${screen.id}" th:text="${screen.getName()}"></option>
+                                                </th:block>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <button onclick="openScreen()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-3">
                                             <span>Hệ điều hành</span>
                                         </div>
                                         <div class="col-lg-7">
-                                            <input placeholder="Android 12" class="form-control"
-                                                   id="ip-edit-product-os">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <div class="col-lg-5">
-                                            <span>Camera sau</span>
-                                        </div>
-                                        <div class="col-lg-7">
-                                            <input placeholder="Chính 108 MP & Phụ 12 MP, 10 MP, 10 MP"
-                                                   class="form-control" id="ip-edit-product-cam_sau">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <div class="col-lg-5">
-                                            <span>Camera trước</span>
-                                        </div>
-                                        <div class="col-lg-7">
-                                            <input placeholder="40 MP" class="form-control"
-                                                   id="ip-edit-product-cam_truoc">
-                                        </div>
-                                    </div>
+                                            <select id="ip-edit-product-os" class="form-control select2"
+                                                    data-status="add">
+                                                <th:block th:each="os : ${listOs}">
+                                                    <option th:value="${os.id}" th:text="${os.getName()}"></option>
+                                                </th:block>
+                                            </select>
 
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <button onclick="openOS()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <div class="col-lg-3">
+                                            <span>Camera</span>
+                                        </div>
+                                        <div class="col-lg-7">
+                                            <select id="ip-edit-product-cam_sau" class="form-control select2"
+                                                    data-status="add">
+                                                <th:block th:each="cam : ${listCam}">
+                                                    <option th:value="${cam.id}" th:text="${cam.nameSau} + ' || ' + ${cam.getNameTruoc()}"></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <button onclick="openCam()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-lg-6">
 
                                     <div id="product-edit-property">
 
                                         <div class="mb-3 row">
-                                            <div class="col-lg-5">
+                                            <div class="col-lg-3">
                                                 <span>Chip</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="Snapdragon 8 Gen 1 8 nhân" class="form-control"
-                                                       id="ip-edit-product-chip">
+                                                <select id="ip-edit-product-chip" class="form-control select2"
+                                                        data-status="add">
+                                                    <th:block th:each="chip : ${listChip}">
+                                                        <option th:value="${chip.id}" th:text="${chip.getName()}"></option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <button onclick="openChip()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
-                                            <div class="col-lg-5">
+                                            <div class="col-lg-3">
                                                 <span>Ram</span>
                                             </div>
                                             <div class="col-lg-7">
                                                 <select id="ip-edit-product-ram" class="form-control select2"
                                                         data-status="add">
-                                                    <option value="2">2 GB</option>
-                                                    <option value="3">3 GB</option>
-                                                    <option value="4">4 GB</option>
-                                                    <option value="6">6 GB</option>
-                                                    <option value="8">8 GB</option>
-                                                    <option value="12">12 GB</option>
+                                                    <th:block th:each="ram : ${listRam}">
+                                                        <option th:value="${ram.id}" th:text="${ram.getName()} + ' GB'"></option>
+                                                    </th:block>
                                                 </select>
+
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <button onclick="openRam()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
-                                            <div class="col-lg-5">
+                                            <div class="col-lg-3">
                                                 <span>Bộ nhớ trong</span>
                                             </div>
                                             <div class="col-lg-7">
@@ -577,22 +604,21 @@
                                                 </label>
                                             </div>
                                         </div>
+
                                         <div class="mb-3 row">
-                                            <div class="col-lg-5">
-                                                <span>Sim</span>
+                                            <div class="col-lg-3">
+                                                <span>Pin</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <input placeholder="2 Nano SIM hoặc 1 Nano SIM + 1 eSIMHỗ trợ 5G"
-                                                       class="form-control" id="ip-edit-product-sim">
+                                                <select id="ip-edit-product-pin" class="form-control select2"
+                                                        data-status="add">
+                                                    <th:block th:each="pin : ${listPin}">
+                                                        <option th:value="${pin.id}" th:text="${pin.getName()} + ' mAh'"></option>
+                                                    </th:block>
+                                                </select>
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <div class="col-lg-5">
-                                                <span>Pin, sạc</span>
-                                            </div>
-                                            <div class="col-lg-7">
-                                                <input placeholder="5000 mAh45 W" class="form-control"
-                                                       id="ip-edit-product-pin">
+                                            <div class="col-lg-2">
+                                                <button onclick="openPin()"  type="button" class="btn-blue-grey"><i class="bi bi-plus"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -780,7 +806,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-2">
                         <div class="mb-3">
                             <label for="ip-order-invoice-date">
                                 Mã đơn hàng:
@@ -789,7 +815,7 @@
                         <div class="mb-3 input-group" id="datepicker1">
                             <input type="text" class="form-control"
                                    id="ip-order-invoice-code"
-                                   placeholder="Vui lòng nhập mã đơn hàng"/>
+                                   placeholder="Vui lòng nhập mã"/>
                         </div>
                         <div class="mb-3">
                             <label for="ip-order-invoice-date">
@@ -826,7 +852,7 @@
                                       id="ip-order-invoice-note"></textarea>
                         </div>
                     </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-10">
                         <div class="table-responsive" style="overflow-y: auto; max-height: 60vh">
                             <table class="table">
                                 <thead>
@@ -853,8 +879,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Đóng</button>
                     <button type="button" class="btn btn-success waves-effect waves-light"
-                            onclick="onClickSubmitAddOrderInvoice()">
-                        Lưu
+                            onclick="onClickSubmitAddOrderInvoice(0)">Lưu
                     </button>
                 </div>
             </div><!-- /.modal-content -->

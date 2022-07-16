@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface RomRepo extends JpaRepository<RomEntity, Long> {
 
-    @Query("select o from RomEntity o where o.productEntity.id = ?1 and o.status = '1'")
+    @Query("select o from RomEntity o where o.productEntity.id = ?1 and o.status = 'ON'")
     List<RomEntity> findByProductEntity(Long id);
 
     RomEntity findByIdAndDeleteFlagIsFalse(Long id);

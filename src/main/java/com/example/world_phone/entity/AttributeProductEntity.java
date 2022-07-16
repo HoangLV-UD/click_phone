@@ -12,35 +12,29 @@ public class AttributeProductEntity extends BaseEntity{
 
     @Basic
     @Column(name = "OS_ID")
-    private Integer osId; // he dieu hanh
+    private Long osId; // he dieu hanh
 
     @Basic
     @Column(name = "SCREEN_ID")
-    private Integer screenId; // man hinh
+    private Long screenId; // man hinh
 
     @Basic
-    @Column(name = "CHIP")
-    private String chip;
+    @Column(name = "CHIP_ID")
+    private Long chipId;
 
     @Basic
-    @Column(name = "CAM_TRUOC")
-    private String camTruoc;
+    @Column(name = "CAM_ID")
+    private Long camId;
+
+
 
     @Basic
-    @Column(name = "CAM_SAU")
-    private String camSau;
-
-    @Basic
-    @Column(name = "SIM")
-    private String sim;
-
-    @Basic
-    @Column(name = "PIN")
-    private String pin;
+    @Column(name = "PIN_ID")
+    private Long pinId;
 
     @Basic
     @Column(name = "RAM_ID")
-    private Integer ramID;
+    private Long ramID;
 
     @Basic
     @Column(name = "PRODUCT_ID")
@@ -54,67 +48,52 @@ public class AttributeProductEntity extends BaseEntity{
         this.id = id;
     }
 
-    public Integer getOsId() {
+    public Long getOsId() {
         return osId;
     }
 
-    public void setOsId(Integer osId) {
+    public void setOsId(Long osId) {
         this.osId = osId;
     }
 
-    public Integer getScreenId() {
+    public Long getScreenId() {
         return screenId;
     }
 
-    public void setScreenId(Integer screenId) {
+    public void setScreenId(Long screenId) {
         this.screenId = screenId;
     }
 
-    public String getChip() {
-        return chip;
+
+    public Long getChipId() {
+        return chipId;
     }
 
-    public void setChip(String chip) {
-        this.chip = chip;
+    public void setChipId(Long chipId) {
+        this.chipId = chipId;
     }
 
-    public String getCamTruoc() {
-        return camTruoc;
+    public Long getCamId() {
+        return camId;
     }
 
-    public void setCamTruoc(String camTruoc) {
-        this.camTruoc = camTruoc;
+    public void setCamId(Long camId) {
+        this.camId = camId;
     }
 
-    public String getCamSau() {
-        return camSau;
+    public Long getPinId() {
+        return pinId;
     }
 
-    public void setCamSau(String camSau) {
-        this.camSau = camSau;
+    public void setPinId(Long pinId) {
+        this.pinId = pinId;
     }
 
-    public String getSim() {
-        return sim;
-    }
-
-    public void setSim(String sim) {
-        this.sim = sim;
-    }
-
-    public String getPin() {
-        return pin;
-    }
-
-    public void setPin(String pin) {
-        this.pin = pin;
-    }
-
-    public Integer getRamID() {
+    public Long getRamID() {
         return ramID;
     }
 
-    public void setRamID(Integer ramID) {
+    public void setRamID(Long ramID) {
         this.ramID = ramID;
     }
 

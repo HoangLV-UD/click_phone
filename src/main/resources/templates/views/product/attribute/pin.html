@@ -40,14 +40,14 @@
                            class="table table-striped table-hover table-bordered nowrap dataTable no-footer shadow"
                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead class="text-center">
-                        <th></th>
+                        <th>STT</th>
                         <th>Chức năng</th>
                         <th>Dung lượng pin</th>
                         </thead>
                         <tbody style="vertical-align: middle;">
                         <tr th:each="pin, iterator : ${list}">
                             <td class="text-end info-index">
-                                <!-- <span th:text="${iterator.index + 1}"></span>-->
+                                 <span th:text="${iterator.index + 1}"></span>
                             </td>
                             <td class="text-center">
                                 <i class="col-4 fas fa-edit" style="color: darkblue;" title="Cập nhật" onclick="onBtnEdit(this)"></i>

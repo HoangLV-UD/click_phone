@@ -3,8 +3,6 @@ package com.example.world_phone.dto.request.product;
 
 import com.example.world_phone.dto.request.attribute.AttributeRequestAdd;
 import com.example.world_phone.dto.request.rom.RomRequestAdd;
-import com.example.world_phone.dto.respone.attribute.AttributeRespone;
-import com.example.world_phone.dto.respone.rom.RomRespone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

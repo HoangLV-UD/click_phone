@@ -57,7 +57,7 @@
 
                             <input type="hidden" class="check-item" th:value="${ram.getId()}">
 
-                            <td th:text="${ram.name}">Họ tên</td>
+                            <td th:text="${ram.name} + ' GB'">Họ tên</td>
                         </tr>
                         </tbody>
                     </table>
@@ -465,7 +465,7 @@
                         type: 'DELETE',
                         contentType: 'application/json',
                         success: function (result) {
-                            window.location.href = "/screen";
+                            window.location.href = "/ram";
                         },
                         error: function (error) {
                             console.log(error);

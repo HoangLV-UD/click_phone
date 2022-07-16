@@ -95,6 +95,7 @@ function onClickSaveVoucher() {
         , getElementVoucherDescription
         , getElementVoucherPromo
     );
+    console.log(objVoucher);
     if (objVoucher !== null && objVoucher !== undefined) {
         $.ajax({
             url: '/api/voucher',

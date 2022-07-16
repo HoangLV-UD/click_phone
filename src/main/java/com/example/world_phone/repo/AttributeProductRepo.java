@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AttributeProductRepo extends JpaRepository<AttributeProductEntity, Long> {
-    AttributeProductEntity findByProductId(long productId);
+    AttributeProductEntity findByProductId(Long productId);
 }

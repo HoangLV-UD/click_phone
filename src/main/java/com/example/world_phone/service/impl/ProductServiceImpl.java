@@ -3,6 +3,7 @@ package com.example.world_phone.service.impl;
 import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.dto.request.product.ProductRequestAdd;
 import com.example.world_phone.dto.request.product.ProductRequestEdit;
+import com.example.world_phone.dto.respone.attribute.AttributeRespone;
 import com.example.world_phone.dto.respone.category.CategoryResponeDto;
 import com.example.world_phone.dto.respone.image.ImageRespone;
 import com.example.world_phone.dto.respone.product.ProductPropertyRespone;
@@ -10,7 +11,6 @@ import com.example.world_phone.dto.respone.product.ProductResponse;
 import com.example.world_phone.dto.respone.rom.RomRespone;
 import com.example.world_phone.entity.*;
 import com.example.world_phone.exception.WorldPhoneExp;
-import com.example.world_phone.repo.AttributeRepo;
 import com.example.world_phone.repo.ImageRepo;
 import com.example.world_phone.repo.ProductRepo;
 import com.example.world_phone.repo.PropertyProductRepo;
@@ -35,7 +35,7 @@ public class ProductServiceImpl implements IProductService {
     private final ProductRepo productRepo;
 
     private final PropertyProductRepo propertyProductRepo;
-    private final IAttributeService attributeService;
+    private final AttributeProductService attributeProductService;
     private final IRomService romService;
     private final ImageRepo imageRepo;
     private final ICategoryService categoryService;
@@ -54,6 +54,7 @@ public class ProductServiceImpl implements IProductService {
         List<ProductEntity> productEntityList = productRepo.findAll();
         List<ProductResponse> productResponseList = new ArrayList<>();
         for (ProductEntity a : productEntityList){
+
             productResponseList.add(mapToRespone(a));
         }
         return productResponseList;
@@ -67,7 +68,7 @@ public class ProductServiceImpl implements IProductService {
         }
         ProductEntity entity = mapToRequest(requestProduct);
         entity = productRepo.save(entity);
-        if(!attributeService.createAttribute(requestProduct.getAttributeRequestAdd(), entity.getId()).equals("ok")){
+        if(!attributeProductService.saveAttribute(requestProduct.getAttributeRequestAdd(), entity.getId()).equals("ok")){
             entity.setDeleteFlag(true);
             entity = productRepo.save(entity);
             log.error("them moi san pham that bai");
@@ -101,7 +102,7 @@ public class ProductServiceImpl implements IProductService {
             throw new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST);
         }
         ProductEntity entity = productRepo.findByIdAndDeleteFlagIsFalse(requestEdit.getIdProduct());
-        if(!attributeService.updateAttribute(requestEdit.getAttributeRequestedit()).equals("ok")){
+        if(!attributeProductService.updateAttribute(requestEdit.getAttributeRequestedit() , entity.getId()).equals("ok")){
             log.error("update sản phẩm thất bại ở phần attribute");
             return "false";
         }
@@ -155,35 +156,42 @@ public class ProductServiceImpl implements IProductService {
 
 
     @Override
-    public ProductResponse getName(String name) {
+    public List<ProductResponse> getName(String name) {
         List<ProductEntity> entities = productRepo.findByName(name);
         if(entities.size() == 0){
             throw new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST);
         }
-        ProductResponse response = mapToRespone(entities.get(0));
-        List<RomEntity> romEntityList = entities.get(0).getRomEntities();
-        List<RomRespone> romRespones = new ArrayList<>();
-        for (RomEntity r: romEntityList
-        ) {
-            RomRespone romRespone = new RomRespone();
-            romRespone.setName(r.getName());
-            romRespone.setId(String.valueOf(r.getId()));
-            List<ProductPropertyRespone> productPropertyResponeList = new ArrayList<>();
-            for (ProductPropertyEntity p: r.getProductProperties()
+
+        List<ProductResponse> list = new ArrayList<>();
+        for (ProductEntity e: entities
+             ) {
+            ProductResponse response = mapToRespone(e);
+            List<RomEntity> romEntityList = e.getRomEntities();
+            List<RomRespone> romRespones = new ArrayList<>();
+            for (RomEntity r: romEntityList
             ) {
-                ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
-                productPropertyRespone.setQuantity(p.getQuantity());
-                productPropertyRespone.setPrice(p.getPrice());
-                productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
-                productPropertyRespone.setColorName(p.getColorEntity().getValueColor());
-                productPropertyRespone.setStatus(p.getStatus());
-                productPropertyResponeList.add(productPropertyRespone);
+                RomRespone romRespone = new RomRespone();
+                romRespone.setName(r.getName());
+                romRespone.setId(String.valueOf(r.getId()));
+                List<ProductPropertyRespone> productPropertyResponeList = new ArrayList<>();
+                for (ProductPropertyEntity p: r.getProductProperties()
+                ) {
+                    ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
+                    productPropertyRespone.setQuantity(p.getQuantity());
+                    productPropertyRespone.setPrice(p.getPrice());
+                    productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
+                    productPropertyRespone.setColorName(p.getColorEntity().getValueColor());
+                    productPropertyRespone.setStatus(p.getStatus());
+                    productPropertyResponeList.add(productPropertyRespone);
+                }
+                romRespone.setProductPropertyResponeList(productPropertyResponeList);
+                romRespones.add(romRespone);
             }
-            romRespone.setProductPropertyResponeList(productPropertyResponeList);
-            romRespones.add(romRespone);
+            response.setRomRespones(romRespones);
+            list.add(response);
         }
-        response.setRomRespones(romRespones);
-        return response;
+
+        return list;
 
     }
 
@@ -242,8 +250,12 @@ public class ProductServiceImpl implements IProductService {
                 imageProduct.add(imageRespone);
             }
             response.setImage(imageProduct);
-            response.setAttributeRespone(attributeService.findByProductId(response.getId()));
+            //response.setAttributeRespone(attributeService.findByProductId(response.getId()));
             response.setRomRespones(romService.findByProduct(x.getId()));
+
+            // tìm attribute
+            AttributeRespone attributeRespone = attributeProductService.findByProduct(x.getId());
+            response.setAttributeRespone(attributeRespone);
             return response;
         }
     }

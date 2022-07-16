@@ -16,7 +16,7 @@ public interface IProductService {
 
     ProductResponse getProduct(Long id);
 
-    ProductResponse getName(String name);
+    List<ProductResponse> getName(String name);
 
     String deleteProduct(Long id);
 
