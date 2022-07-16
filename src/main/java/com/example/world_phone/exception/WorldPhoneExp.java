@@ -20,7 +20,7 @@ public class WorldPhoneExp extends RuntimeException{
         this.errorMessage = message;
     }
 
-    public WorldPhoneExp(String errorCode, Object args){
+    public WorldPhoneExp(String errorCode, Object... args){
         this.errorMessage = ErrorMessageLoader.getMessage(errorCode);
     }
 }

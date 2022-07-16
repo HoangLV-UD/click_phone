@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/product")
@@ -20,16 +23,7 @@ public class ProductApi {
 
     private final HttpServletRequest request;
 
-    @GetMapping() // yêu cầu ass java 5
-    public ResponseEntity<?> getByName(){
-        String name = request.getParameter("name");
-        System.out.println(name);
-        ProductResponse response = productService.getName(name);
-        if(response == null){
-            return ResponseEntity.badRequest().body(String.valueOf(new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST)));
-        }
-        return ResponseEntity.ok().body(response);
-    }
+
 
     @PostMapping()
     public ResponseEntity<?> add(@RequestBody ProductRequestAdd productRequestAdd){
@@ -76,6 +70,17 @@ public class ProductApi {
         }
             return ResponseEntity.badRequest().body(check);
     }
+
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<ProductResponse>> searchProductByKeyword(@PathVariable("keyword") String keyword) {
+        List<ProductResponse> productResponse = productService.getName(keyword);
+        if (Objects.nonNull(productResponse)) {
+            return ResponseEntity.ok(productResponse);
+        }
+        return ResponseEntity.badRequest().body(new ArrayList<>());
+    }
+
+
 
 
 }

@@ -53,4 +53,5 @@ public class ProductPropertyApi {
         }
         return ResponseEntity.badRequest().body("false");
     }
+
 }

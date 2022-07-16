@@ -2,6 +2,7 @@ package com.example.world_phone.service.impl;
 
 
 import com.example.world_phone.constant.ConstansErrorCode;
+import com.example.world_phone.constant.ConstansStatus;
 import com.example.world_phone.dto.request.product_property.ProductPropertyRequest;
 import com.example.world_phone.dto.respone.product.ProductPropertyRespone;
 import com.example.world_phone.entity.ProductPropertyEntity;
@@ -79,10 +80,17 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
             log.error(String.valueOf(new WorldPhoneExp(ConstansErrorCode.ROM_NOT_EXIST).getErrorMessage().getVn()));
             return "false";
         }
-        entityList.get(0).setStatus(request.getStatus());
+        if(request.getStatus().equalsIgnoreCase("Ngừng kinh doanh")){
+            entityList.get(0).setStatus(ConstansStatus.OFF);
+        }else {
+            entityList.get(0).setStatus(ConstansStatus.ON);
+        }
+
         repo.save(entityList.get(0));
         return "ok";
     }
+
+
 
 
     private ProductPropertyRespone mapToDto(ProductPropertyEntity entity){

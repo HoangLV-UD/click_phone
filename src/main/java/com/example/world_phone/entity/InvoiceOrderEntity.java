@@ -30,6 +30,19 @@ public class InvoiceOrderEntity extends BaseEntity{
     private Long totalMoney;
 
     @Basic
+    @Column(name = "GIAM_GIA")
+    private Long giamGia;
+
+
+    @Basic
+    @Column(name = "TONG_TIEN_TRA")
+    private Long totalMoneyPay;
+
+
+    @Basic
+    @Column(name = "TONG_TIEN_THUA")
+    private Long totalMoneyThua;
+    @Basic
     @Column(name = "STATUS")
     private Integer status;
 
@@ -119,5 +132,30 @@ public class InvoiceOrderEntity extends BaseEntity{
 
     public void setDetailEntity(List<InvoiceOrderDetailEntity> detailEntity) {
         this.detailEntity = detailEntity;
+    }
+
+    public Long getGiamGia() {
+        return giamGia;
+    }
+
+    public void setGiamGia(Long giamGia) {
+        this.giamGia = giamGia;
+    }
+
+
+    public Long getTotalMoneyPay() {
+        return totalMoneyPay;
+    }
+
+    public void setTotalMoneyPay(Long totalMoneyPay) {
+        this.totalMoneyPay = totalMoneyPay;
+    }
+
+    public Long getTotalMoneyThua() {
+        return totalMoneyThua;
+    }
+
+    public void setTotalMoneyThua(Long totalMoneyThua) {
+        this.totalMoneyThua = totalMoneyThua;
     }
 }

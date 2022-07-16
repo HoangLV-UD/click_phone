@@ -17,11 +17,7 @@ public class AttributeRequestAdd {
 
     private String chip;
 
-    private String camTruoc;
-
-    private String camSau;
-
-    private String sim;
+    private String cam;
 
     private String pin;
 

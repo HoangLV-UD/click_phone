@@ -98,36 +98,7 @@ function onChangeAddProduct(e) {
     onChangeTotal();
 }
 
-function onChangeInvoiceOrderEdit(e) {
-    let value = e.value + '';
-    let id, supplierId;
-    if (value !== null && value !== undefined && value !== '') {
-        id = value;
-    } else {
-        return;
-    }
-    $('#ip-edit-supplier option[value=' + supplierId + ']').attr('selected', true).change();
-    $.ajax({
-        url: '/api/invoice?orderId=' + id,
-        method: 'GET',
-        success: function (data) {
-            $(data).each((index, obj) => {
-                $('#bodyAddProduct').html('');
-                $.ajax({
-                    url: '/invoice/component/edit-product?number='
-                        + (index + 1)
-                        + '&productId=' + (obj.productId)
-                        + '&quantity=' + (obj.quantity)
-                        + '&quantityActual=' + (obj.quantityActual)
-                        + '&price=' + (obj.price),
-                    success: function (htm) {
-                        $('#bodyAddProduct').append(htm);
-                    }
-                })
-            })
-        }
-    })
-}
+
 
 function onChangeAddProductEdit(e) {
     let arrSelect = getSelectValues(e);
@@ -183,30 +154,25 @@ function getSelectValues(select) {
 }
 
 function onClickAddInvoice() {
-    let getInvoiceOrderCode = document.getElementById('ip-edit-order-code');
-    let getInvoiceShip = document.getElementById('ip-edit-ship');
-    let getSupplier = document.getElementById('ip-edit-supplier');
-    let getInvoiceDiscount = document.getElementById('ip-edit-invoice-discount');
-    let getInvoicePaid = document.getElementById('ip-edit-invoice-paid');
-    let getInvoiceNote = document.getElementById('ip-edit-invoice-note');
-    let getAllProductId = document.getElementsByClassName('ip-edit-product');
-    let getAllProductQuantity = document.getElementsByClassName('ip-edit-quantity');
-    let getAllProductQuantityActual = document.getElementsByClassName('ip-edit-quantity-actual');
-    let getAllProductPrice = document.getElementsByClassName('ip-edit-price');
+    let getInvoiceOrderCode = document.getElementById('ip-add-order-code');
+    let getSupplier = document.getElementById('ip-add-supplier');
+    let getInvoiceDiscount = document.getElementById('ip-add-invoice-discount');
+    let getInvoicePaid = document.getElementById('ip-add-invoice-paid');
+    let getInvoiceNote = document.getElementById('ip-add-invoice-note');
+    let getAllProductId = document.getElementsByClassName('add-product1');
+    let tienThua = document.getElementById("ip-add-thua");
     let obj = valueDateInvoice(
-        '',
+
         getInvoiceOrderCode,
-        getInvoiceShip,
         getSupplier,
         getInvoiceDiscount,
         getInvoicePaid,
         getInvoiceNote,
         getAllProductId,
-        getAllProductQuantity,
-        getAllProductQuantityActual,
-        getAllProductPrice
+        tienThua
     )
-    if (obj !== null && obj !== undefined && onChangeQuantityOrPrice()) {
+    console.log(obj)
+    if (obj !== null && obj !== undefined ) {
         $.ajax({
             url: '/api/invoice',
             method: 'POST',
@@ -219,15 +185,128 @@ function onClickAddInvoice() {
                 }, 2000)
             },
             error: function (error) {
-                if (error.responseJSON.vn === null || error.responseJSON.vn === undefined) {
-                    let message = error.responseJSON.message + '';
-                    message = message.substring(message.indexOf(':') + 1)
-                    toastDanger('Lỗi', message);
-                    return;
-                }
-                toastDanger('Lỗi', error.responseJSON.vn);
+                toastDanger('Lỗi', 'Hệ thống lỗi');
             }
         })
+    }
+}
+function valueDateInvoice(
+
+    getInvoiceOrderCode,
+    getSupplier,
+    getInvoiceDiscount,
+    getInvoicePaid,
+    getInvoiceNote,
+    getAllProductId,
+    tienThua
+) {
+
+    if (getSupplier === null || getSupplier === undefined || getSupplier.value === '') {
+        toastDanger('Lỗi', 'Vui lòng chọn nhà cung cấp');
+        return;
+    }
+    if (getInvoiceDiscount.value === null || getInvoiceDiscount.value === undefined) {
+        getInvoiceDiscount.value = 0
+    }
+    if (Number(getInvoiceDiscount.value) || getInvoiceDiscount.value === '0') {
+        if (Number(getInvoiceDiscount.value) < 0) {
+            toastDanger('Lỗi', 'Số tiền giảm giá phải từ 0đ')
+            return;
+        }
+    } else {
+        toastDanger('Lỗi', 'Số tiền giảm giá phải là một số nguyên')
+        return;
+    }
+
+    if (Number(tienThua.value) || tienThua.value === '0') {
+        if (Number(tienThua.value) < 0) {
+            toastDanger('Lỗi', 'Số tiền thừa phải từ 0đ')
+            return;
+        }
+    } else {
+        toastDanger('Lỗi', 'Số tiền thừa phải là một số nguyên')
+        return;
+    }
+
+    if (getInvoicePaid.value === null || getInvoicePaid.value === undefined) {
+        getInvoicePaid.value = 0
+    }
+    if (Number(getInvoicePaid.value) || getInvoicePaid.value === '0') {
+        if (Number(getInvoicePaid.value) < 0) {
+            toastDanger('Lỗi', 'Số tiền trả NCC phải từ 0đ')
+            return;
+        }
+    } else {
+        toastDanger('Lỗi', 'Số tiền trả NCC phải là một số nguyên')
+        return;
+    }
+    let lstDetails = [];
+    let tong = 0;
+    if (getAllProductId !== null && getAllProductId !== undefined) {
+        let count = 0;
+
+        for (const $tr of getAllProductId) {
+            if(count === 0){
+                count ++;
+                continue;
+            }
+            if(count > 0){
+                if($tr.childNodes[9].childNodes[1].value <= 0){
+                    toastDanger("Lỗi", "Vui lòng nhập số lượng lớn hơn 0");
+                    return;
+                }
+                if($tr.childNodes[11].childNodes[1].value <= 0){
+                    toastDanger("Lỗi", "Vui lòng nhập giá tiền lớn hơn 0");
+                    return;
+                }
+
+                console.log($tr.childNodes[11].childNodes[1].value)
+                lstDetails.push({
+                    "romId" : $tr.childNodes[7].childNodes[3].innerText,
+                    "colorId" : $tr.childNodes[5].childNodes[3].innerText,
+                    "quantityInvoice" : $tr.childNodes[9].childNodes[1].value,
+                    "moneyInvoice" : $tr.childNodes[11].childNodes[1].value
+                });
+                tong+=Number($tr.childNodes[11].childNodes[1].value);
+            }
+        }
+        if(lstDetails.length === 0){
+            toastDanger("Lỗi", "Bạn chưa chọn sản phẩm nào");
+            return;
+        }
+        for (let i = 0; i < lstDetails.length; i++) {
+            for (let j = 0; j < lstDetails.length; j++) {
+                if(lstDetails[i].romId === lstDetails[j].romId && i !== j && lstDetails[i].colorId === lstDetails[j].colorId){
+                    toastDanger('Lỗi', 'Đã bị trùng sản phẩm xin vui lòng nhập lại');
+                    return;
+                }
+            }
+        }
+        if(Number(getInvoicePaid.value) -  Number(tong)  < 0){
+            toastDanger("Lỗi", "Tổng tiền trả NCC ít hơn tổng tiền sản phẩm");
+            return;
+        }
+
+        if(Number(tienThua.value) > (Number(getInvoicePaid.value) - (Number(tong) - Number(getInvoiceDiscount.value)))){
+            toastDanger("Lỗi", "Tổng tiền thừa không đúng");
+            return;
+        }
+        if(Number(tienThua.value) < (Number(getInvoicePaid.value) - (Number(tong) - Number(getInvoiceDiscount.value)))){
+            toastDanger("Lỗi", "Tổng tiền thừa không đúng");
+            return;
+        }
+
+    }
+
+    return {
+        "id" : '0',
+        "suppliderId": getSupplier.value,
+        "discount": getInvoiceDiscount.value,
+        "paid": getInvoicePaid.value,
+        "note": getInvoiceNote.value,
+        "totalMoney" : tong,
+        "tienThua" : tienThua.value,
+        "detailRequest" : lstDetails
     }
 }
 
@@ -252,49 +331,85 @@ function onClickOpenModalAdd() {
     })
 }
 
-function onAddProduct() {
-    let count = $('.tr-product').length + 1
-    if (count < 20) {
-        $.ajax({
-            url: '/invoice/component/add-product?number=' + count,
-            success: function (tr) {
-                $('#bodyAddProduct').append(tr);
-            }
-        })
-        if (count === 19) {
-            $('#btnAddProduct').hide();
-        }
+function onChangeInvoiceOrderEdit(e) {
+    const rowMain = document.getElementById("rowMain");
+    const rowClone = rowMain.cloneNode(true);
+    const  table = document.getElementById("bodyAddProduct");
+    while (table.lastElementChild) {
+        table.removeChild(table.lastElementChild);
     }
+    table.appendChild(rowClone);
+
+    let value = e.value + '';
+    let id, supplierId;
+    if (value !== null && value !== undefined && value !== '') {
+        id = value;
+    } else {
+        return;
+    }
+
+    $.ajax({
+        url: '/api/order-invoice/' + value,
+        method: 'GET',
+        success: function (data) {
+            console.log(data);
+            for (let i = 0; i < data.orderDetail.length; i++){
+                const rowChinh = rowClone.cloneNode(true);
+                rowChinh.childNodes[1].textContent = data.orderDetail[i].productName;
+                rowChinh.childNodes[5].childNodes[1].textContent =  data.orderDetail[i].colorName;
+                rowChinh.childNodes[5].childNodes[3].textContent = data.orderDetail[i].colorId;
+                rowChinh.childNodes[7].childNodes[1].textContent =  data.orderDetail[i].productRomName + ' GB';
+                rowChinh.childNodes[7].childNodes[3].textContent = data.orderDetail[i].productRomID;
+                rowChinh.childNodes[9].childNodes[1].value = data.orderDetail[i].quantityProduct;
+                rowChinh.removeAttribute("id");
+                rowChinh.removeAttribute("style");
+                table.appendChild(rowChinh);
+            }
+
+        },
+        error: function (error) {
+            toastDanger('Lỗi', 'Hệ thống lỗi');
+        }
+    })
 }
 
 
 function onClickEditInvoice(e) {
-    $('#btnSubmitAddInvoice').hide();
     $('#btnSubmitEditInvoice').show();
     $('#btnSubmitEditInvoice').attr('data-id', e.dataset.id)
     $('#titleModal').html('Cập nhật hoá đơn nhập hàng')
+    const rowMain = document.getElementById("rowMain1");
+    const rowClone = rowMain.cloneNode(true);
+    const  table = document.getElementById("bodyEditProduct");
+    while (table.lastElementChild) {
+        table.removeChild(table.lastElementChild);
+    }
+    table.appendChild(rowClone);
+
+
+
     $.ajax({
-        url: '/invoice/component/edit-invoice?id=' + e.dataset.id,
-        success: function (html) {
-            $('#editInvoice').html(html)
-            $.ajax({
-                url: '/api/invoice?invoiceId=' + e.dataset.id,
-                success: function (data) {
-                    $(data).each((index, obj) => {
-                        $.ajax({
-                            url: '/invoice/component/edit-product?number='
-                                + (index + 1)
-                                + '&productId=' + (obj.productId)
-                                + '&quantity=' + (obj.quantity)
-                                + '&quantityActual=' + (obj.quantityActual)
-                                + '&price=' + (obj.price),
-                            success: function (htm) {
-                                $('#bodyAddProduct').append(htm);
-                            }
-                        })
-                    })
-                }
-            })
+        url: '/api/order-invoice/' + e.dataset.id,
+        method : 'GET',
+        success: function (data) {
+            console.log(data)
+            for (let i = 0; i < data.orderDetail.length; i++){
+                const rowChinh = rowClone.cloneNode(true);
+                rowChinh.childNodes[1].textContent = data.orderDetail[i].productName;
+                rowChinh.childNodes[5].childNodes[1].textContent =  data.orderDetail[i].colorName;
+                rowChinh.childNodes[5].childNodes[3].textContent = data.orderDetail[i].colorId;
+                rowChinh.childNodes[7].childNodes[1].textContent =  data.orderDetail[i].productRomName + ' GB';
+                rowChinh.childNodes[7].childNodes[3].textContent = data.orderDetail[i].productRomID;
+                rowChinh.childNodes[9].childNodes[1].value = data.orderDetail[i].quantityProduct;
+                rowChinh.childNodes[11].childNodes[1].value = data.orderDetail[i].priceProduce;
+                rowChinh.removeAttribute("id");
+                rowChinh.removeAttribute("style");
+                table.appendChild(rowChinh);
+                document.getElementById("ip-edit-thua").value = data.tienThua
+                document.getElementById("ip-edit-invoice-paid").value = data.phaiTraNCC
+                document.getElementById("ip-edit-invoice-discount").value = data.giamGia
+                document.getElementById("ip-edit-order-code").innerText = data.codeOrder
+            }
         },
         error: function (e) {
             $('#modal-edit-invoice').modal('hide');
@@ -304,29 +419,28 @@ function onClickEditInvoice(e) {
 
 function onClickSubmitEditInvoice(e) {
     let getInvoiceOrderCode = document.getElementById('ip-edit-order-code');
-    let getInvoiceShip = document.getElementById('ip-edit-ship');
     let getSupplier = document.getElementById('ip-edit-supplier');
     let getInvoiceDiscount = document.getElementById('ip-edit-invoice-discount');
     let getInvoicePaid = document.getElementById('ip-edit-invoice-paid');
     let getInvoiceNote = document.getElementById('ip-edit-invoice-note');
-    let getAllProductId = document.getElementsByClassName('ip-edit-product');
     let getAllProductQuantity = document.getElementsByClassName('ip-edit-quantity');
-    let getAllProductQuantityActual = document.getElementsByClassName('ip-edit-quantity-actual');
     let getAllProductPrice = document.getElementsByClassName('ip-edit-price');
-    let obj = valueDateInvoice(
+    let getAllProductId = document.getElementsByClassName('edit-product1');
+    let tienThua = document.getElementById('ip-edit-thua');
+    let obj = valueDateInvoiceEdit(
         e.dataset.id,
         getInvoiceOrderCode,
-        getInvoiceShip,
         getSupplier,
         getInvoiceDiscount,
         getInvoicePaid,
         getInvoiceNote,
-        getAllProductId,
         getAllProductQuantity,
-        getAllProductQuantityActual,
-        getAllProductPrice
+        getAllProductPrice,
+        getAllProductId,
+        tienThua
     )
-    if (obj !== null && obj !== undefined && onChangeQuantityOrPrice()) {
+    console.log(obj)
+    if (obj !== null && obj !== undefined) {
         $.ajax({
             url: '/api/invoice',
             method: 'PUT',
@@ -346,27 +460,19 @@ function onClickSubmitEditInvoice(e) {
     }
 }
 
-function valueDateInvoice(
+function valueDateInvoiceEdit(
     id,
     getInvoiceOrderCode,
-    getInvoiceShip,
     getSupplier,
     getInvoiceDiscount,
     getInvoicePaid,
     getInvoiceNote,
-    getAllProductId,
     getAllProductQuantity,
-    getAllProductQuantityActual,
     getAllProductPrice,
+    getAllProductId,
+    tienThua
 ) {
-    // if (getInvoiceCode === null || getInvoiceCode === undefined || getInvoiceCode.value === '') {
-    //     toastDanger('Lỗi', 'Vui lòng nhập mã nhập hàng');
-    //     return;
-    // }
-    // if (getInvoiceCode.value.length < 5 || getInvoiceCode.value.length > 50) {
-    //     toastDanger('Lỗi', 'Mã nhập hàng phải từ 10 đến 50 ký tự');
-    //     return;
-    // }
+
     if (getSupplier === null || getSupplier === undefined || getSupplier.value === '') {
         toastDanger('Lỗi', 'Vui lòng chọn nhà cung cấp');
         return;
@@ -383,6 +489,17 @@ function valueDateInvoice(
         toastDanger('Lỗi', 'Số tiền giảm giá phải là một số nguyên')
         return;
     }
+
+    if (Number(tienThua.value) || tienThua.value === '0') {
+        if (Number(tienThua.value) < 0) {
+            toastDanger('Lỗi', 'Số tiền thừa phải từ 0đ')
+            return;
+        }
+    } else {
+        toastDanger('Lỗi', 'Số tiền thừa phải là một số nguyên')
+        return;
+    }
+
     if (getInvoicePaid.value === null || getInvoicePaid.value === undefined) {
         getInvoicePaid.value = 0
     }
@@ -395,58 +512,72 @@ function valueDateInvoice(
         toastDanger('Lỗi', 'Số tiền trả NCC phải là một số nguyên')
         return;
     }
-    if (getInvoiceShip === null || getInvoiceShip === undefined || getInvoiceShip.value === '') {
-        toastDanger('Lỗi', 'Vui lòng nhập người giao hàng')
-        return;
-    }
-    $('.btnProductSave').click();
-    let detail = [];
+    let lstDetails = [];
+    let tong = 0;
     if (getAllProductId !== null && getAllProductId !== undefined) {
-        for (let i = 0; i < getAllProductId.length; i++) {
-            let obj = {
-                "productId": getAllProductId[i].value,
-                "quantity": getAllProductQuantity[i].innerHTML,
-                "quantityActual": getAllProductQuantityActual[i].innerHTML,
-                "price": getAllProductPrice[i].innerHTML,
-            };
-            let flag = true;
-            if (obj.productId === null || obj.productId === undefined || obj.productId === '' || obj.productId === 'null') {
-                flag = false;
-            } else if (obj.quantity === null || obj.quantity === undefined || obj.quantity === '' || obj.quantity === '0' || obj.quantity === 'null') {
-                flag = false;
-            } else if (Number(obj.quantity) < 1) {
-                toastDanger('Lỗi', 'Số lượng trên hoá đơn phải là một số nguyên')
-                return;
-            } else if (obj.quantityActual === null || obj.quantityActual === undefined || obj.quantityActual === '' || obj.quantityActual === 'null' || obj.quantityActual === '0') {
-                flag = false;
-            } else if (Number(obj.quantityActual) < 1) {
-                toastDanger('Lỗi', 'Số lượng nhập phải là một số nguyên')
-                return;
-            } else if (obj.price === null || obj.price === undefined || obj.price === '' || obj.price === 'null' || obj.price === '0') {
-                flag = false;
-            } else if (Number(obj.price) < 1) {
-                toastDanger('Lỗi', 'Giá tiền phải là một số nguyên')
-                return;
+        let count = 0;
+
+        for (const $tr of getAllProductId) {
+            if(count === 0){
+                count ++;
+                continue;
             }
-            if (flag) {
-                detail.push(obj);
+            if(count > 0){
+                if($tr.childNodes[9].childNodes[1].value <= 0){
+                    toastDanger("Lỗi", "Vui lòng nhập số lượng lớn hơn 0");
+                    return;
+                }
+                if($tr.childNodes[11].childNodes[1].value <= 0){
+                    toastDanger("Lỗi", "Vui lòng nhập giá tiền lớn hơn 0");
+                    return;
+                }
+
+                console.log($tr.childNodes[11].childNodes[1].value)
+                lstDetails.push({
+                    "romId" : $tr.childNodes[7].childNodes[3].innerText,
+                    "colorId" : $tr.childNodes[5].childNodes[3].innerText,
+                    "quantityInvoice" : $tr.childNodes[9].childNodes[1].value,
+                    "moneyInvoice" : $tr.childNodes[11].childNodes[1].value
+                });
+                tong+=Number($tr.childNodes[11].childNodes[1].value);
             }
         }
+        if(lstDetails.length === 0){
+            toastDanger("Lỗi", "Bạn chưa chọn sản phẩm nào");
+            return;
+        }
+        for (let i = 0; i < lstDetails.length; i++) {
+            for (let j = 0; j < lstDetails.length; j++) {
+                if(lstDetails[i].romId === lstDetails[j].romId && i !== j && lstDetails[i].colorId === lstDetails[j].colorId){
+                    toastDanger('Lỗi', 'Đã bị trùng sản phẩm xin vui lòng nhập lại');
+                    return;
+                }
+            }
+        }
+        if(Number(getInvoicePaid.value) -  Number(tong)  < 0){
+            toastDanger("Lỗi", "Tổng tiền trả NCC ít hơn tổng tiền sản phẩm");
+            return;
+        }
+
+         if(Number(tienThua.value) > (Number(getInvoicePaid.value) - (Number(tong) - Number(getInvoiceDiscount.value)))){
+             toastDanger("Lỗi", "Tổng tiền thừa không đúng");
+             return;
+         }
+        if(Number(tienThua.value) < (Number(getInvoicePaid.value) - (Number(tong) - Number(getInvoiceDiscount.value)))){
+            toastDanger("Lỗi", "Tổng tiền thừa không đúng");
+            return;
+        }
+
     }
-    if (detail.length === 0) {
-        toastDanger('Lỗi', 'Vui lòng chọn sản phẩm nhập');
-        return;
-    }
-    let invoiceOrderCode = getInvoiceOrderCode.value + '';
     return {
-        "invoiceId": id,
-        "shipper": getInvoiceShip.value,
-        "invoiceOrderId": invoiceOrderCode.substring(0, invoiceOrderCode.indexOf('@')),
-        "supplierId": getSupplier.value,
+        "id": id,
+        "suppliderId": getSupplier.value,
         "discount": getInvoiceDiscount.value,
         "paid": getInvoicePaid.value,
         "note": getInvoiceNote.value,
-        "details": detail
+        "totalMoney" : tong,
+        "tienThua" : tienThua.value,
+        "detailRequest" : lstDetails
     }
 }
 

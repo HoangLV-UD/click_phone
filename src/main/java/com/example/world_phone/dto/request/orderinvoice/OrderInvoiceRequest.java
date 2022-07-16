@@ -15,10 +15,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderInvoiceRequest {
+    private String id;
     private String note;
     private String orderCode;
     private Long totalMoney;
     private String receiveDate;
     private Integer suppliderId;
+    private Long discount;
+    private Long paid;
+    private Long tienThua;
     private List<OrderInvoiceDetailRequest> detailRequest;
 }

@@ -4,10 +4,10 @@ import com.example.world_phone.dto.request.attribute.AttributeRequestAdd;
 import com.example.world_phone.dto.request.attribute.AttributeRequestEdit;
 import com.example.world_phone.dto.respone.attribute.AttributeRespone;
 
-public interface IAttributeService {
-    AttributeRespone findByProductId(Long id);
+public interface AttributeProductService {
+    AttributeRespone findByProduct(Long id);
 
-    String createAttribute(AttributeRequestAdd requestAdd, Long idProduct);
+    String saveAttribute(AttributeRequestAdd requestAdd, Long productId) ;
 
-    String updateAttribute(AttributeRequestEdit attributeRequestEdit);
+    String updateAttribute(AttributeRequestEdit attributeRequestEdit, Long productId);
 }

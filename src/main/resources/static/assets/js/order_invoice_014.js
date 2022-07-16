@@ -43,162 +43,63 @@ function onClickSubmitEditOrderInvoice(e) {
     let getTrProduct = document.getElementsByClassName('tr-order-edit-product');
     if (getTrProduct !== null && getTrProduct !== undefined) {
         for (const $tr of getTrProduct) {
-            let idProduct = $tr.id;
-            let quantity;
-            let getQuantity = $tr.getElementsByClassName('edit-quantity-product');
-            if (getQuantity !== null && getQuantity !== undefined) {
-                quantity = getQuantity[0].value;
-                if (quantity === null || quantity === undefined || !Number(quantity) || Number(quantity) < 1) {
-                    // toastDanger('Lỗi', 'Vui lòng nhập số lượng đặt lớn hơn 0');
-                    // return;
-                } else {
-                    lstDetails.push({
-                        "productId": idProduct,
-                        "quantity": quantity
-                    })
-                }
+
+            if($tr.childNodes[9].childNodes[1].value <= 0){
+                continue;
             }
+            lstDetails.push({
+                "romId" : $tr.childNodes[7].childNodes[1].value,
+                "quantityInvoice" : $tr.childNodes[9].childNodes[1].value,
+                "colorId" : $tr.childNodes[5].childNodes[1].value
+            });
+
+            console.log($tr.childNodes[5].childNodes[1].value) // color
+            console.log($tr.childNodes[7].childNodes[1].value) // rom
+            console.log($tr.childNodes[9].childNodes[1].value) // quantity
+
         }
     }
+    console.log(lstDetails)
     if (lstDetails.length === 0) {
         toastDanger('Lỗi', 'Vui lòng nhập số lượng ít nhất 1 sản phẩm');
         return;
     }
-    let obj = {
-        "id": e.dataset.id,
-        "code": orderCode,
-        "date": orderDate,
-        "supplierId": idSupplier,
-        "note": note,
-        "details": lstDetails
+    for (let i = 0; i < lstDetails.length; i++) {
+        for (let j = 0; j < lstDetails.length; j++) {
+            if(lstDetails[i].romId === lstDetails[j].romId && i !== j && lstDetails[i].colorId === lstDetails[j].colorId){
+                toastDanger('Lỗi', 'Đã bị trùng sản phẩm xin vui lòng nhập lại');
+                return;
+            }
+        }
     }
-    console.log(obj)
+
+    let orderInvoice = {
+        "note" : note,
+        "receiveDate" : orderDate,
+        "suppliderId" : idSupplier,
+        "orderCode" : orderCode,
+        "detailRequest" : lstDetails
+    };
+    console.log(orderInvoice);
     $.ajax({
         url: '/api/order-invoice',
         method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(obj),
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(orderInvoice),
         success: function (data) {
-            toastSuccess('Thành công', 'Đã cập nhật hoá đơn đặt hàng NCC');
+            toastSuccess('Thành công', 'Đã cập nhật thành công');
+            $('.btn-close').click();
             setTimeout(function () {
                 location.reload();
             }, 2000)
         },
         error: function (error) {
-            if (error.responseJSON.vn === null || error.responseJSON.vn === undefined) {
-                let message = error.responseJSON.message + '';
-                message = message.substring(message.indexOf(':') + 1)
-                toastDanger('Lỗi', message);
-                return;
-            }
-            toastDanger('Lỗi', error.responseJSON.vn);
+            toastDanger('Lỗi', error);
         }
     })
 }
 
-// function onClickSubmitAddOrderInvoice() {
-//     let getOrderCode = document.getElementById('ip-order-invoice-code');
-//     let orderCode;
-//     if (getOrderCode !== null && getOrderCode !== undefined) {
-//         orderCode = getOrderCode.value;
-//         if (orderCode === null || orderCode === undefined || orderCode === '') {
-//             toastDanger('Lỗi', 'Vui lòng nhập mã đặt hàng');
-//             return;
-//         }
-//         if (orderCode.length < 5 || orderCode.length > 50) {
-//             toastDanger('Lỗi', 'Mã đặt hàng từ 5 đến 50 ký tự');
-//             return;
-//         }
-//     }
-//     let getDate = document.getElementById('ip-order-invoice-date');
-//     let orderDate;
-//     if (getDate !== null && getDate !== undefined) {
-//         orderDate = getDate.value;
-//         if (orderDate === null || orderDate === undefined || orderDate === '') {
-//             toastDanger('Lỗi', 'Vui lòng chọn ngày hẹn nhận');
-//             return;
-//         }
-//     }
-//     let getSupplier = document.getElementById('ip-order-invoice-supplier');
-//     let idSupplier;
-//     if (getSupplier !== null && getSupplier !== undefined) {
-//         idSupplier = getSupplier.value;
-//         if (idSupplier === null || idSupplier === undefined) {
-//             toastDanger('Lỗi', 'Vui long chọn nhà cung cấp');
-//             return;
-//         }
-//     }
-//     let getNote = document.getElementById('ip-order-invoice-note');
-//     let note;
-//     if (getNote !== null && getNote !== undefined) {
-//         note = getNote.value;
-//     }
-//     let lstDetails = [];
-//     let getTrProduct = document.getElementsByClassName('tr-order-add-product');
-//     if (getTrProduct !== null && getTrProduct !== undefined) {
-//         for (const $tr of getTrProduct) {
-//             // let getCheckBox = $tr.getElementsByClassName('chk-add-product');
-//             // let flag = false;
-//             // if (getCheckBox !== null && getCheckBox !== undefined) {
-//             //     if (getCheckBox[0].checked) {
-//             //         flag = true;
-//             //     }
-//             // }
-//             // if (!flag) {
-//             //     continue;
-//             // }
-//             let idProduct = $tr.id;
-//             let quantity;
-//             let getQuantity = $tr.getElementsByClassName('quantity-product');
-//             if (getQuantity !== null && getQuantity !== undefined) {
-//                 quantity = getQuantity[0].value;
-//                 if (quantity === null || quantity === undefined || !Number(quantity) || Number(quantity) < 1) {
-//                     // toastDanger('Lỗi', 'Vui lòng nhập số lượng đặt lớn hơn 0');
-//                     // return;
-//                 } else {
-//                     lstDetails.push({
-//                         "productId": idProduct,
-//                         "quantity": quantity
-//                     })
-//                 }
-//             }
-//         }
-//     }
-//     if (lstDetails.length === 0) {
-//         toastDanger('Lỗi', 'Vui lòng nhập số lượng ít nhất 1 sản phẩm');
-//         return;
-//     }
-//     let obj = {
-//         "code": orderCode,
-//         "date": orderDate,
-//         "supplierId": idSupplier,
-//         "note": note,
-//         "details": lstDetails
-//     }
-//     $.ajax({
-//         url: '/api/order-invoice',
-//         method: 'POST',
-//         contentType: 'application/json',
-//         data: JSON.stringify(obj),
-//         success: function (data) {
-//             toastSuccess('Thành công', 'Đã tạo mới hoá đơn đặt hàng NCC');
-//             setTimeout(function () {
-//                 location.reload();
-//             }, 2000)
-//         },
-//         error: function (error) {
-//             if (error.responseJSON.vn === null || error.responseJSON.vn === undefined) {
-//                 let message = error.responseJSON.message + '';
-//                 message = message.substring(message.indexOf(':') + 1)
-//                 console.log(message)
-//                 toastDanger('Lỗi', message);
-//                 return;
-//             }
-//             toastDanger('Lỗi', error.responseJSON.vn);
-//         }
-//     })
-//     console.log(obj);
-// }
+
 
 function onClickCancelOrderInvoice(e) {
     let id = e.dataset.id
@@ -208,9 +109,9 @@ function onClickCancelOrderInvoice(e) {
         cancel = true;
     }
     if (cancel) {
-        url += '?cancel=true';
+        url += '/true';
     } else {
-        url += '?cancel=false';
+        url += '/false';
     }
     $.ajax({
         url: url,
@@ -238,33 +139,65 @@ function onClickCancelOrderInvoice(e) {
     })
 }
 
+
+
+function copy_row2(e){
+    var tr = e.parentNode.parentNode.cloneNode(true);
+    var table = document.getElementById("bodyEditProductOrderInvoice");
+    table.appendChild(tr)
+}
+
+function copy_row1(e){
+    //document.getElementById("bodyEditProductOrderInvoice").innerHTML += tr.outerHTML;
+    var table = document.getElementById("bodyEditProductOrderInvoice");
+    table.appendChild(e)
+}
+
 function onClickEditOrderInvoice(e) {
     $.ajax({
         url: '/api/order-invoice/' + e.dataset.id,
         success: function (data) {
+            console.log(data)
             let getCode = document.getElementById('ip-edit-order-invoice-code');
             if (getCode !== null && getCode !== undefined) {
-                getCode.value = data.invoiceOrderCode;
+                getCode.value = data.codeOrder;
             }
             let getDate = document.getElementById('ip-edit-order-invoice-date');
             if (getDate !== null && getDate !== undefined) {
-                getDate.value = data.orderDelivery;
+                const [year, month, day] = data.receiveDate.split('-');
+
+                const result = [month, day, year].join('-');
+                getDate.value = result;
             }
             let getSupplier = document.getElementById('ip-edit-order-invoice-supplier');
             if (getSupplier !== null && getSupplier !== undefined) {
-                $(getSupplier).val(data.invoiceSupplierId).change();
+                $(getSupplier).val(data.supplierId).change();
             }
             $('#ip-edit-order-invoice-note').val(data.note);
             $('.edit-quantity-product').val(0);
-            for (const detail of data.details) {
-                $('.' + detail.productId).val(detail.quantity)
-                // let text = $('.' + detail.productId).parent().parent();
-                // $('.' + detail.productId).parent().parent().html();
-                // text += document.getElementById('bodyEditProductOrderInvoice').innerHTML;
-                // $('#bodyEditProductOrderInvoice').html(text);
+            let getTrProduct = document.getElementsByClassName('tr-order-edit-product');
+            let table = document.getElementById("bodyEditProductOrderInvoice");
+            if (getTrProduct !== null && getTrProduct !== undefined) {
+                var count = data.orderDetail.length;
+                 for (const detail of data.orderDetail) {
+                    for (const $tr of getTrProduct) {
+                         if($tr.childNodes[1].childNodes[1].textContent === detail.productName && count > 0){
+                             var trClone = $tr.cloneNode(true);
+                             $tr.childNodes[5].childNodes[1].value = detail.colorId;
+                             $tr.childNodes[9].childNodes[1].value = detail.quantityProduct;
+                             $tr.childNodes[7].childNodes[1].value = detail.productRomID;
+                             copy_row1(trClone);
+                             count--;
+                             break;
+                         }else {
+
+                         }
+                    }
+                 }
             }
 
-            if (data.status === 'ON') {
+            console.log(data.status)
+            if (data.status === 1) {
                 $('#btnSubmitEditInvoice').show();
                 $('#btnSubmitReverseCancel').hide();
                 $('#btnSubmitEditInvoice').attr("data-id", e.dataset.id)

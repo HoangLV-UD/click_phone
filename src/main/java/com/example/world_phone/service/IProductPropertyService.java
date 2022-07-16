@@ -15,4 +15,6 @@ public interface IProductPropertyService {
     ProductPropertyRespone updateProductProperty(ProductPropertyRequest request);
 
     String udpateStatusProductProperty(ProductPropertyRequest request);
+
+
 }
