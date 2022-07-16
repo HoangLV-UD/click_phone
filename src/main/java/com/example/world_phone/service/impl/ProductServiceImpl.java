@@ -101,10 +101,21 @@ public class ProductServiceImpl implements IProductService {
         if(requestEdit.getIdProduct() == null){
             throw new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST);
         }
+
         ProductEntity entity = productRepo.findByIdAndDeleteFlagIsFalse(requestEdit.getIdProduct());
         if(!attributeProductService.updateAttribute(requestEdit.getAttributeRequestedit() , entity.getId()).equals("ok")){
             log.error("update sản phẩm thất bại ở phần attribute");
             return "false";
+        }
+        if(requestEdit.getImage() != null){
+            if(requestEdit.getImage().size() > 0){
+                if(!iImageService.editImage(requestEdit.getImage(), entity.getId()).equals("ok")){
+                    entity.setDeleteFlag(true);
+                    entity = productRepo.save(entity);
+                    log.error("them moi san pham that bai");
+                    return "that bai";
+                }
+            }
         }
 
         if(!romService.createRomWithProductEdit(requestEdit.getRomRequestAdds(), entity).equals("ok")){

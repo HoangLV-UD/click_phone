@@ -30,6 +30,8 @@ public class ProductRequestEdit {
 
     private String create_By;
 
+    private List<String> image;
+
 
     private AttributeRequestEdit attributeRequestedit;
 
