@@ -227,7 +227,7 @@ function onClickUpdateProduct(e) {
         romRequestAdds
     );
     console.log(objectProduct);
-    delete objectProduct.image;
+
 
     if (objectProduct !== null && objectProduct !== undefined) {
         objectProduct["idProduct"] = e.dataset.id
@@ -465,7 +465,6 @@ function validateObjectProduct(
 
     // validate hình ảnh sản phẩm
     if (productImages === null || productImages === undefined || productImages.length === 0) {
-        console.log('Vui lòng chọn hình ảnh sản phẩm');
         toastDanger('Lỗi', 'Vui lòng chọn hình ảnh sản phẩm');
         return;
     }
@@ -556,12 +555,7 @@ function validateObjectProductEdit(
         return;
     }
 
-    // validate hình ảnh sản phẩm
-    if (productImages === null || productImages === undefined || productImages.length === 0) {
-        console.log('Vui lòng chọn hình ảnh sản phẩm');
-        toastDanger('Lỗi', 'Vui lòng chọn hình ảnh sản phẩm');
-        return;
-    }
+
 
     if(check === 0){
         console.log('Vui lòng chọn dung lượng');
@@ -734,7 +728,7 @@ function onClickEditProduct(e) {
 
 
             if(data.imageProduct !== null && data.imageProduct !== undefined){
-                dataImageUploadEdit = data.imageProduct;
+                //dataImageUploadEdit.push(data.imageProduct);
                 sizeImage = 0;
                 let previewUpload = document.getElementById('previewUpload')
                 let carouselIndicators = document.getElementById('carousel-indicators')
@@ -746,8 +740,10 @@ function onClickEditProduct(e) {
                 if (data.image.length > 0){
                     for (let i = 0; i < data.image.length; i++) {
                         addImagePreview(data.image[i].img_link);
+                        //dataImageUploadEdit.push(data.image[i].img_link);
                     }
                 }
+                console.log(dataImageUploadEdit.length)
             }
 
             CKEDITOR.instances['productEditDescription'].setData(data.note);

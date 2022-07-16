@@ -40,4 +40,24 @@ public class ImageServiceImpl implements IImageService {
         }
         return "ok";
     }
+
+    @Override
+    public String editImage(List<String> image, Long id) {
+        ProductEntity productEntity = productRepo.findByIdAndDeleteFlagIsFalse(id);
+        if(productEntity == null){
+            throw new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST);
+        }
+        for (int i = 0; i < image.size(); i++){
+            ImageEntity entity = new ImageEntity();
+            entity.setCreateBy((String) sessionUtil.getObject("username"));
+            entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
+            entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
+            entity.setModifierBy((String) sessionUtil.getObject("username"));
+            entity.setDeleteFlag(false);
+            entity.setLing_image(image.get(i));
+            entity.setProductEntity(productEntity);
+            imageRepo.save(entity);
+        }
+        return "ok";
+    }
 }
