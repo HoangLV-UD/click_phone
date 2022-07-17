@@ -33,7 +33,7 @@ public class VoucherController {
 //            x.setLstCustomer(voucherService.findAllIdCustomerByVoucherId(x.getVoucherId()));
 //        }
         List<CategoryResponeDto> lstCategory = categoryService.getAllCategory();
-        //List<CustomerInfoResponse> lstCustomer = customerService.getCustomers();
+       // List<CustomerInfoResponse> lstCustomer = customerService.getCustomers();
         lstVoucher.sort(((o1, o2) -> o2.getVoucherCreateDate().compareTo(o1.getVoucherCreateDate())));
         model.addAttribute("lstVoucher", lstVoucher);
         model.addAttribute("lstCategory", lstCategory);
