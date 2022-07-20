@@ -148,7 +148,6 @@ function copy_row2(e){
 }
 
 function copy_row1(e){
-    //document.getElementById("bodyEditProductOrderInvoice").innerHTML += tr.outerHTML;
     var table = document.getElementById("bodyEditProductOrderInvoice");
     table.appendChild(e)
 }
@@ -183,9 +182,14 @@ function onClickEditOrderInvoice(e) {
                     for (const $tr of getTrProduct) {
                          if($tr.childNodes[1].childNodes[1].textContent === detail.productName && count > 0){
                              var trClone = $tr.cloneNode(true);
-                             $tr.childNodes[5].childNodes[1].value = detail.colorId;
-                             $tr.childNodes[9].childNodes[1].value = detail.quantityProduct;
-                             $tr.childNodes[7].childNodes[1].value = detail.productRomID;
+
+                             trClone.childNodes[5].childNodes[1].removeAttribute('id');
+                             console.log(detail.colorId)
+                             trClone.childNodes[5].childNodes[1].value = detail.colorId;
+
+                             console.log(trClone.childNodes[5].childNodes[1])
+                             trClone.childNodes[9].childNodes[1].value = detail.quantityProduct;
+                             trClone.childNodes[7].childNodes[1].value = detail.productRomID;
                              copy_row1(trClone);
                              count--;
                              break;
