@@ -200,6 +200,12 @@ function valueDateInvoice(
     getAllProductId,
     tienThua
 ) {
+    let id = 0;
+    if(getInvoiceOrderCode === null || getInvoiceOrderCode === undefined || getInvoiceOrderCode.value === ''){
+        id = 0;
+    }else {
+        id = getInvoiceOrderCode.value;
+    }
 
     if (getSupplier === null || getSupplier === undefined || getSupplier.value === '') {
         toastDanger('Lỗi', 'Vui lòng chọn nhà cung cấp');
@@ -299,7 +305,7 @@ function valueDateInvoice(
     }
 
     return {
-        "id" : '0',
+        "id" : id,
         "suppliderId": getSupplier.value,
         "discount": getInvoiceDiscount.value,
         "paid": getInvoicePaid.value,

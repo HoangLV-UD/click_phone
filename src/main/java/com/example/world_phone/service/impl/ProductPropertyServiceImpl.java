@@ -74,7 +74,7 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
 
     @Override
     public String udpateStatusProductProperty(ProductPropertyRequest request) {
-        List<ProductPropertyRespone> respones = new ArrayList<>();
+
         List<ProductPropertyEntity> entityList = repo.findByRomAndColor(Long.valueOf(request.getRomId()), Long.valueOf(request.getColorId()));
         if(entityList.size() < 1){
             log.error(String.valueOf(new WorldPhoneExp(ConstansErrorCode.ROM_NOT_EXIST).getErrorMessage().getVn()));
@@ -106,6 +106,8 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
             dto.setQuantity(entity.getQuantity());
             dto.setStatus(entity.getStatus());
             dto.setPriceString(convertUtil.moneyToStringFormat(entity.getPrice()));
+            dto.setPricePromotion(entity.getPricePromotion());
+            dto.setPricePromotionString(convertUtil.moneyToStringFormat(entity.getPricePromotion()));
             return dto;
         }
     }

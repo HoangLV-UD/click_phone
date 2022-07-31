@@ -105,22 +105,22 @@ public class VoucherService implements IVoucherService {
 
         voucherEntity.setStatus(ON.toUpperCase());
         voucherEntity.setAccompanyPromo(voucherRequest.getVoucherAccompanyPromo().toUpperCase().equals(ON.toUpperCase()) ? VoucherKey.USED.name() : VoucherKey.UNUSED.name());
-        List<VoucherCustomerEntity> lstVoucherCustomerEntities = new ArrayList<>();
-        if (Objects.nonNull(voucherRequest.getTypeDiscountPerson())) {
-            for (String x : voucherRequest.getTypeDiscountPerson()) {
-                lstVoucherCustomerEntities.add(VoucherCustomerEntity.builder()
-                        .customerId(Long.valueOf(x))
-                        .voucherId(Long.valueOf(voucherEntity.getId()))
-                        .status(OFF.toUpperCase())
-                        .discount(voucherEntity.getDiscount())
-                        .startDatte(voucherEntity.getStartDate())
-                        .endDate(voucherEntity.getEndDate())
-                        .build());
-            }
-        }
+        //List<VoucherCustomerEntity> lstVoucherCustomerEntities = new ArrayList<>();
+//        if (Objects.nonNull(voucherRequest.getTypeDiscountPerson())) {
+//            for (String x : voucherRequest.getTypeDiscountPerson()) {
+//                lstVoucherCustomerEntities.add(VoucherCustomerEntity.builder()
+//                        .customerId(Long.valueOf(x))
+//                        .voucherId(Long.valueOf(voucherEntity.getId()))
+//                        .status(OFF.toUpperCase())
+//                        .discount(voucherEntity.getDiscount())
+//                        .startDatte(voucherEntity.getStartDate())
+//                        .endDate(voucherEntity.getEndDate())
+//                        .build());
+//            }
+//        }
         try {
             voucherRepo.save(voucherEntity);
-            voucherCustomerRepo.saveAll(lstVoucherCustomerEntities);
+            //voucherCustomerRepo.saveAll(lstVoucherCustomerEntities);
             return SUCCESS.name();
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,9 +163,9 @@ public class VoucherService implements IVoucherService {
                         .build());
             }
         }
-        List<VoucherCustomerEntity> lstVoucherCustomerDelete = voucherCustomerRepo.findAllByVoucherId(voucherId);
-        lstVoucherCustomerDelete.forEach(e -> e.setDeleteFlag(true));
-        lstVoucherCustomerEntities.addAll(lstVoucherCustomerDelete);
+        //List<VoucherCustomerEntity> lstVoucherCustomerDelete = voucherCustomerRepo.findAllByVoucherId(voucherId);
+       // lstVoucherCustomerDelete.forEach(e -> e.setDeleteFlag(true));
+        //lstVoucherCustomerEntities.addAll(lstVoucherCustomerDelete);
         try {
             voucherRepo.save(voucherEntity);
             voucherCustomerRepo.saveAll(lstVoucherCustomerEntities);
