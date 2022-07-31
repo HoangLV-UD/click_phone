@@ -18,4 +18,7 @@ public interface PropertyProductRepo extends JpaRepository<ProductPropertyEntity
 
     @Query("select o from ProductPropertyEntity o where o.deleteFlag = false  and  o.colorEntity.id = ?1")
     List<ProductPropertyEntity> findByColor( Long colorId);
+
+
+    List<ProductPropertyEntity> findByDeleteFlagIsFalse();
 }

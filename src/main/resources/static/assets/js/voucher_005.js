@@ -146,6 +146,7 @@ function onClickUpdateVoucher(e) {
     // get element mô tả chi tiết mã giảm giá
     let getElementVoucherDescription = document.querySelector('.ip-voucher-description' + id);
     let getElementVoucherPromo = document.querySelector('.ip-voucher-promo' + id);
+    // console.log(getElementVoucherTypeDiscount.innerHTML)
     let objVoucher = validateObjectVoucher(
         id,
         getElementVoucherCode
@@ -163,6 +164,7 @@ function onClickUpdateVoucher(e) {
         , getElementVoucherDescription
         , getElementVoucherPromo
     );
+    console.log(objVoucher);
     if (objVoucher !== null && objVoucher !== undefined) {
         $.ajax({
             url: '/api/voucher',
@@ -274,6 +276,7 @@ function validateObjectVoucher(
     , getElementVoucherDescription
     , getElementVoucherPromo
 ) {
+
     let voucherCode, voucherName, voucherQuantity, voucherDiscount, voucherTypeDiscount, voucherMoneyMin,
         voucherStartDate, voucherEndDate, voucherCategory,
         voucherPersonApply, typeDiscountMoneyMin, typeDiscountPerson;
@@ -295,6 +298,7 @@ function validateObjectVoucher(
     }
     // get loại mệnh giá
     if (getElementVoucherTypeDiscount !== null && getElementVoucherTypeDiscount !== undefined) {
+        console.log(getElementVoucherTypeDiscount.innerHTML)
         voucherTypeDiscount = getElementVoucherTypeDiscount.innerHTML;
     }
     // get tiền hàng tối thiểu
@@ -373,6 +377,7 @@ function validateObjectVoucher(
         voucherTypeDiscount = '%';
     }
     voucherTypeDiscount = voucherTypeDiscount.trim();
+    console.log(voucherTypeDiscount)
     if (voucherTypeDiscount === '%') {
         if (Number(voucherDiscount) < 0 || Number(voucherDiscount) > 100) {
             console.log('Tỉ lệ giảm không đúng (từ 0% - 100%)');

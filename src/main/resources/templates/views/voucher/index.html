@@ -143,17 +143,7 @@
                                                             </span>
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" data-bs-toggle="tab"
-                                                           th:href="${'#history-use-' + voucher.voucherId}" role="tab">
-                                                            <span class="d-none d-md-block">
-                                                                Lịch sử sử dụng
-                                                            </span>
-                                                            <span class="d-block d-md-none">
-                                                                <i class="mdi mdi-account h5"></i>
-                                                            </span>
-                                                        </a>
-                                                    </li>
+
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div class="tab-pane active p-3"
@@ -205,7 +195,7 @@
                                                                                    th:class="${'form-control ip-voucher-discount' + voucher.voucherId}"
                                                                                    placeholder="Nhập mệnh giá..."
                                                                                    th:value="${voucher.voucherDiscount}">
-                                                                            <span class="input-group-text ip-voucher-type-discount"
+                                                                            <span th:class="${'input-group-text ip-voucher-type-discount' + voucher.voucherId}"
                                                                                   onclick="onClickChangeTypeDiscount(this)"
                                                                                   th:style="${voucher.getVoucherCreateDate().before(#dates.createNow()) ? 'pointer-events: none;' : 'cursor: pointer;'}"
                                                                                   th:disabled="${voucher.getVoucherCreateDate().before(#dates.createNow())}">
@@ -294,10 +284,6 @@
                                                                                     th:selected="${voucher.typeDiscountMinAmount != null && voucher.typeDiscountMinAmount > 0}">
                                                                                 Đã mua tối thiểu?
                                                                             </option>
-                                                                            <option value="CHOOSE-PERSON"
-                                                                                    th:selected="${voucher.lstCustomer != null && not #lists.isEmpty(voucher.lstCustomer)}">
-                                                                                Lựa chọn khách hàng
-                                                                            </option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -311,21 +297,6 @@
                                                                                    placeholder="Nhập số tiền tối thiểu..."
                                                                                    th:class="${'form-control ip-type-discount-money-min' + voucher.voucherId}"
                                                                                    th:value="${voucher.typeDiscountMinAmount}"/>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="mb-3 row CHOOSE-PERSON">
-                                                                        <div class="col-lg-5">
-                                                                            Chọn khách hàng
-                                                                        </div>
-                                                                        <div class="col-lg-7">
-                                                                            <select th:class="${'select2 form-control select2-multiple ip-type-discount-person' + voucher.voucherId}"
-                                                                                    multiple="multiple"
-                                                                                    data-placeholder="Chọn khách hàng...">
-                                                                                <option th:each="customer : ${lstCustomer}"
-                                                                                        th:selected="${voucher.lstCustomer != null && #lists.contains(voucher.lstCustomer, customer.id)}"
-                                                                                        th:value="${customer.id}"
-                                                                                        th:text="${customer.fullName}"></option>
-                                                                            </select>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -352,22 +323,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="tab-pane p-3"
-                                                         th:id="${'history-use-' + voucher.voucherId}"
-                                                         role="tabpanel">
-                                                        <table class="table table-bordered table-hover voucher-used"
-                                                               th:data-id="${voucher.voucherId}">
-                                                            <thead>
-                                                            <tr class="text-center">
-                                                                <th>STT</th>
-                                                                <th>Họ và tên</th>
-                                                                <th>Tổng tiền hoá đơn</th>
-                                                                <th>Ngày sử dụng</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody class="voucher-used-content"></tbody>
-                                                        </table>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </td>
@@ -382,6 +338,7 @@
             </div>
         </div>
     </div>
+
     <div id="modal-add-voucher" class="modal fade show" style="display: block;" tabindex="-1"
          aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -498,9 +455,6 @@
                                         <option value="PERSON-BUY-MONEY">
                                             Đã mua tối thiểu?
                                         </option>
-                                        <option value="CHOOSE-PERSON">
-                                            Lựa chọn khách hàng
-                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -512,20 +466,6 @@
                                     <div class="col-lg-7">
                                         <input type="number" min="1" placeholder="Nhập số tiền tối thiểu..."
                                                class="form-control" id="ip-type-discount-money-min"/>
-                                    </div>
-                                </div>
-                                <div class="mb-3 row CHOOSE-PERSON">
-                                    <label class="col-lg-5" for="ip-type-discount-person">
-                                        Chọn khách hàng
-                                    </label>
-                                    <div class="col-lg-7">
-                                        <select class="select2 form-control select2-multiple"
-                                                id="ip-type-discount-person" multiple="multiple"
-                                                data-placeholder="Chọn khách hàng...">
-                                            <option th:each="customer : ${lstCustomer}"
-                                                    th:value="${customer.id}"
-                                                    th:text="${customer.fullName}"></option>
-                                        </select>
                                     </div>
                                 </div>
                             </div>

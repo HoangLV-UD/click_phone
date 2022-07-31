@@ -24,6 +24,11 @@ public class ProductPropertyEntity extends BaseEntity{
     @Column(name = "QUANTITY")
     private long quantity;
 
+    @Basic
+    @Column(name = "PRICE_PROMOTION")
+    private long pricePromotion;
+
+
     @ManyToOne
     @JoinColumn(name = "ROM_ID", referencedColumnName = "ID")
     private RomEntity romEntity;
@@ -79,5 +84,13 @@ public class ProductPropertyEntity extends BaseEntity{
 
     public void setColorEntity(ColorEntity colorEntity) {
         this.colorEntity = colorEntity;
+    }
+
+    public long getPricePromotion() {
+        return pricePromotion;
+    }
+
+    public void setPricePromotion(long pricePromotion) {
+        this.pricePromotion = pricePromotion;
     }
 }

@@ -18,4 +18,6 @@ public class ProductPropertyRespone {
     private long quantity;
     private String colorName;
     private String status;
+    private String pricePromotionString;
+    private long pricePromotion;
 }

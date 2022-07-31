@@ -48,11 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //CustomerAuthenticationFilter customerAuthenticationFilter = new CustomerAuthenticationFilter(authenticationManagerBean());
-      //  customerAuthenticationFilter.setFilterProcessesUrl("/login-check");
         http.csrf().disable();
-       // http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         http.authorizeRequests().antMatchers("/login/**", "/assets/**").permitAll();
         http.authorizeRequests().antMatchers("/staff").hasAnyAuthority("ROLE_ADMIN")
                 .and().exceptionHandling().accessDeniedPage("/");
