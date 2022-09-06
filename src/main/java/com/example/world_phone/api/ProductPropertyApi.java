@@ -2,6 +2,7 @@ package com.example.world_phone.api;
 
 
 import com.example.world_phone.dto.request.product_property.ProductPropertyRequest;
+import com.example.world_phone.dto.respone.order_detail.OrderDetailRespone;
 import com.example.world_phone.dto.respone.product.ProductPropertyRespone;
 import com.example.world_phone.service.IProductPropertyService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,13 @@ import java.util.List;
 public class ProductPropertyApi {
 
     private final IProductPropertyService service;
+
+
+    @GetMapping("{id}")
+    public ResponseEntity<?> findByID(@PathVariable("id") Long id){
+        OrderDetailRespone respone = service.findById(id);
+        return ResponseEntity.ok().body(respone);
+    }
 
     @PostMapping("")
     public ResponseEntity<?> getProductProperty(@RequestBody ProductPropertyRequest request){
