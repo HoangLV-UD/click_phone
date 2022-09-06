@@ -541,9 +541,7 @@
                         })
                         const  rom = document.getElementById("rom");
                         for (let i = 0; i < res.length; i++) {
-
                             let d = rom.cloneNode(true);
-
                             d.removeAttribute("id");
                             d.removeAttribute("hidden")
                             while (d.lastElementChild) {
@@ -603,7 +601,6 @@
             const rowChinh = document.getElementById("rowMain").cloneNode(true);
             const  e = tr.childNodes[7].childNodes[0];
             const  d = tr.childNodes[9].childNodes[1];
-
             rowChinh.childNodes[1].textContent = tr.childNodes[5].textContent;
             rowChinh.childNodes[7].childNodes[1].textContent = e.options[e.selectedIndex].text
             rowChinh.childNodes[7].childNodes[3].textContent = e.options[e.selectedIndex].value

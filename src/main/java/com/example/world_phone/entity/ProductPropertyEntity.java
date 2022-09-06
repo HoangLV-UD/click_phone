@@ -28,6 +28,10 @@ public class ProductPropertyEntity extends BaseEntity{
     @Column(name = "PRICE_PROMOTION")
     private long pricePromotion;
 
+    @Basic
+    @Column(name = "PROMOTION_ID")
+    private long promotionId;
+
 
     @ManyToOne
     @JoinColumn(name = "ROM_ID", referencedColumnName = "ID")
@@ -92,5 +96,13 @@ public class ProductPropertyEntity extends BaseEntity{
 
     public void setPricePromotion(long pricePromotion) {
         this.pricePromotion = pricePromotion;
+    }
+
+    public long getPromotionId() {
+        return promotionId;
+    }
+
+    public void setPromotionId(long promotionId) {
+        this.promotionId = promotionId;
     }
 }

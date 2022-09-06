@@ -4,7 +4,9 @@ package com.example.world_phone.service.impl;
 import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.constant.ConstansStatus;
 import com.example.world_phone.dto.request.product_property.ProductPropertyRequest;
+import com.example.world_phone.dto.respone.order_detail.OrderDetailRespone;
 import com.example.world_phone.dto.respone.product.ProductPropertyRespone;
+import com.example.world_phone.entity.ProductEntity;
 import com.example.world_phone.entity.ProductPropertyEntity;
 import com.example.world_phone.exception.WorldPhoneExp;
 import com.example.world_phone.repo.PropertyProductRepo;
@@ -24,6 +26,8 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
     private final PropertyProductRepo repo;
     private final ConvertUtil convertUtil;
 
+    private final PropertyProductRepo propertyProductRepo;
+
     @Override
     public List<ProductPropertyRespone> findByRom(Long id) {
         List<ProductPropertyRespone> respones = new ArrayList<>();
@@ -33,6 +37,29 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
             respones.add(mapToDto(a));
         }
         return respones;
+    }
+
+    @Override
+    public OrderDetailRespone findById(Long id) {
+        OrderDetailRespone detailRespone = new OrderDetailRespone();
+        ProductPropertyEntity propertyEntity = propertyProductRepo.getById(id);
+        detailRespone.setIdProductProperty(String.valueOf(propertyEntity.getId()));
+        ProductEntity productEntity = propertyEntity.getRomEntity().getProductEntity();
+        detailRespone.setColorProduct(propertyEntity.getColorEntity().getValueColor());
+        detailRespone.setRomProduct(propertyEntity.getRomEntity().getName());
+        detailRespone.setNameProduct(productEntity.getName());
+        detailRespone.setImageProduct(productEntity.getImage_key());
+        detailRespone.setTonKho(String.valueOf(propertyEntity.getQuantity()));
+        if(propertyEntity.getPricePromotion() > 0){
+            detailRespone.setGiaBan(propertyEntity.getPricePromotion());
+        }else {
+            detailRespone.setGiaBan(propertyEntity.getPrice());
+        }
+        detailRespone.setGiaBanString(convertUtil.moneyToStringFormat(detailRespone.getGiaBan()));
+        detailRespone.setTongTien(detailRespone.getGiaBan());
+        detailRespone.setTongTienString(convertUtil.moneyToStringFormat(detailRespone.getGiaBan()));
+        detailRespone.setStatusProduct(propertyEntity.getQuantity() == 0 ? "0" : "1");
+        return detailRespone;
     }
 
     @Override

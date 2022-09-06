@@ -13,6 +13,10 @@ public interface PropertyProductRepo extends JpaRepository<ProductPropertyEntity
     @Query("select o from ProductPropertyEntity o where o.deleteFlag = false  and o.romEntity.id = ?1")
     List<ProductPropertyEntity> findByRom(Long id);
 
+
+    @Query("select o from ProductPropertyEntity o where o.status = 'ON' and o.deleteFlag = false  and o.romEntity.id = ?1")
+    List<ProductPropertyEntity> findByRomAAndStatus(Long id);
+
     @Query("select o from ProductPropertyEntity o where o.deleteFlag = false  and o.romEntity.id = ?1 and o.colorEntity.id = ?2")
     List<ProductPropertyEntity> findByRomAndColor(Long romId, Long colorId);
 

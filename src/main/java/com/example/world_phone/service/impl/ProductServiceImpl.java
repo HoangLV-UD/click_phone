@@ -185,10 +185,12 @@ public class ProductServiceImpl implements IProductService {
                 romRespone.setName(r.getName());
                 romRespone.setId(String.valueOf(r.getId()));
                 List<ProductPropertyRespone> productPropertyResponeList = new ArrayList<>();
-                for (ProductPropertyEntity p: r.getProductProperties()
+                List<ProductPropertyEntity> productPropertyEntityList = propertyProductRepo.findByRomAAndStatus(r.getId());
+                for (ProductPropertyEntity p: productPropertyEntityList
                 ) {
                     ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
                     productPropertyRespone.setQuantity(p.getQuantity());
+                    productPropertyRespone.setId(String.valueOf(p.getId()));
                     productPropertyRespone.setPrice(p.getPrice());
                     productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
                     productPropertyRespone.setColorName(p.getColorEntity().getValueColor());

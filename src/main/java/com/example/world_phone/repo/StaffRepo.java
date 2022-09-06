@@ -2,6 +2,7 @@ package com.example.world_phone.repo;
 
 import com.example.world_phone.entity.StaffEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public interface StaffRepo extends JpaRepository<StaffEntity, Long> {
 
 
     // Find staff by email
+    @Query("select o from StaffEntity o where o.status = '0' and o.deleteFlag = false  and  o.email = ?1")
     List<StaffEntity> findByEmailAndDeleteFlagIsFalse(String email);
 
     // Find staff by phoneNumber
