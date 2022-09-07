@@ -1262,6 +1262,23 @@
             data["detailRequest"].push(detail);
         });
         console.log(data)
+        for (let i = 0; i < data.detailRequest.length; i++){
+            for (let j = 0; j < data.detailRequest.length; j++){
+                if(j !== i){
+                    if(data.detailRequest[i].productId === data.detailRequest[j].productId){
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            title: 'Sản phẩm không được trùng nhau',
+                            showConfirmButton: true,
+                            timerProgressBar: true,
+                            timer: 2000
+                        })
+                        return;
+                    }
+                }
+            }
+        }
 
         $.ajax({
             url: '/api/orders/edit-order-details',
@@ -1518,7 +1535,7 @@
                     if (result.shipping === '-12') {
                         $('.modal-info-order').find('.btnEdit').hide();
                     } else {
-                        if (result.shipping === '0') {
+                        if (result.shipping === '0' || result.shipping === '1') {
                             // unlock edit product
                             // $('.modal-info-order').find('.btnEdit').show();
                             $('.btnQty').removeAttr('disabled');
@@ -1530,9 +1547,9 @@
                         }
                     }
                     // Show/Hide btnCancel if exists function "BẢO HÀNH"
-                    if ((result.orderType === 'ONLINE' || result.paymentMethod === 'CASH') && result.status === 'UNPAID' && result.transactionStatus !== 'CANCEL') {
-                        btnCancel.show();
-                    }
+
+                    btnCancel.show();
+
 
                     if ($('#feeDelivery').val() === '0 đ') {
                         $('#inside').prop('checked', true);
@@ -2008,7 +2025,7 @@
 
     function onBtnCancel() {
         const orderId = $('#order-id').val();
-
+        let id = orderId;
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success mx-2',
@@ -2026,14 +2043,10 @@
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                let data = {}
-                data['id'] = orderId;
-
+                console.log(orderId)
                 $.ajax({
-                    url: `/api/v1/orders/cancel-order`,
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
+                    url: '/api/orders/cancel-order/' + id,
+                    type: 'GET',
                     success: function (res) {
                         Swal.fire({
                             position: 'center',

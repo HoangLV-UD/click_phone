@@ -146,4 +146,19 @@ public class OrderServiceimpl implements IOrderService {
         ordersRepo.save(entity);
         return "ok";
     }
+
+    @Override
+    public String deleteOrder(String request) {
+        OrdersEntity ordersEntity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request);
+        ordersEntity.setStatus("-1");
+        ordersRepo.save(ordersEntity);
+        List<OrdersDetailEntity> list = ordersDetailRepo.findByDeleteFlagIsFalseAndOrdersEntity(ordersEntity);
+        for (OrdersDetailEntity detail: list
+             ) {
+            ProductPropertyEntity propertyEntity = propertyProductRepo.getById(detail.getIdPropertyProduct());
+            propertyEntity.setQuantity(detail.getQuantity() + propertyEntity.getQuantity());
+            propertyProductRepo.save(propertyEntity);
+        }
+        return "ok";
+    }
 }

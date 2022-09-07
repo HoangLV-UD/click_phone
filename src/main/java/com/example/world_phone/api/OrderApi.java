@@ -60,4 +60,13 @@ public class OrderApi {
         }
         return ResponseEntity.badRequest().body(respone);
     }
+
+    @GetMapping("/cancel-order/{id}")
+    public ResponseEntity<?> cancelOrder(@PathVariable("id") String id) throws ParseException {
+        String respone = orderService.deleteOrder(String.valueOf(id));
+        if(respone.equals("ok")){
+            return ResponseEntity.ok().body(respone);
+        }
+        return ResponseEntity.badRequest().body(respone);
+    }
 }

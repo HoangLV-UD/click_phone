@@ -22,6 +22,8 @@ public interface IOrderService {
 
     String confirmOrder(OrderRequest request) throws ParseException;
 
+    String deleteOrder(String id);
+
 
 
 
