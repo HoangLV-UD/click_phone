@@ -38,9 +38,13 @@ public class OrdersEntity extends BaseEntity{
     @Column(name = "TOTAL_MONEY")
     private Long totalMoney;
 
-    @ManyToOne
-    @JoinColumn(name = "VOUCHER_ID", referencedColumnName = "ID")
-    private VoucherEntity voucherEntity;
+//    @ManyToOne
+//    @JoinColumn(name = "VOUCHER_ID", referencedColumnName = "ID")
+//    private VoucherEntity voucherEntity;
+
+    @Basic
+    @Column(name = "VOUCHER_ID")
+    private Long voucherID;
 
     @ManyToOne
     @JoinColumn(name = "PROMOTION_ID", referencedColumnName = "ID")
@@ -57,11 +61,24 @@ public class OrdersEntity extends BaseEntity{
     @Basic
     @Column(name = "STATUS")
     private String status;
+    @Basic
+    @Column(name = "NAME_SHIP")
+    private String nameShip;
+    @Basic
+    @Column(name = "PHONE_SHIP")
+    private String phoneShip;
+    @Basic
+    @Column(name = "NOTE_SHIP")
+    private String noteShip;
 
 
     @Basic
     @Column(name = "STATUS_PAY")
     private Integer statusPay;
+
+    @Basic
+    @Column(name = "TYPE_ORDER")
+    private Integer typeOrder;
 
     @OneToMany(mappedBy = "ordersEntity")
     private List<OrdersDetailEntity> ordersDetailEntities;
@@ -70,6 +87,14 @@ public class OrdersEntity extends BaseEntity{
     @Column(name = "RECEIVE_DATE")
     private Date receiveDate;
 
+
+    public Integer getTypeOrder() {
+        return typeOrder;
+    }
+
+    public void setTypeOrder(Integer typeOrder) {
+        this.typeOrder = typeOrder;
+    }
 
     public Long getId() {
         return id;
@@ -111,12 +136,12 @@ public class OrdersEntity extends BaseEntity{
         this.totalMoney = totalMoney;
     }
 
-    public VoucherEntity getVoucherEntity() {
-        return voucherEntity;
+    public Long getVoucherID() {
+        return voucherID;
     }
 
-    public void setVoucherEntity(VoucherEntity voucherEntity) {
-        this.voucherEntity = voucherEntity;
+    public void setVoucherID(Long voucherID) {
+        this.voucherID = voucherID;
     }
 
     public PromotionEnity getPromotionEnity() {
@@ -173,5 +198,29 @@ public class OrdersEntity extends BaseEntity{
 
     public void setReceiveDate(Date receiveDate) {
         this.receiveDate = receiveDate;
+    }
+
+    public String getNameShip() {
+        return nameShip;
+    }
+
+    public void setNameShip(String namShip) {
+        this.nameShip = namShip;
+    }
+
+    public String getPhoneShip() {
+        return phoneShip;
+    }
+
+    public void setPhoneShip(String phoneShip) {
+        this.phoneShip = phoneShip;
+    }
+
+    public String getNoteShip() {
+        return noteShip;
+    }
+
+    public void setNoteShip(String noteShip) {
+        this.noteShip = noteShip;
     }
 }

@@ -25,7 +25,7 @@ public interface StaffRepo extends JpaRepository<StaffEntity, Long> {
 
 
     // Find staff by email
-    @Query("select o from StaffEntity o where o.status = '0' and o.deleteFlag = false  and  o.email = ?1")
+    @Query("select o from StaffEntity o where o.status = '1' and o.deleteFlag = false  and  o.email = ?1")
     List<StaffEntity> findByEmailAndDeleteFlagIsFalse(String email);
 
     // Find staff by phoneNumber

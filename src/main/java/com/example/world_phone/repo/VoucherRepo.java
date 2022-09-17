@@ -3,8 +3,10 @@ package com.example.world_phone.repo;
 import com.example.world_phone.entity.VoucherEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -17,4 +19,6 @@ public interface VoucherRepo extends JpaRepository<VoucherEntity, String> {
     List<VoucherEntity> findAllByDeleteFlagIsFalse();
 
     VoucherEntity getByIdAndDeleteFlagIsFalse(String id);
+    @Query("select o from VoucherEntity o where o.endDate >= ?1 and o.code = ?2 and o.status = 'ON' and o.deleteFlag = false ")
+    VoucherEntity getByEndDate(Date date, String code);
 }

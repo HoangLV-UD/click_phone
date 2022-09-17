@@ -18,13 +18,18 @@ import java.text.ParseException;
  * Project_name: com.example.world_phone.api
  */
 @RestController
-@RequestMapping("api/orders/")
+@RequestMapping("api/orders")
 @RequiredArgsConstructor
 public class OrderApi {
     private final IOrderService orderService;
 
     private final IOrderDetailService detailService;
 
+    @PostMapping("")
+    public ResponseEntity<?> addOrder(@RequestBody OrderRequest request){
+        orderService.addOrder(request);
+        return ResponseEntity.ok().body(request);
+    }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getorder(@PathVariable("id") String id){
@@ -43,8 +48,26 @@ public class OrderApi {
     }
 
     @PostMapping("confirm-order-sale-person")
-    public ResponseEntity<?> confirmOrders(@RequestBody OrderRequest request) throws ParseException {
+    public ResponseEntity<?> confirmSaleOrders(@RequestBody OrderRequest request) throws ParseException {
         String respone = orderService.confirmOrder(request);
+        if(respone.equals("ok")){
+            return ResponseEntity.ok().body(respone);
+        }
+        return ResponseEntity.badRequest().body(respone);
+    }
+
+    @PostMapping("confirm-export-order")
+    public ResponseEntity<?> confirmExportOrders(@RequestBody OrderRequest request){
+        String respone = orderService.exportOrder(request);
+        if(respone.equals("ok")){
+            return ResponseEntity.ok().body(respone);
+        }
+        return ResponseEntity.badRequest().body(respone);
+    }
+
+    @PostMapping("shipping")
+    public ResponseEntity<?> confirmShipping(@RequestBody OrderRequest request){
+        String respone = orderService.shippingOrder(request);
         if(respone.equals("ok")){
             return ResponseEntity.ok().body(respone);
         }
@@ -53,8 +76,26 @@ public class OrderApi {
 
 
     @GetMapping("/{id}/{code}")
-    public ResponseEntity<?> deleteOrder(@PathVariable("id") Long id, @PathVariable("code") String codeOrder) throws ParseException {
+    public ResponseEntity<?> deleteOrder(@PathVariable("id") Long id, @PathVariable("code") String codeOrder){
         String respone = detailService.deleteDetail(id, codeOrder);
+        if(respone.equals("ok")){
+            return ResponseEntity.ok().body(respone);
+        }
+        return ResponseEntity.badRequest().body(respone);
+    }
+
+    @GetMapping("pay-the-bill/{id}")
+    public ResponseEntity<?> doneOrder(@PathVariable("id") String id){
+        String respone = orderService.doneOrder(id);
+        if(respone.equals("ok")){
+            return ResponseEntity.ok().body(respone);
+        }
+        return ResponseEntity.badRequest().body(respone);
+    }
+
+    @GetMapping("/cancel-order/{id}")
+    public ResponseEntity<?> cancelOrder(@PathVariable("id") String id){
+        String respone = orderService.deleteOrder(String.valueOf(id));
         if(respone.equals("ok")){
             return ResponseEntity.ok().body(respone);
         }

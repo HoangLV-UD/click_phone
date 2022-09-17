@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface CustomerRepo extends JpaRepository<CustomerEntity, Long> {
 
     Optional<CustomerEntity> findById(Long id);
+
+    CustomerEntity findByPhoneNumber(String phone);
 }
