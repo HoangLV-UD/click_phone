@@ -69,8 +69,7 @@ public class VoucherEntity extends BaseEntity {
     @Column(name = "accompany_promo")
     private String accompanyPromo;
 
-//    @OneToMany(mappedBy = "voucher",fetch = FetchType.EAGER)
-//    private List<OrdersEntity> orders;
+
 
     @Override
     public boolean equals(Object o) {

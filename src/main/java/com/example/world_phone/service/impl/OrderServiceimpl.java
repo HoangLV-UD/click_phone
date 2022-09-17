@@ -44,6 +44,7 @@ public class OrderServiceimpl implements IOrderService {
 
     private final ProductRepo productRepo;
 
+    private final VoucherRepo voucherRepo;
 
     @Override
     public List<OrderRespone> findAllOrder() {
@@ -53,6 +54,8 @@ public class OrderServiceimpl implements IOrderService {
              ) {
             OrderRespone orderRespone = new OrderRespone();
             orderRespone.setShipping(entity.getStatus());
+
+            orderRespone.setOrderType(String.valueOf(entity.getTypeOrder()));
             orderRespone.setTotalString(convertUtil.moneyToStringFormat(entity.getTotalMoney()));
             orderRespone.setCodeOrder(entity.getCodeOrder());
             orderRespone.setTypeOrder(String.valueOf(entity.getStatusPay()));
@@ -96,6 +99,7 @@ public class OrderServiceimpl implements IOrderService {
         customerRespone.setPhone(customerEntity.getPhoneNumber());
 
         OrderRespone respone = new OrderRespone();
+        respone.setOrderType(String.valueOf(entity.getTypeOrder()));
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         respone.setDeliveryDate(df.format(entity.getReceiveDate()));
         respone.setShipping(entity.getStatus());
@@ -107,7 +111,87 @@ public class OrderServiceimpl implements IOrderService {
         respone.setOrderCreate(entity.getCreateDate().toString());
         respone.setCustomerRespone(customerRespone);
         respone.setListDetail(orderDetailRespones);
+        respone.setNote(entity.getNote());
+        respone.setShipperPhone(entity.getPhoneShip());
+        respone.setShipperName(entity.getNameShip());
+       if(entity.getVoucherID() != null){
+           VoucherEntity voucherEntity = voucherRepo.getByIdAndDeleteFlagIsFalse(String.valueOf(entity.getVoucherID()));
+           respone.setVoucherName(voucherEntity.getName());
+       }
         return respone;
+    }
+
+    @Override
+    public String addOrder(OrderRequest request) {
+        CustomerEntity customerEntity = customerRepo.findByPhoneNumber(request.getPhoneNumber());
+        VoucherEntity voucherEntity = null;
+        if(customerEntity == null){
+            customerEntity = new CustomerEntity();
+            customerEntity.setPhoneNumber(request.getPhoneNumber());
+            customerEntity.setFullName(request.getFullName());
+            customerEntity = customerRepo.save(customerEntity);
+        }
+        long millis=System.currentTimeMillis();
+        java.sql.Date date=new java.sql.Date(millis);
+        OrdersEntity entity = new OrdersEntity();
+        if(request.getOrderType().equals("COUNTER")){
+            entity.setStatus("4");
+            entity.setTypeOrder(0);
+        }else {
+            entity.setStatus("2");
+            entity.setTypeOrder(1);
+        }
+        entity.setStatusPay(0);
+        entity.setAddress(request.getRecipientAddress());
+        entity.setCustomerEntity(customerEntity);
+        entity.setReceiveDate(request.getDeliveryDate());
+        entity = ordersRepo.save(entity);
+        entity.setCodeOrder("HD000" + entity.getId());
+        entity = ordersRepo.save(entity);
+        long tong = 0;
+        for (OrderDetailRequest detail: request.getDetailRequest()
+             ) {
+            OrdersDetailEntity detailEntity = new OrdersDetailEntity();
+            detailEntity.setQuantity(Long.valueOf(detail.getQuantity()));
+            detailEntity.setOrdersEntity(entity);
+            detailEntity.setIdPropertyProduct(Long.valueOf(detail.getProductId().replace("productDetail", "")));
+            ProductPropertyEntity propertyEntity = propertyProductRepo.getById(Long.valueOf(detail.getProductId().replace("productDetail", "")));
+            if(propertyEntity.getPricePromotion() > 0){
+                detailEntity.setPrice(propertyEntity.getPricePromotion());
+                tong+=propertyEntity.getPricePromotion();
+            }else {
+                detailEntity.setPrice(propertyEntity.getPrice());
+                tong+=propertyEntity.getPrice();
+            }
+            propertyEntity.setQuantity(propertyEntity.getQuantity() - Long.parseLong(detail.getQuantity()));
+            propertyProductRepo.save(propertyEntity);
+            ordersDetailRepo.save(detailEntity);
+        }
+        if(request.getVoucherId() != null){
+            voucherEntity = voucherRepo.getByEndDate(date,request.getVoucherId());
+            if(voucherEntity != null){
+                entity.setVoucherID(Long.valueOf(voucherEntity.getId()));
+                if(voucherEntity.getTypeDiscount().equals("đ")){
+                    tong = tong - voucherEntity.getDiscount();
+                }else {
+                    tong = tong - (tong / 100) * voucherEntity.getDiscount();
+                }
+            }
+        }
+        entity.setTotalMoney(tong);
+        ordersRepo.save(entity);
+        return "ok";
+    }
+
+    private void addOrderVoucher(CustomerEntity entity, OrderRequest request){
+        long tong = 0;
+        for (OrderDetailRequest detail: request.getDetailRequest()
+             ) {
+            ProductPropertyEntity propertyEntity = propertyProductRepo.getById(Long.valueOf(detail.getId()));
+            tong += propertyEntity.getPricePromotion() == 0 ? propertyEntity.getPrice() * Long.parseLong(detail.getQuantity()) : propertyEntity.getPricePromotion() * Long.parseLong(detail.getQuantity());
+        }
+        OrdersEntity entityOrder = new OrdersEntity();
+
     }
 
     @Override
@@ -143,6 +227,36 @@ public class OrderServiceimpl implements IOrderService {
         entity.setAddress(request.getRecipientAddress());
         entity.setReceiveDate(request.getDeliveryDate());
         entity.setStatus("1");
+        ordersRepo.save(entity);
+        return "ok";
+    }
+
+    @Override
+    public String shippingOrder(OrderRequest request) {
+        OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
+        entity.setNameShip(request.getShipperName());
+        entity.setNoteShip(request.getNote());
+        entity.setStatus("3");
+        entity.setPhoneShip(request.getShipperPhone());
+        ordersRepo.save(entity);
+        return "ok";
+    }
+
+    @Override
+    public String exportOrder(OrderRequest request) {
+        OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
+        entity.setAddress(request.getRecipientAddress());
+
+        entity.setReceiveDate(request.getDeliveryDate());
+        entity.setStatus("2");
+        ordersRepo.save(entity);
+        return "ok";
+    }
+
+    @Override
+    public String doneOrder(String  id) {
+        OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(id);
+        entity.setStatus("4");
         ordersRepo.save(entity);
         return "ok";
     }

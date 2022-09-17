@@ -121,7 +121,7 @@
                             <th>Mã hoá đơn</th>
                             <th>Tổng tiền hàng</th>
                             <th class="order-date">Ngày đặt đơn</th>
-
+                            <th>Loại đơn hàng</th>
                             <th>Phương thức<br/>thanh toán</th>
                         </tr>
                         </thead>
@@ -141,6 +141,11 @@
                             <td class="order-id" th:text="${order.getCodeOrder()}">Mã hoá đơn</td>
                             <td class="text-end order-tax" th:text="${order.getTotalString()}">Tổng tiền hàng</td>
                             <td class="text-center" th:text="${order.getOrderCreate()}">Ngày đặt đơn</td>
+                            <td class="text-center" th:switch="${order.getOrderType()}">
+                                <span th:case="1" class="order-type">Online</span>
+                                <span th:case="2" class="order-type">Gọi đặt hàng</span>
+                                <span th:case="0" class="order-type">Tại quầy</span>
+                            </td>
                             <td class="text-center" th:switch="${order.getTypeOrder()}">
                                 <span th:case="1" class="order-method">Thẻ</span>
                                 <span th:case="0" class="order-method">Tiền mặt</span>
@@ -222,10 +227,10 @@
                                     <th class="align-top"><label for="inputVoucher">Mã voucher</label></th>
                                     <td><input id="inputVoucher" name="inputVoucher" class="ps-2 bg-white"></td>
                                 </tr>
-                                <tr>
-                                    <th><label for="priceVoucher">Giảm giá voucher</label></th>
-                                    <td><span id="priceVoucher" class="ps-2 fw-bolder"></span></td>
-                                </tr>
+<!--                                <tr>-->
+<!--                                    <th><label for="priceVoucher">Tên Voucher</label></th>-->
+<!--                                    <td><span id="priceVoucher" class="ps-2 fw-bolder"></span></td>-->
+<!--                                </tr>-->
                                 <tr>
                                     <th><label for="price">Tổng thanh toán</label></th>
                                     <td><span id="price" class="ps-2 fw-bolder text-danger"></span></td>
@@ -681,7 +686,7 @@
         let errorMessage = '';
         let flag = true;
 
-        const input = $('#recipientName, #recipientAddress');
+        const input = $('#recipientAddress');
         input.each(function() {
             if ($(this).val() === '') {
                 $(this).addClass('error');
@@ -704,23 +709,23 @@
             errorMessage += 'Ngày giao hàng phải sau ngày hiện tại!\n';
             flag = false;
         }
-
-        const phoneNumber = $('#recipientPhone');
-        const patternPhone = /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/i;
+        //
+        // const phoneNumber = $('#recipientPhone');
+         const patternPhone = /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/i;
         let count = 0;
-        phoneNumber.each(function(){
-            if ($(this).val() === '') {
-                $(this).addClass('error');
-                flag = false;
-            } else {
-                const regexPhone = patternPhone.test($(this).val())
-                if(!regexPhone) {
-                    flag = false;
-                    $(this).addClass('error');
-                    count++;
-                }
-            }
-        });
+        // phoneNumber.each(function(){
+        //     if ($(this).val() === '') {
+        //         $(this).addClass('error');
+        //         flag = false;
+        //     } else {
+        //         const regexPhone = patternPhone.test($(this).val())
+        //         if(!regexPhone) {
+        //             flag = false;
+        //             $(this).addClass('error');
+        //             count++;
+        //         }
+        //     }
+        // });
 
         // Validate for "Giao hàng"
         if ($('#btnSave span').text()==='Giao hàng') {
@@ -748,35 +753,35 @@
             });
         }
 
-        // Validate for "Xác nhận đơn hàng"
-        if ($('#btnSave span').text()==='Xác nhận đơn hàng') {
-            const phoneNumber = $('#phoneNumber');
-            phoneNumber.each(function(){
-                if ($(this).val() === '') {
-                    $(this).addClass('error');
-                    flag = false;
-                } else {
-                    const regexPhone = patternPhone.test($(this).val())
-                    if(!regexPhone) {
-                        flag = false;
-                        $(this).addClass('error');
-                        count++;
-                    }
-                }
-            });
-
-            const buyerInfo = $('#fullName, #feeDelivery');
-            buyerInfo.each(function() {
-                if ($(this).val() === '') {
-                    $(this).addClass('error');
-                    flag = false;
-                }
-            });
-
-            if ($('.order:not(:first)').length !== 0) {
-
-            }
-        }
+        // // Validate for "Xác nhận đơn hàng"
+        // if ($('#btnSave span').text()==='Xác nhận đơn hàng') {
+        //     const phoneNumber = $('#phoneNumber');
+        //     phoneNumber.each(function(){
+        //         if ($(this).val() === '') {
+        //             $(this).addClass('error');
+        //             flag = false;
+        //         } else {
+        //             const regexPhone = patternPhone.test($(this).val())
+        //             if(!regexPhone) {
+        //                 flag = false;
+        //                 $(this).addClass('error');
+        //                 count++;
+        //             }
+        //         }
+        //     });
+        //
+        //     const buyerInfo = $('#fullName, #feeDelivery');
+        //     buyerInfo.each(function() {
+        //         if ($(this).val() === '') {
+        //             $(this).addClass('error');
+        //             flag = false;
+        //         }
+        //     });
+        //
+        //     if ($('.order:not(:first)').length !== 0) {
+        //
+        //     }
+        // }
 
         if (count !== 0) errorMessage += 'Số điện thoại không hợp lệ!\n';
 
@@ -848,18 +853,14 @@
         } else if (btnSubmit === 'Giao hàng') {
             goShippingOrder();
         } else if (btnSubmit === 'Xác nhận hoàn thành') {
-            if ($('#order_type').val() === 'ONLINE') {
-                // Get Order
+            //if ($('#order_type').val() === 'ONLINE') {
                 let data = {};
                 data["id"] = $('input[id=order-id]').val();
                 data["givenMoney"] = 0;
 
                 $.ajax({
-                    url: '/api/v1/orders/pay-the-bill',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
-                    dataType: 'json',
+                    url: '/api/orders/pay-the-bill/' + $('input[id=order-id]').val(),
+                    type: 'GET',
                     success: function (result) {
                         $('.modal-given-money').modal('hide');
                         Swal.fire({
@@ -872,6 +873,7 @@
                         }).then(() => window.location.reload());
                     },
                     error: function (error) {
+                        console.log(error)
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top-end',
@@ -889,9 +891,10 @@
                         })
                     }
                 })
-            } else {
-                $('.modal-given-money').modal('show');
-            }
+           //}
+            // else {
+            //     $('.modal-given-money').modal('show');
+            // }
         }
 
         // Submit thanh toán tại quầy
@@ -903,19 +906,52 @@
     //API confirm order
     const feeDelivery = $('input[name=feeDelivery]');
     function confirmOrder() {
-        // Info Receiver order
-        let data = {};
-        data["recipientAddress"] = $('textarea[name=recipientAddress]').val();
-        data["deliveryDate"] = moment($('input[name=deliveryDate]').val(), 'DD-MM-YYYY').format('YYYY-MM-DD');
+        let data = {}
 
-        data["id"] = $('input[id=order-id]').val();
+        data["id"] = $('#order-id').val();
+        data["detailRequest"] = [];
+        data["totalMoney"] = removePoint($('#price').text())
+
+
+        $('#list-order tr:not(:first)').each(function () {
+            let detail = {};
+            detail["id"] = $(this).find('.order-detail-id').val();
+            detail["productId"] = $(this).find('.product-id').first().val();
+            detail["quantity"] = $(this).find('.order-quantity').first().text();
+            detail["price"] = removePoint($(this).find('.product-price').first().text());
+            data["detailRequest"].push(detail);
+        });
+        console.log(data)
+        for (let i = 0; i < data.detailRequest.length; i++){
+            for (let j = 0; j < data.detailRequest.length; j++){
+                if(j !== i){
+                    if(data.detailRequest[i].productId === data.detailRequest[j].productId){
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            title: 'Sản phẩm không được trùng nhau',
+                            showConfirmButton: true,
+                            timerProgressBar: true,
+                            timer: 2000
+                        })
+                        return;
+                    }
+                }
+            }
+        }
+        // Info Receiver order
+        let data1 = {};
+        data1["recipientAddress"] = $('textarea[name=recipientAddress]').val();
+        data1["deliveryDate"] = moment($('input[name=deliveryDate]').val(), 'DD-MM-YYYY').format('YYYY-MM-DD');
+
+        data1["id"] = $('input[id=order-id]').val();
         if(validateForm()) {
-            console.log(data);
+            console.log(data1);
             $.ajax({
                 url: '/api/orders/confirm-order-sale-person',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(data),
+                data: JSON.stringify(data1),
                 dataType: 'json',
                 success: function (result) {
                     $('.modal-info-order').modal('hide');
@@ -958,7 +994,7 @@
             let data = {};
             data["id"] = $('input[id=order-id]').val();
             data["note"] = "";
-
+            data["detailRequest"] = [];
             // Get list OrderDetails
             let productDetailsRequests = [];
             $('.order:not(:first)').each(function (index) {
@@ -973,10 +1009,12 @@
                 productDetailsRequests.push(orderDetail);
             });
             data["productDetailsRequests"] = productDetailsRequests;
+        data["recipientAddress"] = $('textarea[name=recipientAddress]').val();
             console.log(data)
+
             if (validateForm()) {
                 $.ajax({
-                    url: '/api/v1/orders/confirm-export-order',
+                    url: '/api/orders/confirm-export-order',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(data),
@@ -993,21 +1031,28 @@
                         }).then(()=> window.location.reload());
                     },
                     error: function (error) {
-                        const Toast = Swal.mixin({
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer)
-                                toast.addEventListener('mouseleave', Swal.resumeTimer)
-                            }
-                        })
-                        Toast.fire({
-                            icon: 'error',
-                            title: "Lỗi hệ thống!\nVui lòng thử lại sau"
-                        })
+                        console.log(error.status);
+                        if(Number(error.status) === 200){
+                            $('.modal-info-order').modal('hide');
+                            confirmListOrderDetail('CONFIRM');
+                        }else {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+                            Toast.fire({
+                                icon: 'error',
+                                title: "Lỗi hệ thống!\nVui lòng thử lại sau"
+                            })
+                        }
+
                     }
                 })
                 onLockEditOrder(true);
@@ -1023,17 +1068,13 @@
         let data = {};
         data["id"] = $('input[id=order-id]').val();
         data["note"] = $('#shipNote').val();
-        if (feeDelivery.val().indexOf(" đ") > 0) {
-            data["feeDelivery"] = removePoint(feeDelivery.val());
-        } else {
-            data["feeDelivery"] = feeDelivery.val();
-        }
         data["shipperName"] = $('input[id=shipperName]').val();
         data["shipperPhone"] = $('input[id=shipperPhone]').val();
 
         if (validateForm()) {
+            console.log(data)
             $.ajax({
-                url: '/api/v1/orders/shipping',
+                url: '/api/orders/shipping',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
@@ -1050,21 +1091,34 @@
                     }).then(()=> window.location.reload());
                 },
                 error: function (error) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
-                    Toast.fire({
-                        icon: 'error',
-                        title: "Lỗi hệ thống!\nVui lòng thử lại sau"
-                    })
+                    if(Number(error.status) === 200){
+                        $('.modal-info-order').modal('hide');
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Giao hàng thành công',
+                            showConfirmButton: true,
+                            timerProgressBar: true,
+                            timer: 2000
+                        }).then(()=> window.location.reload());
+                    }else {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'error',
+                            title: "Lỗi hệ thống!\nVui lòng thử lại sau"
+                        })
+                    }
+
                 }
             })
             onLockEditOrder(true);
@@ -1112,10 +1166,9 @@
             data["givenMoney"] = money.val();
 
             $.ajax({
-                url: '/api/v1/orders/pay-the-bill',
+                url: '/api/orders/pay-the-bill',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(data),
                 dataType: 'json',
                 success: function (result) {
                     $('.modal-given-money').modal('hide');
@@ -1154,39 +1207,52 @@
         // Info Receiver order
         let data = {};
 
-        let customer = {};
-        customer["fullName"] = $('#fullName').val();
-        customer["phoneNumber"] = $('#phoneNumber').val();
-        data["customer"] = customer;
+        // let customer = {};
+        // customer["fullName"] = $('#fullName').val();
+        // customer["phoneNumber"] = $('#phoneNumber').val();
+        // data["customer"] = customer;
+        data["fullName"] = $('#fullName').val();
+        data["phoneNumber"] = $('#phoneNumber').val();
 
         data["recipientName"] = $('input[name=recipientName]').val();
         data["recipientPhone"] = $('input[name=recipientPhone]').val();
         data["recipientAddress"] = $('textarea[name=recipientAddress]').val();
         data["deliveryDate"] = moment($('input[name=deliveryDate]').val(), 'DD-MM-YYYY').format('YYYY-MM-DD');
-        if (feeDelivery.val().indexOf(" đ") > 0) {
-            data["feeDelivery"] = +feeDelivery.val().substring(0, feeDelivery.val().indexOf(" đ")).replace('.', '');
-        } else {
-            data["feeDelivery"] = feeDelivery.val();
-        }
-
-        data["paymentMethod"] = "CASH";
-        data["orderMethod"] = "CASH";
         data["voucherId"] = $('#inputVoucher').val();
         data["orderType"] = $('#create-order-type').prop('checked') ? "ORDER_ONLINE" : "COUNTER";
 
-        data["productDetails"] = [];
+        data["detailRequest"] = [];
 
         $('#list-order tr:not(:first)').each(function () {
             let productDetails = {};
             productDetails["productId"] = $(this).find('.product-id').first().val();
             productDetails["quantity"] = $(this).find('.order-quantity').first().text();
-            data["productDetails"].push(productDetails);
+            //productDetails["price"] = removePoint($(this).find('.product-price').first().text());
+            data["detailRequest"].push(productDetails);
         });
+        for (let i = 0; i < data.detailRequest.length; i++){
+            for (let j = 0; j < data.detailRequest.length; j++){
+                if(j !== i){
+                    if(data.detailRequest[i].productId === data.detailRequest[j].productId){
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            title: 'Sản phẩm không được trùng nhau',
+                            showConfirmButton: true,
+                            timerProgressBar: true,
+                            timer: 2000
+                        })
+                        return;
+                    }
+                }
+            }
+        }
+        console.log(data);
 
         if(validateForm()) {
             if ($('#list-order tr:not(:first)').length > 0) {
                 $.ajax({
-                    url: '/api/v1/orders',
+                    url: '/api/orders',
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(data),
@@ -1526,9 +1592,9 @@
                     $('input[name=shipperName]').val(result.shipperName);
                     $('input[name=shipperPhone]').val(result.shipperPhone);
                     $('textarea[name=shipNote]').text(result.note);
-                    // if (result.voucher !== null) {
-                    //     $('#inputVoucher').val(result.voucher.voucherCode);
-                    //     $('#priceVoucher').text(result.voucher.voucherDiscount + ' ' + result.voucher.voucherTypeDiscount);
+                    // if (result.voucherName !== null) {
+                    //     $('#inputVoucher').val(result.voucherName.voucherCode);
+                    //     $('#priceVoucher').text(result.voucherName);
                     // }
 
                     // Show/Hide btnEdit
