@@ -38,9 +38,6 @@ public class OrdersEntity extends BaseEntity{
     @Column(name = "TOTAL_MONEY")
     private Long totalMoney;
 
-//    @ManyToOne
-//    @JoinColumn(name = "VOUCHER_ID", referencedColumnName = "ID")
-//    private VoucherEntity voucherEntity;
 
     @Basic
     @Column(name = "VOUCHER_ID")

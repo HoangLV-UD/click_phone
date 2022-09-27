@@ -131,7 +131,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductResponse getProduct(Long id) {
+    public ProductResponse getProduct(Long id)  {
         ProductEntity entity = productRepo.findByIdAndDeleteFlagIsFalse(id);
         if(entity == null){
             throw new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST);
