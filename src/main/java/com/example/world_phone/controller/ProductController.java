@@ -2,6 +2,7 @@ package com.example.world_phone.controller;
 
 import com.example.world_phone.dto.respone.attribute.cam.CamRespone;
 import com.example.world_phone.dto.respone.attribute.chip.ChipRespone;
+import com.example.world_phone.dto.respone.attribute.loai_os.Loai_OsRespone;
 import com.example.world_phone.dto.respone.attribute.os.OsRespone;
 import com.example.world_phone.dto.respone.attribute.pin.PinRespone;
 import com.example.world_phone.dto.respone.attribute.ram.RamRespone;
@@ -39,20 +40,20 @@ public class ProductController {
     private final IScreenService screenService;
 
     private final IOsService osService;
-
+    private final ILoaiOsService loaiOsService;
     private final IRamService ramService;
 
     private final IPinService pinService;
 
     private final IChipService chipService;
 
-    private final ICamService  camService;
+    private final ICamService camService;
 
     private final RomValueService romValueService;
 
 
     @GetMapping()
-    public String index(Model model){
+    public String index(Model model) {
 
         List<CategoryResponeDto> categoryDTOList = categoryService.getAllCategory();
         List<SupplierResponseDTO> supplierResponseDTOS = supplierService.findAll();
@@ -64,6 +65,8 @@ public class ProductController {
         List<RamRespone> ramRespones = ramService.findAll();
         List<CamRespone> camRespones = camService.findAll();
         List<ChipRespone> chipRespones = chipService.findAll();
+        List<Loai_OsRespone> loaiosRespones = loaiOsService.findAll();
+
         List<RomRespone> romRespones = romValueService.findAll();
         model.addAttribute("listRom", romRespones);
         model.addAttribute("listChip", chipRespones);
@@ -76,6 +79,7 @@ public class ProductController {
         model.addAttribute("listOs", osRespones);
         model.addAttribute("listRam", ramRespones);
         model.addAttribute("listPin", pinRespones);
+        model.addAttribute("listloaios",loaiosRespones);
         return "/views/product/product";
     }
 

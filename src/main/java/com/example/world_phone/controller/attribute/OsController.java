@@ -1,5 +1,6 @@
 package com.example.world_phone.controller.attribute;
 
+import com.example.world_phone.service.ILoaiOsService;
 import com.example.world_phone.service.IOsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,10 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("os")
 public class OsController {
     private final IOsService service;
+    private final ILoaiOsService service1;
+
+
 
     @GetMapping
     public String index(Model model){
         model.addAttribute("list", service.findAll());
+        model.addAttribute("listos", service1.findAll());
+        System.out.println(service1.findAll().get(0));
         return "/views/product/attribute/os";
     }
 }

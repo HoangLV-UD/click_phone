@@ -2,6 +2,7 @@ package com.example.world_phone.service.impl;
 
 import com.example.world_phone.dto.request.attribute.os.OsRequest;
 import com.example.world_phone.dto.respone.attribute.os.OsRespone;
+import com.example.world_phone.entity.LoaiOsEntity;
 import com.example.world_phone.entity.OSEntity;
 import com.example.world_phone.repo.OsRepo;
 import com.example.world_phone.service.IOsService;
@@ -23,9 +24,8 @@ public class OsServiceImpl implements IOsService {
     public List<OsRespone> findAll() {
         List<OSEntity> entities = repo.findByDeleteFlagIsFalse();
         List<OsRespone> list = new ArrayList<>();
-        for (OSEntity e: entities
-             ) {
-            list.add(new OsRespone(e.getId(), e.getName(), e.getLoai()));
+        for (OSEntity e : entities) {
+            list.add(new OsRespone(e.getId(), e.getName(), e.getLoaiOsEntity().getId()));
         }
         return list;
     }
@@ -33,7 +33,10 @@ public class OsServiceImpl implements IOsService {
     @Override
     public String save(OsRequest request) {
         OSEntity entity = new OSEntity();
-        entity.setLoai(request.getLoai());
+        LoaiOsEntity loaiOsEntity = new LoaiOsEntity();
+        loaiOsEntity.setId(request.getLoaiOsId());
+        entity.setId(request.getId());
+        entity.setLoaiOsEntity(loaiOsEntity);
         entity.setName(request.getName());
         entity.setCreateBy("ADMIN");
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
@@ -47,7 +50,10 @@ public class OsServiceImpl implements IOsService {
     @Override
     public String edit(OsRequest request) {
         OSEntity entity = repo.getById(request.getId());
-        entity.setLoai(request.getLoai());
+//        entity.setLoai(request.getLoai());
+        LoaiOsEntity loaiOsEntity = new LoaiOsEntity();
+        loaiOsEntity.setId(request.getLoaiOsId());
+        entity.setLoaiOsEntity(loaiOsEntity);
         entity.setName(request.getName());
         repo.save(entity);
         return "ok";
@@ -56,7 +62,7 @@ public class OsServiceImpl implements IOsService {
     @Override
     public OsRespone findById(String id) {
         OSEntity entity = repo.getById(Long.valueOf(id));
-        return new OsRespone(entity.getId(), entity.getName(), entity.getLoai());
+        return new OsRespone(entity.getId(), entity.getName(), entity.getLoaiOsEntity().getId());
     }
 
     @Override

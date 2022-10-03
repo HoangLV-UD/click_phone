@@ -1,11 +1,8 @@
 package com.example.world_phone.api.attribute;
 
 import com.example.world_phone.dto.request.attribute.chip.ChipRequest;
-import com.example.world_phone.dto.request.attribute.os.OsRequest;
 import com.example.world_phone.dto.respone.attribute.chip.ChipRespone;
-import com.example.world_phone.dto.respone.attribute.os.OsRespone;
 import com.example.world_phone.service.IChipService;
-import com.example.world_phone.service.IOsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

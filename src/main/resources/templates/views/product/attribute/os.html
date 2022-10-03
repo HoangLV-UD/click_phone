@@ -5,6 +5,7 @@
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Quản lý hệ điều hành - WorlPhone</title>
+    <script th:src="@{/system/attribute_screen.js}"></script>
 </head>
 
 <body>
@@ -30,7 +31,8 @@
         <!-- End-Sidebar -->
         <div class="col-lg-10" id="rightKH">
             <div class="row justify-content-end">
-                <button type="button" class="btn btn-primary col-auto mb-3 me-2 waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".modal-add-staff">
+                <button type="button" class="btn btn-primary col-auto mb-3 me-2 waves-effect waves-light"
+                        data-bs-toggle="modal" data-bs-target=".modal-add-staff">
                     <i class="fas fa-plus me-2"></i>Hệ điều hành
                 </button>
             </div>
@@ -46,24 +48,32 @@
                         <th>Loại</th>
                         </thead>
                         <tbody style="vertical-align: middle;">
-                        <tr th:each="ram, iterator : ${list}">
+                        <tr th:each="os, iterator : ${list}">
                             <td class="text-end info-index">
                                 <!-- <span th:text="${iterator.index + 1}"></span>-->
                             </td>
                             <td class="text-center">
-                                <i class="col-4 fas fa-edit" style="color: darkblue;" title="Cập nhật" onclick="onBtnEdit(this)"></i>
-                                <i class="col-4 fas fa-user-times" style="color: red;" title="Xoá hệ điều hành" onclick="onBtnDelete(this)"></i>
+                                <i class="col-4 fas fa-edit" style="color: darkblue;" title="Cập nhật"
+                                   onclick="onBtnEdit(this)"></i>
+                                <i class="col-4 fas fa-user-times" style="color: red;" title="Xoá hệ điều hành"
+                                   onclick="onBtnDelete(this)"></i>
                             </td>
 
 
-                            <input type="hidden" class="check-item" th:value="${ram.getId()}">
+                            <input type="hidden" class="check-item" th:value="${os.getId()}">
 
-                            <td th:text="${ram.name}"></td>
-                            <td th:switch="${ram.loai}" class="text-center">
-                                <span th:case="0" class="role">Android</span>
-                                <span th:case="1" class="role">IOS</span>
-                                <span th:case="2" class="role">Điện thoại phổ thông</span>
+                            <td th:text="${os.name}"></td>
+
+                            <td class="text-center">
+                                <th:block th:each="loaios :${listos}" th:if="${loaios.id == os.loai.toString()}">
+                                    <span th:text="${loaios.name}"></span>
+                                </th:block>
+                                <!--                                <span    class="role" th:text="${loaios.name}"></span>-->
+                                <!--                                <span th:case="1" class="role">IOS</span>-->
+                                <!--                                <span th:case="2" class="role">Điện thoại phổ thông</span>-->
+                                <!--                                <span th:case="3" class="role">Điện thoạ</span>-->
                             </td>
+
 
                         </tr>
                         </tbody>
@@ -87,21 +97,31 @@
                             <div class="col-5 px-4">
                                 <table class="table-borderless w-100">
                                     <tr>
-                                        <th style="width: 140px"><label class="form-label" for="name">Tên Ram</label><span class="required"> *</span></th>
-                                        <td><input class="form-control" type="text" name="name" id="name" onblur="onType(this)"></td>
+                                        <th style="width: 140px"><label class="form-label" for="name">Tên
+                                            Ram</label><span class="required"> *</span></th>
+                                        <td><input class="form-control" type="text" name="name" id="name"
+                                                   onblur="onType(this)"></td>
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-5 px-4">
+                            <div class="col-6 px-4">
                                 <table class="table-borderless w-100">
                                     <tr>
-                                        <th><label for="loai" class="form-label">Loại kích cỡ</label><span class="required"> *</span></th>
+                                        <th><label for="loai" class="form-label">Loại kích cỡ</label><span
+                                                class="required"> *</span></th>
                                         <td>
-                                            <select class="form-select" name="loai" id="loai" onchange="onType(this)">
-                                                <option value="" disabled selected>-- Chọn loại hệ điều hành --</option>
-                                                <option value="0">Android</option>
-                                                <option value="1">IOS</option>
-                                            </select>
+                                            <div class="d-flex">
+                                                <select class="form-select" name="loai" id="loai"
+                                                        onchange="onType(this)">
+                                                    <th:block th:each="loaios : ${listos}">
+                                                        <option th:value="${loaios.id}"
+                                                                th:text="${loaios.getName()}"></option>
+                                                    </th:block>
+                                                </select>
+
+                                                <button onclick="openLoaiOs()" type="button" class="btn-blue-grey ms-2">
+                                                    <i class="bi bi-plus"></i></button>
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -139,24 +159,31 @@
                     <div class="modal-body">
                         <div class="row">
 
-                            <div class="col-5 px-4">
+                            <div class="col-6 px-4">
                                 <table class="table-borderless w-100">
                                     <tr>
-                                        <th><label class="form-label" for="name-edit">Tên hệ điều hành</label><span class="required"> *</span></th>
-                                        <td><input class="form-control" type="text" name="name" id="name-edit" onblur="onType(this)"></td>
+                                        <th><label class="form-label" for="name-edit">Tên hệ điều hành</label><span
+                                                class="required"> *</span></th>
+                                        <td><input class="form-control" type="text" name="name" id="name-edit"
+                                                   onblur="onType(this)"></td>
                                     </tr>
                                 </table>
                             </div>
                             <div class="col-5 px-4">
                                 <table class="table-borderless w-100">
                                     <tr>
-                                        <th><label for="loai-edit" class="form-label">Chức vụ</label><span class="required"> *</span></th>
+                                        <th><label for="loai-edit" class="form-label">Chức vụ</label><span
+                                                class="required"> *</span></th>
                                         <td>
                                             <select class="form-select" name="loai" id="loai-edit">
                                                 <option value="" disabled selected>-- Chọn loại hệ điều hành --</option>
-                                                <option value="0">Android</option>
-                                                <option value="1">IOS</option>
+
+                                                <th:block th:each="loaios : ${listos}">
+                                                    <option th:value="${loaios.id}"
+                                                            th:text="${loaios.getName()}"></option>
+                                                </th:block>
                                             </select>
+
                                         </td>
                                     </tr>
                                 </table>
@@ -188,7 +215,7 @@
     <!-- End Modal Edit Staff -->
 </div>
 
-<script layout:fragment="script" >
+<script layout:fragment="script">
 
     $(document).ready(function () {
         $('.roleFilter').chosen();
@@ -205,7 +232,6 @@
             $(this).text(index + 1);
         });
     }
-
 
 
     $('.arrow').click(function (e) {
@@ -245,7 +271,6 @@
     $('form').on('blur', 'input[type=number]', function (e) {
         $(this).off('wheel.disableScroll')
     })
-
 
 
     // event filter table by role
@@ -289,7 +314,7 @@
         console.log(data);
 
 
-        if(validateForm('add')) {
+        if (validateForm('add')) {
             addStaff(data);
         } else {
             console.log("validate fail");
@@ -299,7 +324,7 @@
     // Event onKeyPress formAdd
     function onType(element) {
         const tag = $(element);
-        if(tag.val() === '') {
+        if (tag.val() === '') {
             tag.addClass('error');
         } else {
             tag.removeClass('error');
@@ -308,14 +333,14 @@
 
     // Event onBlur for input date
     $('#birthdate').blur(function () {
-        setTimeout(function(){
+        setTimeout(function () {
             onType($('#birthdate'));
         }, 100); // delay 500 ms
     });
 
     // Event onBlur for input date
     $('#birthdate-edit').blur(function () {
-        setTimeout(function(){
+        setTimeout(function () {
             onType($('#birthdate-edit'));
         }, 100); // delay 500 ms
     });
@@ -330,7 +355,6 @@
             name.addClass('error');
             flag = false;
         }
-
 
 
         const loai = (type === 'add') ? $('#loai') : $('#loai-edit');
@@ -364,6 +388,7 @@
 
     //API add Staff
     function addStaff(data) {
+        console.log("addStaff");
         $.ajax({
             url: '/api/os',
             type: 'POST',
@@ -379,7 +404,7 @@
                     showConfirmButton: true,
                     timerProgressBar: true,
                     timer: 2000
-                }).then(()=> window.location.reload());
+                }).then(() => window.location.reload());
             },
             error: function (error) {
                 const Toast = Swal.mixin({
@@ -409,7 +434,7 @@
             data["" + v.name + ""] = v.value;
         });
 
-        if(validateForm('edit')) {
+        if (validateForm('edit')) {
             editStaff(data);
         } else {
             console.log("validate fail");
@@ -433,7 +458,7 @@
                     showConfirmButton: true,
                     timerProgressBar: true,
                     timer: 2000
-                }).then(()=> window.location.reload());
+                }).then(() => window.location.reload());
             },
             error: function (error) {
                 const Toast = Swal.mixin({
@@ -455,7 +480,7 @@
         })
     }
 
-    function onBtnEdit (element) {
+    function onBtnEdit(element) {
         const tag = $(element).parent().parent().find('.check-item');
         $.ajax({
             url: `/api/os/${tag.val()}`,
@@ -476,8 +501,7 @@
     }
 
 
-
-    function onBtnDelete (element) {
+    function onBtnDelete(element) {
         const tag = $(element).parent().parent();
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
@@ -555,7 +579,7 @@
         arr.pop();
 
         // Get the First Letter of each String
-        arr.forEach(e => username+=e.charAt(0));
+        arr.forEach(e => username += e.charAt(0));
         if (arr.length === 1) {
             return arr[0];
         }
@@ -580,7 +604,7 @@
                 // Adding value to input form
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onloadend = function() {
+                reader.onloadend = function () {
                     $(`#img-base64${type === 'edit' ? '-edit' : ''}`).val(reader.result);
                 }
             } else {
