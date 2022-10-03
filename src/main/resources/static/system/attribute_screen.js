@@ -5,6 +5,9 @@ function openScreen(){
 function openOS(){
     window.open('os', '_blank');
 }
+function openLoaiOs(){
+    window.open('loaios', '_blank');
+}
 
 function openRam(){
     window.open('ram', '_blank');
@@ -21,7 +24,6 @@ function openCam(){
 function openChip(){
     window.open('chip', '_blank');
 }
-
 function openCategory(){
     window.open('category', '_blank');
 }

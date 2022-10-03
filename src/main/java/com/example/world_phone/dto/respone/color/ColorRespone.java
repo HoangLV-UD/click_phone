@@ -12,4 +12,7 @@ import lombok.NoArgsConstructor;
 public class ColorRespone {
     private Long id;
     private String name;
+
+    public ColorRespone(String valueOf, String valueColor) {
+    }
 }

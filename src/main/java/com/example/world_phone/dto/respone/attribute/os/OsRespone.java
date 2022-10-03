@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class OsRespone {
     private Long id;
     private String name;
-    private int loai;
+    private Long loai;
 }

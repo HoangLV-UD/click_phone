@@ -10,5 +10,9 @@ import lombok.NoArgsConstructor;
 public class OsRequest {
     private Long id;
     private String name;
-    private int loai;
+    private Long loai;
+
+    public long getLoaiOsId() {
+        return loai;
+    }
 }
