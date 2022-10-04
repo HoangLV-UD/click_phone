@@ -13,10 +13,9 @@ public class OSEntity extends BaseEntity{ // Hệ điều hành
 
     @Column(name = "NAME")
     private String name;
-
-    @Column(name = "LOAI_OS")
-    private Integer loai;
-
+    @ManyToOne
+    @JoinColumn(name = "LOAI_OS", referencedColumnName = "ID")
+    private LoaiOsEntity LoaiOsEntity;
     public Long getId() {
         return id;
     }
@@ -33,11 +32,12 @@ public class OSEntity extends BaseEntity{ // Hệ điều hành
         this.name = name;
     }
 
-    public Integer getLoai() {
-        return loai;
+
+    public com.example.world_phone.entity.LoaiOsEntity getLoaiOsEntity() {
+        return LoaiOsEntity;
     }
 
-    public void setLoai(Integer loai) {
-        this.loai = loai;
+    public void setLoaiOsEntity(com.example.world_phone.entity.LoaiOsEntity loaiOsEntity) {
+        LoaiOsEntity = loaiOsEntity;
     }
 }
