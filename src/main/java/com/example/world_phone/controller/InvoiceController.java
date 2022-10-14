@@ -19,7 +19,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/invoice")
-public class InvoiceController {
+public class    InvoiceController {
     private final ISupplierService supplierService;
 
     private final IOrderInvoiceService orderInvoiceService;

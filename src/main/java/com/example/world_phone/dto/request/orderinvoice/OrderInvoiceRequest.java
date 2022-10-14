@@ -24,5 +24,6 @@ public class OrderInvoiceRequest {
     private Long discount;
     private Long paid;
     private Long tienThua;
+    private String status;
     private List<OrderInvoiceDetailRequest> detailRequest;
 }

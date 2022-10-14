@@ -30,7 +30,7 @@ public class RomValueServiceImpl implements RomValueService {
         List<RomValueEntity> entities = repo.findByDeleteFlagIsFalse();
         for (RomValueEntity e: entities
              ) {
-            list.add(new RomRespone(e.getId(), e.getName()));
+            list.add(new RomRespone(e.getId(), e.getName() +  " " + e.getLoaiRomEntity().getName()));
         }
         return list;
     }

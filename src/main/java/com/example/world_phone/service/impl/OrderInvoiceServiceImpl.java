@@ -1,5 +1,6 @@
 package com.example.world_phone.service.impl;
 
+import com.example.world_phone.common.StatusOrderInvoice;
 import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.dto.request.orderinvoice.OrderInvoiceRequest;
 import com.example.world_phone.dto.respone.order_invoice.OrderInvoiceRespone;
@@ -49,6 +50,7 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
     @Override
     public String createOrderInvoice(OrderInvoiceRequest request) {
         InvoiceOrderEntity entity = mapRequestToEntity(request);
+        entity.setStatus(Integer.valueOf(request.getStatus()));
         entity.setTotalMoney(0L);
         entity = orderRepo.save(entity);
         if(entity != null){
@@ -71,7 +73,7 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
             entity.setGiamGia(request.getDiscount());
             entity.setTotalMoneyThua(request.getTienThua());
             entity.setTotalMoneyPay(request.getPaid());
-            entity.setStatus(2);
+            entity.setStatus(StatusOrderInvoice.DA_NHAN.getIndex());
             entity.setCodeOrder("HD00");
             Optional<SupplierEntity> supplierEntity = supplierRepo.findByIdAndDeleteFlagIsFalse(Long.valueOf(request.getSuppliderId()));
             if(!supplierEntity.isPresent()){
@@ -109,7 +111,7 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
                 entity.get().setGiamGia(request.getDiscount());
                 entity.get().setTotalMoneyThua(request.getTienThua());
                 entity.get().setTotalMoneyPay(request.getPaid());
-                entity.get().setStatus(2);
+                entity.get().setStatus(StatusOrderInvoice.DA_NHAN.getIndex());
                 StaffEntity staffEntity = staffRepo.findByEmailAndDeleteFlagIsFalse(String.valueOf(sessionUtil.getObject("username"))).get(0);
                 entity.get().setStaffEntity(staffEntity);
                 InvoiceOrderEntity e = orderRepo.save(entity.get());
@@ -158,6 +160,7 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
         if(entity != null){
             InvoiceOrderEntity entity1 = mapRequestToEntity(request);
             entity1.setId(entity.getId());
+            entity1.setStatus(entity.getStatus());
             orderRepo.save(entity1);
             String checkDetail = detailService.updateOrderInvoiceDetail(request.getDetailRequest(), entity);
             if(checkDetail.equals("ok")){
@@ -203,10 +206,10 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
     public String changeStatus(Long id, String message) {
         InvoiceOrderEntity entity = orderRepo.findByIdAndDeleteFlagIsFalse(id);
         if(message.equals("true")){
-            entity.setStatus(0);
+            entity.setStatus(StatusOrderInvoice.HUY.getIndex());
             orderRepo.save(entity);
         }else {
-            entity.setStatus(1);
+            entity.setStatus(StatusOrderInvoice.DA_DAT.getIndex());
             orderRepo.save(entity);
         }
         return "ok";
@@ -215,6 +218,17 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
     @Override
     public OrderInvoiceRespone findById(Long id) {
         InvoiceOrderEntity entity = orderRepo.findByIdAndDeleteFlagIsFalse(id);
+        return mapToRespone(entity);
+    }
+
+    @Override
+    public OrderInvoiceRespone duyetDon(Long id) {
+        InvoiceOrderEntity entity = orderRepo.findByIdAndDeleteFlagIsFalse(id);
+        if(entity.getSupplierEntity() == null){
+            return null;
+        }
+        entity.setStatus(StatusOrderInvoice.DA_DAT.getIndex());
+        entity = orderRepo.save(entity);
         return mapToRespone(entity);
     }
 
@@ -231,12 +245,12 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
         respone.setTienThua(entity.getTotalMoneyThua());
         respone.setTienThuaString(convertUtil.moneyToStringFormat(entity.getTotalMoneyThua()));
         respone.setCodeOrder(entity.getCodeOrder());
-        respone.setSupplierName(entity.getSupplierEntity().getName());
+        respone.setSupplierName(entity.getSupplierEntity() != null ? entity.getSupplierEntity().getName() : "");
         respone.setNote(entity.getNote());
-        respone.setReceiveDate(String.valueOf(entity.getReceiveDate()).substring(0,10));
+        respone.setReceiveDate(entity.getReceiveDate() != null ? String.valueOf(entity.getReceiveDate()).substring(0,10) : "");
         respone.setStatus(entity.getStatus());
         respone.setCreateDate(String.valueOf(entity.getCreateDate()));
-        respone.setSupplierId(String.valueOf(entity.getSupplierEntity().getId()));
+        respone.setSupplierId(entity.getSupplierEntity() != null ? String.valueOf(entity.getSupplierEntity().getId()) : "");
         respone.setOrderDetail(detailService.findByOrderInvoice(entity.getId()));
         return respone;
     }
@@ -244,16 +258,25 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
 
     private InvoiceOrderEntity mapRequestToEntity(OrderInvoiceRequest request){
         InvoiceOrderEntity entity = new InvoiceOrderEntity();
-        entity.setStatus(1);
         entity.setCodeOrder(request.getOrderCode());
-        Date date = convertUtil.strToDate(request.getReceiveDate(), "dd-MM-yyyy");
-        entity.setReceiveDate(date);
-        Optional<SupplierEntity> supplierEntity = supplierRepo.findByIdAndDeleteFlagIsFalse(Long.valueOf(request.getSuppliderId()));
-        if(!supplierEntity.isPresent()){
-            log.error("Supplier not exist");
-            throw new WorldPhoneExp(ConstansErrorCode.SUPPLIER_NOT_EXIST);
+        if(request.getReceiveDate() != null){
+            Date date = convertUtil.strToDate(request.getReceiveDate(), "dd-MM-yyyy");
+            entity.setReceiveDate(date);
+        }else {
+            entity.setReceiveDate(null);
         }
-        entity.setSupplierEntity(supplierEntity.get());
+
+        if(request.getSuppliderId() != null){
+            Optional<SupplierEntity> supplierEntity = supplierRepo.findByIdAndDeleteFlagIsFalse(Long.valueOf(request.getSuppliderId()));
+            if(!supplierEntity.isPresent()){
+                log.error("Supplier not exist");
+                throw new WorldPhoneExp(ConstansErrorCode.SUPPLIER_NOT_EXIST);
+            }
+            entity.setSupplierEntity(supplierEntity.get());
+        }else {
+            entity.setSupplierEntity(null);
+        }
+
         if(request.getNote() != null){
             entity.setNote(request.getNote());
         }

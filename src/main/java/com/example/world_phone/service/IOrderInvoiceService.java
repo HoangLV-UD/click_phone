@@ -24,4 +24,5 @@ public interface IOrderInvoiceService {
     String changeStatus(Long id, String message);
 
     OrderInvoiceRespone findById(Long id);
+    OrderInvoiceRespone duyetDon(Long id);
 }

@@ -1,5 +1,6 @@
 package com.example.world_phone.service.impl;
 
+import com.example.world_phone.common.StatusOrder;
 import com.example.world_phone.dto.request.order.OrderRequest;
 import com.example.world_phone.dto.request.orderdetail.OrderDetailRequest;
 import com.example.world_phone.dto.respone.customer.CustomerRespone;
@@ -135,10 +136,10 @@ public class OrderServiceimpl implements IOrderService {
         java.sql.Date date=new java.sql.Date(millis);
         OrdersEntity entity = new OrdersEntity();
         if(request.getOrderType().equals("COUNTER")){
-            entity.setStatus("4");
+            entity.setStatus(String.valueOf(StatusOrder.HOAN_THANH.getIndex()));
             entity.setTypeOrder(0);
         }else {
-            entity.setStatus("2");
+            entity.setStatus(String.valueOf(StatusOrder.CHO_GIAO_HANG.getIndex()));
             entity.setTypeOrder(1);
         }
         entity.setStatusPay(0);
@@ -226,7 +227,7 @@ public class OrderServiceimpl implements IOrderService {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
         entity.setAddress(request.getRecipientAddress());
         entity.setReceiveDate(request.getDeliveryDate());
-        entity.setStatus("1");
+        entity.setStatus(String.valueOf(StatusOrder.CHO_XUAT_HANG.getIndex()));
         ordersRepo.save(entity);
         return "ok";
     }
@@ -236,7 +237,7 @@ public class OrderServiceimpl implements IOrderService {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
         entity.setNameShip(request.getShipperName());
         entity.setNoteShip(request.getNote());
-        entity.setStatus("3");
+        entity.setStatus(String.valueOf(StatusOrder.DANG_GIAO_HANG.getIndex()));
         entity.setPhoneShip(request.getShipperPhone());
         ordersRepo.save(entity);
         return "ok";
@@ -256,7 +257,7 @@ public class OrderServiceimpl implements IOrderService {
     @Override
     public String doneOrder(String  id) {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(id);
-        entity.setStatus("4");
+        entity.setStatus(String.valueOf(StatusOrder.HOAN_THANH.getIndex()));
         ordersRepo.save(entity);
         return "ok";
     }
@@ -264,7 +265,7 @@ public class OrderServiceimpl implements IOrderService {
     @Override
     public String deleteOrder(String request) {
         OrdersEntity ordersEntity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request);
-        ordersEntity.setStatus("-1");
+        ordersEntity.setStatus(String.valueOf(StatusOrder.HUY.getIndex()));
         ordersRepo.save(ordersEntity);
         List<OrdersDetailEntity> list = ordersDetailRepo.findByDeleteFlagIsFalseAndOrdersEntity(ordersEntity);
         for (OrdersDetailEntity detail: list

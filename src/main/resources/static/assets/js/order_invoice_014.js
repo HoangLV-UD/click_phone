@@ -99,7 +99,28 @@ function onClickSubmitEditOrderInvoice(e) {
     })
 }
 
+function duyet(e){
+    let id = e.dataset.id
+    console.log(id)
+    let url = '/api/order-invoice/' + id;
 
+    $.ajax({
+        url: url,
+        method: 'DELETE',
+        success: function (data) {
+
+                toastSuccess('Thành công', 'Duyệt đơn hàng thành công');
+
+            setTimeout(function () {
+                location.reload();
+            }, 2000)
+        },
+        error: function (error) {
+
+            toastDanger('Lỗi', 'Lỗi hệ thống');
+        }
+    })
+}
 
 function onClickCancelOrderInvoice(e) {
     let id = e.dataset.id
@@ -209,6 +230,15 @@ function onClickEditOrderInvoice(e) {
                 $('#btnSubmitEditInvoice').hide();
                 $('#btnSubmitReverseCancel').show();
                 $('#btnSubmitReverseCancel').attr("data-id", e.dataset.id)
+            }
+            if(data.status === -1){
+                $('#btnDuyet').show();
+                $('#btnSubmitEditInvoice').attr("data-id", e.dataset.id)
+                $('#btnSubmitEditInvoice').show();
+                $('#btnSubmitReverseCancel').hide();
+                $('#btnDuyet').attr("data-id", e.dataset.id)
+            }else {
+                $('#btnDuyet').hide();
             }
         }
     })

@@ -39,6 +39,13 @@
                             </label>
                         </div>
                         <div class="form-group form-check">
+                            <input class="form-check-input" type="radio" name="status" id="statusInActive1"
+                                   value="Đợi duyệt" onchange="onStatusChange(this)">
+                            <label class="form-check-label" for="statusInActive1">
+                                Đợi duyệt
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
                             <input class="form-check-input" type="radio" name="status" id="statusInActive"
                                    value="Đã huỷ" onchange="onStatusChange(this)">
                             <label class="form-check-label" for="statusInActive">
@@ -80,7 +87,7 @@
                                 <tr th:each="orderInvoice : ${lstInvoiceOrder}" class="text-center">
                                     <td></td>
                                     <td class="text-center">
-                                        <button th:if="${orderInvoice.status == 1}" class="btn btn-danger btn-sm"
+                                        <button th:if="${orderInvoice.status != 0}" class="btn btn-danger btn-sm"
                                                 th:data-id="${orderInvoice.id}"
                                                 onclick="onClickCancelOrderInvoice(this)">
                                             Huỷ
@@ -92,6 +99,9 @@
                                         </a>
                                         <a  th:if="${orderInvoice.status == 2}" href="/invoice" class="btn btn-info btn-sm">
                                             Chi tiết
+                                        </a>
+                                        <a  th:if="${orderInvoice.status == 3}" href="/invoice" class="btn btn-blue-grey btn-sm">
+                                            Đã duyệt phiếu
                                         </a>
                                     </td>
                                     <td th:text="${orderInvoice.codeOrder}">Mã đặt hàng</td>
@@ -105,6 +115,8 @@
                                               class="badge bg-danger">Đã huỷ</span>
                                         <span th:if="${orderInvoice.status == 2}"
                                               class="badge bg-purple">Đã nhận</span>
+                                        <span th:if="${orderInvoice.status == -1}"
+                                              class="badge bg-orange">Đợi duyệt</span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -210,7 +222,7 @@
                                             <select id="ip-order-invoice-supplier1" class="form-control select3">
                                                 <option th:each="rom : ${product.getRomRespones()}"
                                                         th:value="${rom.id}"
-                                                        th:text="${rom.name} + ' GB'">
+                                                        th:text="${rom.name}">
                                                 </option>
                                             </select>
                                         </td>
@@ -330,7 +342,7 @@
                                             <select id="ip-order-invoice-supplier6" class="form-control select6">
                                                 <option th:each="rom : ${product.getRomRespones()}"
                                                         th:value="${rom.id}"
-                                                        th:text="${rom.name} + ' GB'">
+                                                        th:text="${rom.name}">
                                                 </option>
                                             </select>
                                         </td>
@@ -352,6 +364,12 @@
                             data-id="" onclick="onClickSubmitEditOrderInvoice(this)">
                         Cập nhật
                     </button>
+
+                    <button type="button" class="btn btn-brown waves-effect waves-light" id="btnDuyet"
+                            data-id="" onclick="duyet(this)">
+                        Duyệt đơn hàng
+                    </button>
+
                     <button type="button" class="btn btn-success waves-effect waves-light" id="btnSubmitReverseCancel"
                             data-id="" onclick="onClickCancelOrderInvoice(this)">
                         Đặt lại

@@ -22,6 +22,10 @@ public class RomValueEntity extends BaseEntity{
     @Column(name = "NAME")
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "loai_rom", referencedColumnName = "ID")
+    private LoaiRomEntity LoaiRomEntity;
+
     public Long getId() {
         return id;
     }
@@ -36,5 +40,13 @@ public class RomValueEntity extends BaseEntity{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public com.example.world_phone.entity.LoaiRomEntity getLoaiRomEntity() {
+        return LoaiRomEntity;
+    }
+
+    public void setLoaiRomEntity(com.example.world_phone.entity.LoaiRomEntity loaiRomEntity) {
+        LoaiRomEntity = loaiRomEntity;
     }
 }
