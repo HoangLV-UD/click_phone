@@ -16,4 +16,7 @@ public class RomRespone {
     private String id;
     private String name;
     private List<ProductPropertyRespone> productPropertyResponeList;
+
+    public RomRespone(Long id, String name) {
+    }
 }

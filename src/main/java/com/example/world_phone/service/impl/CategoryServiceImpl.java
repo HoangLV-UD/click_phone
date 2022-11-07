@@ -45,14 +45,14 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public void saveCategory(CategoryReqDto categoryDto) {
             Date now = new Date();
-            if(categoryDto.getCategoryName().trim().length() == 0){
+            if(categoryDto.getName().trim().length() == 0){
                 throw new WorldPhoneExp(ConstansErrorCode.CATEGORY_NAME);
             }else {
-                if(categoryRepo.findByNameAndDeleteFlagIsFalse(categoryDto.getCategoryName()).size() > 0){
+                if(categoryRepo.findByNameAndDeleteFlagIsFalse(categoryDto.getName()).size() > 0){
                     throw new WorldPhoneExp(ConstansErrorCode.CATEGORY_NAME_SAME);
                 }else {
                     CategoryEntity categoryEntity = new CategoryEntity();
-                    categoryEntity.setName(categoryDto.getCategoryName());
+                    categoryEntity.setName(categoryDto.getName());
                     categoryEntity.setCreateDate(new Timestamp(now.getTime()));
                     categoryEntity.setCreateBy("Admin");
                     categoryEntity.setModifierBy("Admin");
@@ -66,22 +66,23 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public void updateCategory(CategoryDTO categoryDto) {
+    public String updateCategory(CategoryDTO categoryDto) {
         if(categoryDto.getCategoryName().trim().length() == 0){
             throw new WorldPhoneExp(ConstansErrorCode.CATEGORY_NAME);
         }else {
 
-           if(categoryRepo.findByIdAndDeleteFlagIsFalse(Long.valueOf(categoryDto.getCategoryId())).size() > 0){
-              CategoryEntity categoryEntity = categoryRepo.findByIdAndDeleteFlagIsFalse(Long.valueOf(categoryDto.getCategoryId())).get(0);
+           if(categoryRepo.findByIdAndDeleteFlagIsFalse(Long.valueOf(categoryDto.getId())).size() > 0){
+              CategoryEntity categoryEntity = categoryRepo.findByIdAndDeleteFlagIsFalse(Long.valueOf(categoryDto.getId())).get(0);
                categoryEntity.setName(categoryDto.getCategoryName());
 
-               categoryEntity.setId(Long.valueOf(categoryDto.getCategoryId()));
+               categoryEntity.setId(Long.valueOf(categoryDto.getId()));
                categoryRepo.save(categoryEntity);
            }else {
                throw new WorldPhoneExp(ConstansErrorCode.CATEGORY_ID);
            }
 
         }
+        return null;
     }
 
     @Override

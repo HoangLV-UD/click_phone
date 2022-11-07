@@ -17,4 +17,8 @@ import lombok.NoArgsConstructor;
 public class RomRequest {
     private Long id;
     private String name;
+    private Long loai;
+    public long getLoaiRomId() {
+        return loai;
+    }
 }

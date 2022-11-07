@@ -22,7 +22,7 @@ public class CategoryController {
     @GetMapping
     public String index(Model model){
         List<CategoryResponeDto> list = categoryService.getAllCategory();
-        model.addAttribute("cate", list);
+        model.addAttribute("listcategory", list);
         return "views/category/category";
     }
 }

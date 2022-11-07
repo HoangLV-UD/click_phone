@@ -49,7 +49,7 @@ public class ProductController {
 
     private final ICamService camService;
 
-    private final RomValueService romValueService;
+    private final IRomValueService IRomValueService;
 
 
     @GetMapping()
@@ -67,7 +67,7 @@ public class ProductController {
         List<ChipRespone> chipRespones = chipService.findAll();
         List<Loai_OsRespone> loaiosRespones = loaiOsService.findAll();
 
-        List<RomRespone> romRespones = romValueService.findAll();
+        List<RomRespone> romRespones = IRomValueService.findAll();
         model.addAttribute("listRom", romRespones);
         model.addAttribute("listChip", chipRespones);
         model.addAttribute("listCam", camRespones);

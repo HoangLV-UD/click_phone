@@ -10,5 +10,8 @@ import lombok.NoArgsConstructor;
 public class ScreenRequest {
     private Long id;
     private String name;
-    private int loai;
+    private Long loai;
+    public long getLoaiScreenId() {
+        return loai;
+    }
 }

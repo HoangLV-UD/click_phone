@@ -2,6 +2,7 @@ package com.example.world_phone.service.impl;
 
 import com.example.world_phone.dto.request.attribute.screen.ScreenRequest;
 import com.example.world_phone.dto.respone.attribute.screen.ScreenReposne;
+import com.example.world_phone.entity.LoaiScreenEntity;
 import com.example.world_phone.entity.ScreenEntity;
 import com.example.world_phone.repo.ScreenRepo;
 import com.example.world_phone.service.IScreenService;
@@ -29,7 +30,7 @@ public class ScreenServiceImpl implements IScreenService {
         List<ScreenReposne> reposnes = new ArrayList<>();
         for (ScreenEntity e: entityList
              ) {
-            ScreenReposne reposne = new ScreenReposne(e.getId(), e.getName(), e.getLoai());
+            ScreenReposne reposne = new ScreenReposne(e.getId(), e.getName(), e.getLoaiScreenEntity().getId());
             reposnes.add(reposne);
         }
         return reposnes;
@@ -38,8 +39,11 @@ public class ScreenServiceImpl implements IScreenService {
     @Override
     public String save(ScreenRequest request) {
         ScreenEntity entity = new ScreenEntity();
+        LoaiScreenEntity loaiScreenEntity = new LoaiScreenEntity();
+        loaiScreenEntity.setId(request.getLoaiScreenId());
+        entity.setId(request.getId());
+        entity.setLoaiScreenEntity(loaiScreenEntity);
         entity.setName(request.getName());
-        entity.setLoai(request.getLoai());
         entity.setCreateBy("ADMIN");
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
@@ -52,8 +56,10 @@ public class ScreenServiceImpl implements IScreenService {
     @Override
     public String edit(ScreenRequest request) {
         ScreenEntity entity = repo.getById(request.getId());
+        LoaiScreenEntity loaiScreenEntity = new LoaiScreenEntity();
+        loaiScreenEntity.setId(request.getLoaiScreenId());
         entity.setName(request.getName());
-        entity.setLoai(request.getLoai());
+        entity.setLoaiScreenEntity(loaiScreenEntity);
         repo.save(entity);
         return "ok";
     }
@@ -61,7 +67,7 @@ public class ScreenServiceImpl implements IScreenService {
     @Override
     public ScreenReposne findById(String id) {
         ScreenEntity entity = repo.getById(Long.valueOf(id));
-        return new ScreenReposne(entity.getId(), entity.getName(), entity.getLoai());
+        return new ScreenReposne(entity.getId(), entity.getName(), entity.getLoaiScreenEntity().getId());
     }
 
     @Override

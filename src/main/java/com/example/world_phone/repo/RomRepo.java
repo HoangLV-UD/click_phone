@@ -1,5 +1,6 @@
 package com.example.world_phone.repo;
 
+import com.example.world_phone.entity.OSEntity;
 import com.example.world_phone.entity.RomEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,4 +15,5 @@ public interface RomRepo extends JpaRepository<RomEntity, Long> {
     List<RomEntity> findByProductEntity(Long id);
 
     RomEntity findByIdAndDeleteFlagIsFalse(Long id);
+    List<RomEntity> findByDeleteFlagIsFalse();
 }

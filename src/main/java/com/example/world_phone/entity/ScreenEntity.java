@@ -14,9 +14,10 @@ public class ScreenEntity extends BaseEntity{
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "LOAI_SCREEN")
-    private Integer loai;
 
+    @ManyToOne
+    @JoinColumn(name = "LOAI_SCREEN", referencedColumnName = "ID")
+    private LoaiScreenEntity LoaiScreenEntity;
     public Long getId() {
         return id;
     }
@@ -33,11 +34,10 @@ public class ScreenEntity extends BaseEntity{
         this.name = name;
     }
 
-    public Integer getLoai() {
-        return loai;
+    public com.example.world_phone.entity.LoaiScreenEntity getLoaiScreenEntity() {
+        return LoaiScreenEntity;
     }
-
-    public void setLoai(Integer loai) {
-        this.loai = loai;
+    public void setLoaiScreenEntity(com.example.world_phone.entity.LoaiScreenEntity loaiScreenEntity) {
+        LoaiScreenEntity = loaiScreenEntity;
     }
 }

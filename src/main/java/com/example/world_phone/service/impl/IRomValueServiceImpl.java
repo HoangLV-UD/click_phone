@@ -2,9 +2,10 @@ package com.example.world_phone.service.impl;
 
 import com.example.world_phone.dto.request.attribute.rom.RomRequest;
 import com.example.world_phone.dto.respone.attribute.rom.RomRespone;
+import com.example.world_phone.entity.LoaiRomEntity;
 import com.example.world_phone.entity.RomValueEntity;
 import com.example.world_phone.repo.RomValueRepo;
-import com.example.world_phone.service.RomValueService;
+import com.example.world_phone.service.IRomValueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class RomValueServiceImpl implements RomValueService {
+public class IRomValueServiceImpl implements IRomValueService {
     private final RomValueRepo repo;
     @Override
     public List<RomRespone> findAll() {
@@ -30,7 +31,7 @@ public class RomValueServiceImpl implements RomValueService {
         List<RomValueEntity> entities = repo.findByDeleteFlagIsFalse();
         for (RomValueEntity e: entities
              ) {
-            list.add(new RomRespone(e.getId(), e.getName() +  " " + e.getLoaiRomEntity().getName()));
+            list.add(new RomRespone(e.getId(), e.getName(), e.getLoaiRomEntity().getId()));
         }
         return list;
     }
@@ -38,6 +39,10 @@ public class RomValueServiceImpl implements RomValueService {
     @Override
     public String save(RomRequest request) {
         RomValueEntity entity = new RomValueEntity();
+        LoaiRomEntity loaiRomEntity = new LoaiRomEntity();
+        loaiRomEntity.setId(request.getLoaiRomId());
+        entity.setId(request.getId());
+        entity.setLoaiRomEntity(loaiRomEntity);
         entity.setName(request.getName());
         repo.save(entity);
         return "ok";
@@ -45,9 +50,11 @@ public class RomValueServiceImpl implements RomValueService {
 
     @Override
     public String update(RomRequest request) {
-        RomValueEntity entity = new RomValueEntity();
+        RomValueEntity entity = repo.getById(request.getId());
+        LoaiRomEntity loaiRomEntity = new LoaiRomEntity();
+        loaiRomEntity.setId(request.getLoaiRomId());
+        entity.setLoaiRomEntity(loaiRomEntity);
         entity.setName(request.getName());
-        entity.setId(request.getId());
         repo.save(entity);
         return "ok";
     }
@@ -63,6 +70,7 @@ public class RomValueServiceImpl implements RomValueService {
     @Override
     public RomRespone findById(Long id) {
         RomValueEntity entity = repo.getById(id);
-        return new RomRespone(entity.getId(), entity.getName());
+        System.out.println("sssssssssssss"+entity);
+        return new RomRespone(entity.getId(), entity.getName(),entity.getLoaiRomEntity().getId());
     }
 }

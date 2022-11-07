@@ -5,6 +5,7 @@
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Quản lý màn hình - WorlPhone</title>
+    <script th:src="@{/system/attribute_screen.js}"></script>
 </head>
 
 <body>
@@ -59,10 +60,16 @@
                             <input type="hidden" class="check-item" th:value="${screen.getId()}">
 
                             <td th:text="${screen.name}">Họ tên</td>
-                            <td th:switch="${screen.loai}" class="text-center">
-                                <span th:case="0" class="role">Nhỏ gọn</span>
-                                <span th:case="1" class="role">Lớn hơn 6 inch</span>
-                                <span th:case="2" class="role">Màn hình gập</span>
+<!--                            <td th:switch="${screen.loai}" class="text-center">-->
+<!--                                <span th:case="0" class="role">Nhỏ gọn</span>-->
+<!--                                <span th:case="1" class="role">Lớn hơn 6 inch</span>-->
+<!--                                <span th:case="2" class="role">Màn hình gập</span>-->
+<!--                            </td>-->
+                            <td class="text-center">
+                                <th:block th:each="loaiscreen :${listscreen}" th:if="${loaiscreen.id == screen.loai.toString()}">
+                                    <span th:text="${loaiscreen.name}"></span>
+                                </th:block>
+
                             </td>
 
                         </tr>
@@ -97,12 +104,24 @@
                                     <tr>
                                         <th><label for="loai" class="form-label">Loại kích cỡ</label><span class="required"> *</span></th>
                                         <td>
-                                            <select class="form-select" name="loai" id="loai" onchange="onType(this)">
-                                                <option value="" disabled selected>-- Chọn loại màn hình --</option>
-                                                <option value="0">Nhỏ gọn</option>
-                                                <option value="1">Lớn hơn 6 inch</option>
-                                                <option value="2">Màn hình gập</option>
-                                            </select>
+<!--                                            <select class="form-select" name="loai" id="loai" onchange="onType(this)">-->
+<!--                                                <option value="" disabled selected>&#45;&#45; Chọn loại màn hình &#45;&#45;</option>-->
+<!--                                                <option value="0">Nhỏ gọn</option>-->
+<!--                                                <option value="1">Lớn hơn 6 inch</option>-->
+<!--                                                <option value="2">Màn hình gập</option>-->
+<!--                                            </select>-->
+                                            <div class="d-flex">
+                                                <select class="form-select" name="loai" id="loai"
+                                                        onchange="onType(this)">
+                                                    <th:block th:each="loaiscreen : ${listscreen}">
+                                                        <option th:value="${loaiscreen.id}"
+                                                                th:text="${loaiscreen.getName()}"></option>
+                                                    </th:block>
+                                                </select>
+
+                                                <button onclick="openLoaiScreen()" type="button" class="btn-blue-grey ms-2">
+                                                    <i class="bi bi-plus"></i></button>
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>

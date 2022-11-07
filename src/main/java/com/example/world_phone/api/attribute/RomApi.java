@@ -1,11 +1,8 @@
 package com.example.world_phone.api.attribute;
 
-import com.example.world_phone.dto.request.attribute.chip.ChipRequest;
 import com.example.world_phone.dto.request.attribute.rom.RomRequest;
-import com.example.world_phone.dto.respone.attribute.chip.ChipRespone;
 import com.example.world_phone.dto.respone.attribute.rom.RomRespone;
-import com.example.world_phone.service.IChipService;
-import com.example.world_phone.service.RomValueService;
+import com.example.world_phone.service.IRomValueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/rom")
 public class RomApi {
     @Autowired
-    private RomValueService service;
+    private IRomValueService service;
 
     @GetMapping("/{id}")
     public RomRespone findById(@PathVariable("id") String id) {
