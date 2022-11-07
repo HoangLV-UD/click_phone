@@ -18,6 +18,15 @@ public class InvoiceOrderDetailEntity extends BaseEntity{
     @Column(name = "QUANTITY_INVOICE")
     private Long quantityInvoice;
 
+    @Basic
+    @Column(name = "note")
+    private String note;
+
+
+    @Basic
+    @Column(name = "status")
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ROM_ID", referencedColumnName = "ID")
     private RomEntity romEntity;
@@ -76,5 +85,21 @@ public class InvoiceOrderDetailEntity extends BaseEntity{
 
     public void setColorEntity(ColorEntity colorEntity) {
         this.colorEntity = colorEntity;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

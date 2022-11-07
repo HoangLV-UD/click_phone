@@ -1,17 +1,20 @@
 package com.example.world_phone.service.impl;
 
+import com.example.world_phone.common.StatusProduct;
 import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.dto.request.product.ProductRequestAdd;
 import com.example.world_phone.dto.request.product.ProductRequestEdit;
 import com.example.world_phone.dto.respone.attribute.AttributeRespone;
 import com.example.world_phone.dto.respone.category.CategoryResponeDto;
 import com.example.world_phone.dto.respone.image.ImageRespone;
+import com.example.world_phone.dto.respone.imei.ImeiResponse;
 import com.example.world_phone.dto.respone.product.ProductPropertyRespone;
 import com.example.world_phone.dto.respone.product.ProductResponse;
 import com.example.world_phone.dto.respone.rom.RomRespone;
 import com.example.world_phone.entity.*;
 import com.example.world_phone.exception.WorldPhoneExp;
 import com.example.world_phone.repo.ImageRepo;
+import com.example.world_phone.repo.ImeiRepo;
 import com.example.world_phone.repo.ProductRepo;
 import com.example.world_phone.repo.PropertyProductRepo;
 import com.example.world_phone.service.*;
@@ -26,6 +29,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +47,8 @@ public class ProductServiceImpl implements IProductService {
     private final IImageService iImageService;
 
     private final ConvertUtil convertUtil;
+
+    private final ImeiRepo imeiRepo;
 
     private ModelMapper modelMapper = new ModelMapper();
 
@@ -67,6 +73,7 @@ public class ProductServiceImpl implements IProductService {
             return String.valueOf(new WorldPhoneExp(ConstansErrorCode.ROM_NOT_EXIST).getErrorMessage().getVn());
         }
         ProductEntity entity = mapToRequest(requestProduct);
+        entity.setStatus(StatusProduct.NGUNG_KINH_DOANH.getStatus());
         entity = productRepo.save(entity);
         if(!attributeProductService.saveAttribute(requestProduct.getAttributeRequestAdd(), entity.getId()).equals("ok")){
             entity.setDeleteFlag(true);
@@ -89,6 +96,7 @@ public class ProductServiceImpl implements IProductService {
             log.error("them moi san pham that bai");
             return "that bai";
         }
+
         return "ok";
 
     }
@@ -148,6 +156,8 @@ public class ProductServiceImpl implements IProductService {
             for (ProductPropertyEntity p: r.getProductProperties()
             ) {
                 ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
+                Long imei = imeiRepo.countByPropertyProductId(p.getId());
+                productPropertyRespone.setCountImei(imei == null ? 0L : imei);
                 productPropertyRespone.setQuantity(p.getQuantity());
                 productPropertyRespone.setId(String.valueOf(p.getId()));
                 productPropertyRespone.setRomId(String.valueOf(p.getRomEntity().getId()));
@@ -156,6 +166,8 @@ public class ProductServiceImpl implements IProductService {
                 productPropertyRespone.setStatus(p.getStatus());
                 productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
                 productPropertyRespone.setColorName(p.getColorEntity().getValueColor());
+                List<ImeiEntity> list = imeiRepo.findByDeleteFlagIsFalseAndPropertyProductId(entity.getId());
+                productPropertyRespone.setImeiResponses(list.stream().map(this::mapToImei).collect(Collectors.toList()));
                 productPropertyResponeList.add(productPropertyRespone);
             }
             romRespone.setProductPropertyResponeList(productPropertyResponeList);
@@ -188,14 +200,21 @@ public class ProductServiceImpl implements IProductService {
                 List<ProductPropertyEntity> productPropertyEntityList = propertyProductRepo.findByRomAAndStatus(r.getId());
                 for (ProductPropertyEntity p: productPropertyEntityList
                 ) {
+                    Long imei = imeiRepo.countByPropertyProductId(p.getId());
                     ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
+
                     productPropertyRespone.setQuantity(p.getQuantity());
                     productPropertyRespone.setId(String.valueOf(p.getId()));
                     productPropertyRespone.setPrice(p.getPrice());
                     productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
                     productPropertyRespone.setColorName(p.getColorEntity().getValueColor());
                     productPropertyRespone.setStatus(p.getStatus());
-                    productPropertyResponeList.add(productPropertyRespone);
+                    List<ImeiEntity> list1 = imeiRepo.findByDeleteFlagIsFalseAndPropertyProductId(p.getId());
+                    productPropertyRespone.setImeiResponses(list1.stream().map(this::mapToImei).collect(Collectors.toList()));
+                    productPropertyRespone.setCountImei(imei == null ? 0L : imei);
+                    if(list1.size() > 0){
+                        productPropertyResponeList.add(productPropertyRespone);
+                    }
                 }
                 romRespone.setProductPropertyResponeList(productPropertyResponeList);
                 romRespones.add(romRespone);
@@ -252,6 +271,8 @@ public class ProductServiceImpl implements IProductService {
             categoryResponeDto.setCategoryName(categoryEntity.getName());
             response.setCategoryResponeDto(categoryResponeDto);
 
+            // tìm emei
+
 
             List<ImageEntity> imageEntities = imageRepo.findByProductEntity(response.getId());
             List<ImageRespone> imageProduct = new ArrayList<>();
@@ -294,6 +315,11 @@ public class ProductServiceImpl implements IProductService {
         entity.setModifierBy((String) sessionUtil.getObject("username"));
         entity.setDeleteFlag(false);
         return entity;
+    }
+
+
+    private ImeiResponse mapToImei(ImeiEntity imeiEntity){
+        return new ImeiResponse(String.valueOf(imeiEntity.getId()), imeiEntity.getValue());
     }
 
 

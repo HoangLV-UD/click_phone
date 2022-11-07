@@ -19,6 +19,8 @@ public interface IOrderInvoiceService {
 
     List<OrderInvoiceRespone> finAll();
 
+    List<OrderInvoiceRespone> finAllNhapHang();
+
     List<OrderInvoiceRespone> finAllTotalMoney();
 
     String changeStatus(Long id, String message);

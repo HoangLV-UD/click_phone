@@ -1,13 +1,16 @@
 package com.example.world_phone.service.impl;
 
 import com.example.world_phone.common.StatusOrderInvoice;
+import com.example.world_phone.common.StatusOrderInvoiceDetail;
 import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.dto.request.orderinvoice.OrderInvoiceRequest;
 import com.example.world_phone.dto.respone.order_invoice.OrderInvoiceRespone;
+import com.example.world_phone.entity.InvoiceOrderDetailEntity;
 import com.example.world_phone.entity.InvoiceOrderEntity;
 import com.example.world_phone.entity.StaffEntity;
 import com.example.world_phone.entity.SupplierEntity;
 import com.example.world_phone.exception.WorldPhoneExp;
+import com.example.world_phone.repo.InvoiceOrderDetailRepo;
 import com.example.world_phone.repo.InvoiceOrderRepo;
 import com.example.world_phone.repo.StaffRepo;
 import com.example.world_phone.repo.SupplierRepo;
@@ -32,6 +35,8 @@ import java.util.Optional;
 public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
 
     private final InvoiceOrderRepo orderRepo;
+
+    private final InvoiceOrderDetailRepo detailRepo;
 
     private final SupplierRepo supplierRepo;
 
@@ -182,10 +187,21 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
 
     @Override
     public List<OrderInvoiceRespone> finAll() {
-        List<InvoiceOrderEntity> entityList = orderRepo.findByDeleteFlagIsFalse();
+        List<InvoiceOrderEntity> entityList = orderRepo.findByDeleteFlagIsFalseOrderByIdDesc();
         List<OrderInvoiceRespone> list = new ArrayList<>();
         for (InvoiceOrderEntity e: entityList
              ) {
+            list.add(mapToRespone(e));
+        }
+        return list;
+    }
+
+    @Override
+    public List<OrderInvoiceRespone> finAllNhapHang() {
+        List<InvoiceOrderEntity> entityList = orderRepo.findAllNhapHang();
+        List<OrderInvoiceRespone> list = new ArrayList<>();
+        for (InvoiceOrderEntity e: entityList
+        ) {
             list.add(mapToRespone(e));
         }
         return list;
@@ -229,6 +245,12 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
         }
         entity.setStatus(StatusOrderInvoice.DA_DAT.getIndex());
         entity = orderRepo.save(entity);
+        List<InvoiceOrderDetailEntity> list = detailRepo.findByInvoiceOrderEntity(id);
+        for (InvoiceOrderDetailEntity de:list
+             ) {
+            de.setStatus(String.valueOf(StatusOrderInvoiceDetail.DANG_NHAP.getIndex()));
+        }
+        detailRepo.saveAll(list);
         return mapToRespone(entity);
     }
 

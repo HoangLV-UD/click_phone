@@ -47,9 +47,9 @@
                         </div>
                         <div class="form-group form-check">
                             <input class="form-check-input" type="radio" name="status" id="statusInActive"
-                                   value="Đã huỷ" onchange="onStatusChange(this)">
+                                   value="Giao chưa đủ" onchange="onStatusChange(this)">
                             <label class="form-check-label" for="statusInActive">
-                                Đã huỷ
+                                Giao chưa đủ
                             </label>
                         </div>
                     </div>
@@ -92,17 +92,15 @@
                                                 onclick="onClickCancelOrderInvoice(this)">
                                             Huỷ
                                         </button>
-                                        <a  th:if="${orderInvoice.status != 2}" href="#modalEditOrderInvoice" class="btn btn-info btn-sm"
+                                        <a  th:if="${orderInvoice.status != 2 && orderInvoice.status != 3}" href="#modalEditOrderInvoice" class="btn btn-info btn-sm"
                                            th:data-id="${orderInvoice.id}"
                                            data-bs-toggle="modal" onclick="onClickEditOrderInvoice(this)">
                                             Chi tiết
                                         </a>
-                                        <a  th:if="${orderInvoice.status == 2}" href="/invoice" class="btn btn-info btn-sm">
+                                        <a  th:if="${orderInvoice.status == 2 || orderInvoice.status == 3}" href="/invoice" class="btn btn-info btn-sm">
                                             Chi tiết
                                         </a>
-                                        <a  th:if="${orderInvoice.status == 3}" href="/invoice" class="btn btn-blue-grey btn-sm">
-                                            Đã duyệt phiếu
-                                        </a>
+
                                     </td>
                                     <td th:text="${orderInvoice.codeOrder}">Mã đặt hàng</td>
                                     <td th:text="${orderInvoice.supplierName}">NCC</td>
@@ -117,6 +115,8 @@
                                               class="badge bg-purple">Đã nhận</span>
                                         <span th:if="${orderInvoice.status == -1}"
                                               class="badge bg-orange">Đợi duyệt</span>
+                                        <span th:if="${orderInvoice.status == 3}"
+                                              class="badge bg-brown">Giao chưa đủ</span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -138,15 +138,15 @@
                 </div>
                 <div class="modal-body row">
                     <div class="col-lg-2">
-                                                <div class="mb-3">
-                                                    <label for="ip-order-invoice-code">
-                                                        Mã đặt hàng:
-                                                    </label>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <input type="text" id="ip-order-invoice-code" placeholder="Mã đặt hàng...."
-                                                           class="form-control"/>
-                                                </div>
+                        <div class="mb-3">
+                            <label for="ip-order-invoice-code">
+                                Mã đặt hàng:
+                            </label>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" id="ip-order-invoice-code" placeholder="Mã đặt hàng...."
+                                   class="form-control"/>
+                        </div>
                         <div class="mb-3">
                             <label for="ip-order-invoice-date">
                                 Hẹn ngày nhận:
@@ -240,7 +240,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Đóng</button>
                     <button type="button" class="btn btn-success waves-effect waves-light"
-                            onclick="onClickSubmitAddOrderInvoice(1)">
+                            onclick="onClickSubmitAddOrderInvoice1(1)">
                         Lưu
                     </button>
                 </div>
@@ -387,7 +387,151 @@
     <script th:src="@{/assets/js/jquery.bootstrap-touchspin.min.js}"></script>
     <script th:src="@{/assets/js/select2.min.js}"></script>
     <script th:src="@{/assets/js/form-advanced.init.js}"></script>
-    <script th:src="@{/assets/js/product_006.js}"></script>
+    <script>
+        // function onStatusChange(element) {
+        //     const value = $(element).val();
+        //     const tagAll = $('#datatable tbody tr');
+        //     const tag = $('tbody tr td span').filter(function () {
+        //         return $(this).text().includes(value);
+        //     });
+        //     if (value === '') {
+        //         tagAll.show();
+        //     } else {
+        //         tagAll.hide();
+        //         tag.parent().parent().show();
+        //     }
+        // }
+        function onClickSubmitAddOrderInvoice1(e) {
+            let getOrderCode = document.getElementById('ip-order-invoice-code');
+            let orderCode;
+            if (getOrderCode !== null && getOrderCode !== undefined) {
+                orderCode = getOrderCode.value;
+                if (orderCode === null || orderCode === undefined || orderCode === '') {
+                    toastDanger('Lỗi', 'Vui lòng nhập mã đặt hàng');
+                    return;
+                }
+                if (orderCode.length < 5 || orderCode.length > 50) {
+                    toastDanger('Lỗi', 'Mã đặt hàng từ 5 đến 50 ký tự');
+                    return;
+                }
+                let check  = false;
+                $.ajax({
+                    url: '/api/order-invoice/code/' + orderCode,
+                    method: 'GET',
+                    success: function (data) {
+                        if(data === "ok"){
+                            toastDanger('Lỗi', 'Trùng mã đơn hàng');
+                        }
+                    },
+                    error: function (error) {
+                        toastDanger('Lỗi', error);
+
+                    }
+                })
+
+                if(check){
+                    return;
+                }
+            }
+            let getDate = document.getElementById('ip-order-invoice-date');
+            let orderDate;
+            if (getDate !== null && getDate !== undefined) {
+                orderDate = getDate.value;
+                if (orderDate === null || orderDate === undefined || orderDate === '') {
+                    toastDanger('Lỗi', 'Vui lòng chọn ngày hẹn nhận');
+                    return;
+                }
+            }
+            let getSupplier = document.getElementById('ip-order-invoice-supplier');
+            let idSupplier;
+            if (getSupplier !== null && getSupplier !== undefined) {
+                idSupplier = getSupplier.value;
+                if (idSupplier === null || idSupplier === undefined) {
+                    toastDanger('Lỗi', 'Vui long chọn nhà cung cấp');
+                    return;
+                }
+            }
+            let getNote = document.getElementById('ip-order-invoice-note');
+            let note;
+            if (getNote !== null && getNote !== undefined) {
+                note = getNote.value;
+            }
+            let lstDetails = [];
+            let getTrProduct = document.getElementsByClassName('tr-order-add-product');
+            if(e === 0){
+                if (getTrProduct !== null && getTrProduct !== undefined) {
+                    for (const $tr of getTrProduct) {
+                        if($tr.childNodes[9].childNodes[0].value <= 0){
+                            toastDanger("Lỗi", "Vui lòng nhập số lượng lớn hơn 0");
+                            return;
+                        }
+                        lstDetails.push({
+                            "romId" : $tr.childNodes[7].childNodes[0].value,
+                            "quantityInvoice" : $tr.childNodes[9].childNodes[0].value,
+                            "colorId" : $tr.childNodes[5].childNodes[1].value
+                        });
+                    }
+                }
+            }else {
+                if (getTrProduct !== null && getTrProduct !== undefined) {
+                    for (const $tr of getTrProduct) {
+                        if($tr.childNodes[9].childNodes[1].value <= 0){
+                            continue;
+                        }
+                        lstDetails.push({
+                            "romId" : $tr.childNodes[7].childNodes[1].value,
+                            "quantityInvoice" : $tr.childNodes[9].childNodes[1].value,
+                            "colorId" : $tr.childNodes[5].childNodes[1].value
+                        });
+                    }
+                }
+            }
+
+
+            console.log(lstDetails);
+            if (lstDetails.length === 0) {
+                toastDanger('Lỗi', 'Vui lòng nhập số lượng ít nhất 1 sản phẩm');
+                return;
+            }
+            for (let i = 0; i < lstDetails.length; i++) {
+                for (let j = 0; j < lstDetails.length; j++) {
+                    if(lstDetails[i].romId === lstDetails[j].romId && i !== j && lstDetails[i].colorId === lstDetails[j].colorId){
+                        toastDanger('Lỗi', 'Đã bị trùng sản phẩm xin vui lòng nhập lại');
+                        return;
+                    }
+                }
+            }
+
+
+            let orderInvoice = {
+                "note" : note,
+                "receiveDate" : orderDate,
+                "suppliderId" : idSupplier,
+                "orderCode" : orderCode,
+                "detailRequest" : lstDetails,
+                "status" : '-1'
+            };
+
+            $.ajax({
+                url: '/api/order-invoice',
+                method: 'POST',
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify(orderInvoice),
+                success: function (data) {
+                    toastSuccess('Thành công', 'Đã tạo mới hoá đơn đặt hàng NCC');
+                    $('.btn-close').click();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000)
+                },
+                error: function (error) {
+                    toastDanger('Lỗi', error);
+                }
+            })
+
+        }
+    </script>
 </div>
+
 </body>
 </html>

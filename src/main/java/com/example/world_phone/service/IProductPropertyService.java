@@ -19,5 +19,7 @@ public interface IProductPropertyService {
 
     String udpateStatusProductProperty(ProductPropertyRequest request);
 
+    boolean addImei(String romId, String colorId, List<String> imei);
+
 
 }
