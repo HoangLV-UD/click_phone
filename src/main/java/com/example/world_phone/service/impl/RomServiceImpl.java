@@ -1,9 +1,12 @@
 package com.example.world_phone.service.impl;
 
 import com.example.world_phone.constant.ConstansErrorCode;
+import com.example.world_phone.dto.request.attribute.rom.RomRequest;
 import com.example.world_phone.dto.request.rom.RomRequestAdd;
+import com.example.world_phone.dto.respone.attribute.ram.RamRespone;
 import com.example.world_phone.dto.respone.rom.RomRespone;
 import com.example.world_phone.entity.ProductEntity;
+import com.example.world_phone.entity.RamEntity;
 import com.example.world_phone.entity.RomEntity;
 import com.example.world_phone.exception.WorldPhoneExp;
 import com.example.world_phone.repo.RomRepo;
@@ -70,6 +73,53 @@ public class RomServiceImpl implements IRomService {
             }
         }
         return "ok";
+    }
+
+    @Override
+    public List<RomRespone> findAll() {
+        List<RomRespone> list = new ArrayList<>();
+        List<RomEntity> entities = romRepo.findByDeleteFlagIsFalse();
+        for (RomEntity e: entities
+        ) {
+            list.add(new RomRespone(String.valueOf(e.getId()), e.getName(), null));
+        }
+        return list;
+    }
+
+    @Override
+    public String saveRom(RomRequest request) {
+        RomEntity entity = new RomEntity();
+        entity.setName(request.getName());
+        entity.setCreateBy("ADMIN");
+        entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
+        entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
+        entity.setModifierBy("ADMIN");
+        entity.setDeleteFlag(false);
+        romRepo.save(entity);
+        return "ok";
+    }
+
+    @Override
+    public String editRom(RomRequest request) {
+        RomEntity entity = romRepo.getById(request.getId());
+        entity.setName(request.getName());
+        romRepo.save(entity);
+        return "ok";
+    }
+
+    @Override
+    public RamRespone findById(String id) {
+        RomEntity entity = romRepo.getById(Long.valueOf(id));
+        return new RamRespone(entity.getId(), entity.getName());
+    }
+
+    @Override
+    public String deleteRom(Long id) {
+        RomEntity entity = romRepo.getById(id);
+        entity.setDeleteFlag(true);
+        romRepo.save(entity);
+        return "ok";
+
     }
 
     private RomRespone mapToDTO(RomEntity romEntity){

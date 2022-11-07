@@ -9,6 +9,6 @@ import lombok.*;
 @Builder
 @ToString
 public class CategoryReqDto {
-    private String categoryId;
-    private String categoryName;
+    private Integer id;
+    private String name;
 }

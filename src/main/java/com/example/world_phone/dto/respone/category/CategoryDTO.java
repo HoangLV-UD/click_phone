@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class CategoryDTO {
-    private String categoryId;
+    private String id;
     private String categoryName;
-    private String parentId;
-    private List<CategoryDTO> categoryChild;
+//    private String parentId;
+//    private List<CategoryDTO> categoryChild;
 }

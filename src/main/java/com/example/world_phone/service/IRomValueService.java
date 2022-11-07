@@ -12,7 +12,7 @@ import java.util.List;
  * @since: 07/07/2022
  * Project_name: com.example.world_phone.service
  */
-public interface RomValueService {
+public interface IRomValueService {
     List<RomRespone> findAll();
     String save(RomRequest request);
     String update(RomRequest request);

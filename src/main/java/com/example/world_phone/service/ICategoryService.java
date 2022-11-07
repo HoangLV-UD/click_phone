@@ -11,6 +11,6 @@ public interface ICategoryService {
     List<CategoryResponeDto> getAllCategory();
     CategoryEntity findById(String id);
     void saveCategory(CategoryReqDto categoryDto);
-    void updateCategory(CategoryDTO categoryDto);
+    String updateCategory(CategoryDTO categoryDto);
     void deleteCategory(CategoryEntity categoryEntity);
 }

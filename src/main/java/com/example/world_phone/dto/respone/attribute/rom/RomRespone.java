@@ -17,4 +17,8 @@ import lombok.NoArgsConstructor;
 public class RomRespone {
     private Long id;
     private String name;
+    private Long loai;
+
+    public RomRespone(Long id, String s) {
+    }
 }
