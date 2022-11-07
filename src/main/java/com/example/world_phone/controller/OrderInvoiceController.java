@@ -42,7 +42,7 @@ public class OrderInvoiceController {
 
 //        List<ProductResponse> lstProduct = productService.getAllProduct();
 //        lstInvoice.sort((o1, o2) -> o2.getCreateDate().compareTo(o1.getCreateDate()));
-//        lstInvoiceOrder.sort((o1, o2) -> o2.getCreateDate().compareTo(o1.getCreateDate()));
+        lstInvoiceOrder.sort((o1, o2) -> o2.getCreateDate().compareTo(o1.getCreateDate()));
 //        lstProduct.sort((o1, o2) -> o2.getCreateDate().compareTo(o1.getCreateDate()));
 //        model.addAttribute("lstInvoice", lstInvoice);
         model.addAttribute("listColor", colorRespones);

@@ -5,6 +5,7 @@
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Quản lý đơn hàng - TechCam</title>
+    <link rel="stylesheet" th:href="@{/assets/css/select2.min.css}">
 </head>
 
 <body>
@@ -281,6 +282,7 @@
                             <thead class="align-middle text-center" style="background: lightgrey;">
                             <th>STT</th>
                             <th class="list-order-fn">Chức năng<br>thao tác</th>
+                            <th class="order-imei">IMEI</th>
                             <th>Ảnh sản phẩm</th>
                             <th>Tên sản phẩm</th>
                             <th>Bộ nhớ trong</th>
@@ -301,6 +303,12 @@
                                     <button type="button" class="btn btn-danger btn-sm waves-effect waves-light btnDelete" title="Xoá sản phẩm">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
+                                </td>
+                                <td class="text-center order-imei">
+                                    <a class="text-decoration-underline" href="#" onclick="onInputIMEI(this)">Nhập IMEI</a>
+                                    <input type="hidden" class="list-imei">
+                                    <input type="hidden" class="product-id">
+                                    <input type="hidden" class="order-detail-id">
                                 </td>
                                 <td class="text-center">
                                     <img src="" alt="product-img" class="product-image border rounded" style="max-height: 50px; max-width: 105px;">
@@ -357,12 +365,20 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <!-- Modal Body-->
-                <div class="modal-body px-4 overflow-auto" id="list-imei">
-                    <div class="imei-row row align-items-center" style="display: none;">
-                        <div class="col-lg-1 text-end fw-bolder text-primary"><span class="imei-count"></span></div>
-                        <div class="col"><input type="text" name="imei-value" class="imei-value form-control" placeholder="IMEI" onblur="onType(this)"></div>
-                    </div>
-                </div>
+                        <div class="col" style="height: 200px">
+                                <div class="mb-3 row">
+                                    <div class="col-lg-3">
+                                        <span style="margin-left: 20px">Imei</span>
+                                    </div>
+                                    <input hidden id="maxImei" value="1000">
+                                    <input hidden id="idDetail" value="1000">
+                                    <div class="col-lg-7">
+                                        <select id="imei_select" class="typeFilterImei w-100" multiple style="width: 100%">
+                                        </select>
+                                    </div>
+                                </div>
+                        </div>
+
                 <!-- Modal Footer-->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary waves-effect waves-light" data-bs-dismiss="modal">
@@ -459,6 +475,7 @@
                         <th>Tên sản phẩm</th>
                         <th>Bộ nhớ trong</th>
                         <th>Màu sắc</th>
+                        <th></th>
                         </thead>
                         <tbody id="list-product">
                         <tr class="add-product" style="display: none;">
@@ -545,9 +562,17 @@
     <select hidden id="color" class="form-control">
         <option hidden id="dataColor" value="0"> 0 </option>
     </select>
-    <input id="idOrder" type="text">
+    <input hidden id="idOrder" type="text">
+    <select hidden>
+        <option id="imeiOption" value="Online">Online</option>
+    </select>
 </div>
-
+<div layout:fragment="script">
+    <script th:src="@{/assets/js/dropzone.min.js}"></script>
+    <script th:src="@{/assets/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/assets/js/select2.min.js}"></script>
+    <script th:src="@{/assets/js/form-advanced.init.js}"></script>
+</div>
 
 <script layout:fragment="script" >
 
@@ -990,6 +1015,7 @@
 
     //API shipping order
     function shippingOrder() {
+        let checkImei = true;
             // Get Order
             let data = {};
             data["id"] = $('input[id=order-id]').val();
@@ -997,68 +1023,92 @@
             data["detailRequest"] = [];
             // Get list OrderDetails
             let productDetailsRequests = [];
+
             $('.order:not(:first)').each(function (index) {
-                // Get single orderDetail
                 let orderDetail = {};
                 orderDetail["productId"] = $(this).find('input.product-id').val();
                 orderDetail["id"] = $(this).find('input.order-detail-id').val();
                 orderDetail["quantity"] = $(this).find('.order-quantity').text();
+                let quantity = $(this).find('.order-quantity').text();
                 orderDetail["note"] = "";
                 orderDetail["discount"] = removePoint($(this).find('.order-discount').text());
                 // Add single orderDetail to list object OrderDetail
                 productDetailsRequests.push(orderDetail);
-            });
-            data["productDetailsRequests"] = productDetailsRequests;
-        data["recipientAddress"] = $('textarea[name=recipientAddress]').val();
-            console.log(data)
-
-            if (validateForm()) {
                 $.ajax({
-                    url: '/api/orders/confirm-export-order',
-                    type: 'POST',
+                    url: '/api/imei/' + $(this).find('input.product-id').val().toString().replace("productDetail","") +'/' + $(this).find('input.order-detail-id').val().toString().replace("orderDetail", ""),
+                    type: 'GET',
+                    async: false,
                     contentType: 'application/json',
-                    data: JSON.stringify(data),
-                    dataType: 'json',
-                    success: function (result) {
-                        $('.modal-info-order').modal('hide');
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Xuất hàng thành công',
-                            showConfirmButton: true,
-                            timerProgressBar: true,
-                            timer: 2000
-                        }).then(()=> window.location.reload());
+                    success: function (res1) {
+                        if(res1.length === 0 || res1.length < Number(quantity)){
+                            toastDanger("Thông báo", "Bạn chưa nhập đủ imei cho đơn hàng");
+                            checkImei = false;
+                        }
                     },
                     error: function (error) {
-                        console.log(error.status);
-                        if(Number(error.status) === 200){
-                            $('.modal-info-order').modal('hide');
-                            confirmListOrderDetail('CONFIRM');
-                        }else {
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                didOpen: (toast) => {
-                                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                }
-                            })
-                            Toast.fire({
-                                icon: 'error',
-                                title: "Lỗi hệ thống!\nVui lòng thử lại sau"
-                            })
-                        }
-
+                        console.log(error);
                     }
                 })
-                onLockEditOrder(true);
-            } else {
-                console.log("validate fail");
-            }
+                // Get single orderDetail
+
+
+            });
+        data["productDetailsRequests"] = productDetailsRequests;
+        data["recipientAddress"] = $('textarea[name=recipientAddress]').val();
+        console.log(checkImei)
+        if(checkImei == false){
+            return;
+        }
+
+        console.log(data)
+
+        if (validateForm()) {
+            $.ajax({
+                url: '/api/orders/confirm-export-order',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function (result) {
+                    $('.modal-info-order').modal('hide');
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Xuất hàng thành công',
+                        showConfirmButton: true,
+                        timerProgressBar: true,
+                        timer: 2000
+                    }).then(()=> window.location.reload());
+                },
+                error: function (error) {
+                    console.log(error.status);
+                    if(Number(error.status) === 200){
+                        $('.modal-info-order').modal('hide');
+                        confirmListOrderDetail('CONFIRM');
+                    }else {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'error',
+                            title: "Lỗi hệ thống!\nVui lòng thử lại sau"
+                        })
+                    }
+
+                }
+            })
+            onLockEditOrder(true);
+        } else {
+            console.log("validate fail");
+        }
 
     }
 
@@ -1429,6 +1479,126 @@
                 }
             }
         })
+    }
+
+    const modalIMEI = $('.modal-imei');
+    let tempInputIMEI;
+    // Input IMEI
+    function onInputIMEI(tag) {
+        var x = $(tag).parent().parent().find('.product-id');
+        var quantity = $(tag).parent().parent().find('.order-quantity');
+        var detailId = $(tag).parent().parent().find('.order-detail-id');
+        $('#maxImei').val(quantity[0].innerHTML);
+        var idProduct = x[0].value.toString();
+        var idDetail = detailId[0].value.toString().replace("orderDetail", "");
+        $('#idDetail').val(idDetail);
+        idProduct = idProduct.replace("productDetail", "");
+        $('#imei_select').prop('disabled', true).trigger("chosen:updated");
+        const selectImei = document.getElementById('imei_select');
+        while (selectImei.lastElementChild) {
+            selectImei.removeChild(selectImei.lastElementChild);
+        }
+        //$("#imei_select option[value='12345'], #imei_select option[value='option2']").remove();
+
+
+        $.ajax({
+            url: '/api/imei/' + idProduct,
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (res) {
+                console.log(res);
+                $.ajax({
+                    url: '/api/imei/' + idProduct +'/' + idDetail,
+                    type: 'GET',
+                    contentType: 'application/json',
+                    success: function (res1) {
+                        var arrOpt = [];
+                        if(res1.length === 0 && res.length === 0){
+                            toastDanger("Thất bại" , "Sản phẩm này chưa có imei")
+                            return;
+                        }else {
+                            let  colorData = document.getElementById("imeiOption");
+                            for (let z = 0; z < res.length; z++){
+                                let colorDataClone = colorData.cloneNode(true);
+                                colorDataClone.value = res[z].id;
+                                colorDataClone.innerText = res[z].value;
+                                colorDataClone.removeAttribute("id");
+                                colorDataClone.removeAttribute("hidden");
+                                selectImei.appendChild(colorDataClone);
+
+                            }
+                            for (let z = 0; z < res1.length; z++){
+                                let colorDataClone = colorData.cloneNode(true);
+                                colorDataClone.value = res1[z].id;
+                                arrOpt.push(res1[z].id)
+                                colorDataClone.innerText = res1[z].value;
+                                colorDataClone.removeAttribute("id");
+                                colorDataClone.removeAttribute("hidden");
+                                selectImei.appendChild(colorDataClone);
+                            }
+                            $('#imei_select').val(arrOpt).change();
+                            $('#imei_select').prop('disabled', false).trigger("chosen:updated");
+                            $('.typeFilterImei').chosen();
+                            console.log(res1)
+                            modalIMEI.modal('show');
+                        }
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+
+
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    }
+
+
+    function onBtnSaveIMEI() {
+        let imei = document.getElementById('imei_select').options;
+        let formImei = {};
+        let imeiRequestAdds = [];
+        let check = 0;
+        var opt;
+        for (let i = 0; i < imei.length; i++) {
+            opt = imei[i];
+            if (opt.selected) {
+                formImei = {
+                    "imeiId" : opt.value
+                }
+                imeiRequestAdds.push(formImei)
+                formImei = {}
+                check++;
+            }
+        }
+        var quantity = $('#maxImei').val();
+        if(imeiRequestAdds.length > Number(quantity)){
+            toastDanger("Lỗi", "Đã nhập thừa " + (imeiRequestAdds.length - Number(quantity)) + " imei. Vui lòng kiểm tra lại")
+            return;
+        }
+        console.log(imeiRequestAdds)
+        const idDeail = $('#idDetail').val();
+
+        $.ajax({
+            url: '/api/imei/' + idDeail,
+            type: 'POST',
+            data: JSON.stringify(imeiRequestAdds),
+            contentType: 'application/json',
+            success: function (res) {
+                toastSuccess("Thành công", "Lưu imei thành công vào đơn hàng")
+
+            },
+            error: function (error) {
+                toastSuccess("Thất bại", "Lỗi hệ thống")
+            }
+        })
+
+
     }
 
     let orderId = "";
@@ -1847,6 +2017,7 @@
                     const  rom = document.getElementById("rommm");
                     const  color = document.getElementById("color");
 
+
                     for (let i = 0; i < res.length; i++) {
                         if(res[i].romRespones[0].productPropertyResponeList.length > 0){
                             let d = rom.cloneNode(true);
@@ -1868,7 +2039,7 @@
                             const product = $('#list-product').find('.add-product').eq(i + 1).show();
 
                             let  b = document.getElementById("data");
-                            let  colorData = document.getElementById("dataColor");
+
                             for (let j = 0; j < res[i].romRespones.length; j++) {
                                 let c = b.cloneNode(true);
                                 c.value = res[i].romRespones[j].id;
@@ -1878,6 +2049,7 @@
                                 d.appendChild(c);
 
                             }
+                            let  colorData = document.getElementById("dataColor");
                             for (let z = 0; z < res[i].romRespones[0].productPropertyResponeList.length; z++){
                                 let colorDataClone = colorData.cloneNode(true);
                                 console.log(res[i].romRespones[0].productPropertyResponeList[z].id)

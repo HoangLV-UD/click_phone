@@ -12,4 +12,6 @@ public class OrderInvoiceDetailRequest {
     private Long quantityInvoice;
     private Integer romId;
     private Integer colorId;
+    private String status;
+    private String note;
 }

@@ -32,7 +32,7 @@
             <div class="row justify-content-end">
                 <a href="#modal-add-invoice" type="button"
                    class="btn btn-primary col-auto mb-3 waves-effect waves-light"
-                   data-bs-toggle="modal">
+                   data-bs-toggle="modal" >
                     <i class="fas fa-plus me-2"></i>
                     Nhập hàng
                 </a>
@@ -127,7 +127,7 @@
                                             onchange="onChangeInvoiceOrderEdit(this)" style="width: 100%">
                                         <option value="0">Chưa đặt</option>
                                         <option th:each="invoiceOrder : ${lstInvoiceOrder}"
-                                                th:if="${invoiceOrder.getTotalMoneny() == 0}"
+                                                th:if="${invoiceOrder.getStatus() == 1}"
                                                 th:value="${invoiceOrder.id}"
                                                 th:text="${invoiceOrder.getCodeOrder()}">
                                         </option>
@@ -206,8 +206,9 @@
                                         <th>Màu sắc</th>
                                         <th>Bộ nhớ trong</th>
                                         <th>Số lượng nhập</th>
-                                        <th>Giá tiền</th>
-                                        <th></th>
+                                        <th>Giá tiền nhập sản phẩm</th>
+                                        <th>Ghi chú chi tiết</th>
+                                        <th>Trạng thái sản phẩm</th>
                                     </tr>
                                     </thead>
                                     <tbody id="bodyAddProduct">
@@ -231,6 +232,18 @@
                                         <td class="add-product1-tien">
                                             <input type="number"  min="0"
                                                    placeholder="Giá tiền...." class="form-control"/>
+                                        </td>
+                                        <td class="add-product1-ghi-chu">
+                                            <input type="text"
+                                                   placeholder="Ghi chú...." class="form-control"/>
+                                        </td>
+
+                                        <td class="add-product1-trang-thai">
+                                            <select   class="form-control">
+                                                <option  value="1">Đang nhập</option>
+                                                <option  value="2">Đã nhập</option>
+                                                <option value="3">NCC hết hàng</option>
+                                            </select>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -351,8 +364,9 @@
                                         <th>Màu sắc</th>
                                         <th>Bộ nhớ trong</th>
                                         <th>Số lượng nhập</th>
-                                        <th>Giá tiền</th>
-                                        <th></th>
+                                        <th>Giá tiền nhập sản phẩm</th>
+                                        <th>Ghi chú chi tiết</th>
+                                        <th>Trạng thái sản phẩm</th>
                                     </tr>
                                     </thead>
                                     <tbody id="bodyEditProduct">
@@ -376,6 +390,18 @@
                                         <td class="edit-product1-tien">
                                             <input type="number"  min="0"
                                                    placeholder="Giá tiền...." class="form-control"/>
+                                        </td>
+                                        <td class="edit-product1-ghi-chu">
+                                            <input type="text"
+                                                   placeholder="Ghi chú...." class="form-control"/>
+                                        </td>
+
+                                        <td class="edit-product1-trang-thai">
+                                            <select   class="form-control">
+                                                <option  value="1">Đang nhập</option>
+                                                <option  value="2">Đã nhập</option>
+                                                <option value="3">NCC hết hàng</option>
+                                            </select>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -458,6 +484,8 @@
     <select hidden id="rom" class="form-control">
         <option hidden id="data" value="0"> 0 </option>
     </select>
+
+
 
 
 
@@ -557,7 +585,7 @@
                             for (let j = 0; j < res[i].romRespones.length; j++) {
                                 let c = b.cloneNode(true);
                                 c.value = res[i].romRespones[j].id;
-                                c.innerText = res[i].romRespones[j].name + ' GB';
+                                c.innerText = res[i].romRespones[j].name;
                                 c.removeAttribute("id");
                                 c.removeAttribute("hidden");
                                 d.appendChild(c);
@@ -599,6 +627,7 @@
             const table = document.getElementById("bodyAddProduct");
             const tr = tag.parentNode.parentNode;
             const rowChinh = document.getElementById("rowMain").cloneNode(true);
+            console.log(rowChinh)
             const  e = tr.childNodes[7].childNodes[0];
             const  d = tr.childNodes[9].childNodes[1];
             rowChinh.childNodes[1].textContent = tr.childNodes[5].textContent;
@@ -608,6 +637,7 @@
             rowChinh.childNodes[5].childNodes[3].textContent = d.options[d.selectedIndex].value
             rowChinh.removeAttribute("id");
             rowChinh.removeAttribute("style");
+            console.log(rowChinh)
             table.appendChild(rowChinh);
             rowChinh.childNodes[1].textContent = tr.childNodes[5].textContent
 

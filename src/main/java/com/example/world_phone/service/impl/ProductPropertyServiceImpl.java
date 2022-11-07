@@ -1,14 +1,18 @@
 package com.example.world_phone.service.impl;
 
 
+import com.example.world_phone.common.StatusImei;
 import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.constant.ConstansStatus;
 import com.example.world_phone.dto.request.product_property.ProductPropertyRequest;
+import com.example.world_phone.dto.respone.imei.ImeiResponse;
 import com.example.world_phone.dto.respone.order_detail.OrderDetailRespone;
 import com.example.world_phone.dto.respone.product.ProductPropertyRespone;
+import com.example.world_phone.entity.ImeiEntity;
 import com.example.world_phone.entity.ProductEntity;
 import com.example.world_phone.entity.ProductPropertyEntity;
 import com.example.world_phone.exception.WorldPhoneExp;
+import com.example.world_phone.repo.ImeiRepo;
 import com.example.world_phone.repo.PropertyProductRepo;
 import com.example.world_phone.service.IProductPropertyService;
 import com.example.world_phone.until.ConvertUtil;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +30,8 @@ import java.util.List;
 public class ProductPropertyServiceImpl implements IProductPropertyService {
     private final PropertyProductRepo repo;
     private final ConvertUtil convertUtil;
+
+    private final ImeiRepo imeiRepo;
 
     private final PropertyProductRepo propertyProductRepo;
 
@@ -117,13 +124,37 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
         return "ok";
     }
 
-
+    @Override
+    public boolean addImei(String romId, String colorId, List<String> imei) {
+        try {
+            List<ProductPropertyEntity> entityList = repo.findByRomAndColor(Long.valueOf(romId), Long.valueOf(colorId));
+            for (ProductPropertyEntity a: entityList
+            ) {
+                long quantity = a.getQuantity();
+                for (String ime: imei
+                ) {
+                    if(quantity > 0){
+                        ImeiEntity imeiEntity = new ImeiEntity();
+                        imeiEntity.setValue(ime);
+                        imeiEntity.setPropertyProductId(a.getId());
+                        imeiEntity.setStatus(StatusImei.CHUA_BAN.getValue());
+                        imeiRepo.save(imeiEntity);
+                        quantity--;
+                    }
+                }
+            }
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
 
 
     private ProductPropertyRespone mapToDto(ProductPropertyEntity entity){
         if(entity == null){
             return null;
         }else {
+            Long imei = imeiRepo.countByPropertyProductId(entity.getId());
             ProductPropertyRespone dto = new ProductPropertyRespone();
             dto.setColorName(entity.getColorEntity().getValueColor());
             dto.setRomId(String.valueOf(entity.getRomEntity().getId()));
@@ -135,7 +166,14 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
             dto.setPriceString(convertUtil.moneyToStringFormat(entity.getPrice()));
             dto.setPricePromotion(entity.getPricePromotion());
             dto.setPricePromotionString(convertUtil.moneyToStringFormat(entity.getPricePromotion()));
+            dto.setCountImei(imei == null ? 0L : imei);
+            List<ImeiEntity> list = imeiRepo.findByDeleteFlagIsFalseAndPropertyProductId(entity.getId());
+            dto.setImeiResponses(list.stream().map(this::mapToImei).collect(Collectors.toList()));
             return dto;
         }
+    }
+
+    private ImeiResponse mapToImei(ImeiEntity imeiEntity){
+        return new ImeiResponse(String.valueOf(imeiEntity.getId()), imeiEntity.getValue());
     }
 }

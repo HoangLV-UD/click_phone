@@ -24,4 +24,6 @@ public class OrderInvoiceDetailRespone {
     private String colorName;
     private String productRomName;
     private String priceProduce;
+    private String note;
+    private String status;
 }

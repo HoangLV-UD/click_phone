@@ -179,7 +179,7 @@ function onClickAddInvoice() {
             contentType: 'application/json',
             data: JSON.stringify(obj),
             success: function (data) {
-                toastSuccess('Thành công', 'Đã thêm mới nhập hàng')
+                toastSuccess('Thành công', 'Nhập hàng thành công')
                 setTimeout(function () {
                     location.reload()
                 }, 2000)
@@ -266,12 +266,16 @@ function valueDateInvoice(
                     return;
                 }
 
-                console.log($tr.childNodes[11].childNodes[1].value)
+                //console.log($tr.childNodes[15].childNodes[1].options[e.selectedIndex].text)
+                var e = $tr.childNodes[15].childNodes[1];
+                console.log(e.options[e.selectedIndex].value)
                 lstDetails.push({
                     "romId" : $tr.childNodes[7].childNodes[3].innerText,
                     "colorId" : $tr.childNodes[5].childNodes[3].innerText,
                     "quantityInvoice" : $tr.childNodes[9].childNodes[1].value,
-                    "moneyInvoice" : $tr.childNodes[11].childNodes[1].value
+                    "moneyInvoice" : $tr.childNodes[11].childNodes[1].value,
+                    "note" : $tr.childNodes[13].childNodes[1].value,
+                    "status" : e.options[e.selectedIndex].value
                 });
                 tong+=Number($tr.childNodes[11].childNodes[1].value);
             }
@@ -288,7 +292,7 @@ function valueDateInvoice(
                 }
             }
         }
-        if(Number(getInvoicePaid.value) -  Number(tong)  < 0){
+        if(Number(getInvoicePaid.value) -  Number(tong) + Number(getInvoiceDiscount.value)   < 0 ){
             toastDanger("Lỗi", "Tổng tiền trả NCC ít hơn tổng tiền sản phẩm");
             return;
         }
@@ -364,9 +368,11 @@ function onChangeInvoiceOrderEdit(e) {
                 rowChinh.childNodes[1].textContent = data.orderDetail[i].productName;
                 rowChinh.childNodes[5].childNodes[1].textContent =  data.orderDetail[i].colorName;
                 rowChinh.childNodes[5].childNodes[3].textContent = data.orderDetail[i].colorId;
-                rowChinh.childNodes[7].childNodes[1].textContent =  data.orderDetail[i].productRomName + ' GB';
+                rowChinh.childNodes[7].childNodes[1].textContent =  data.orderDetail[i].productRomName;
                 rowChinh.childNodes[7].childNodes[3].textContent = data.orderDetail[i].productRomID;
                 rowChinh.childNodes[9].childNodes[1].value = data.orderDetail[i].quantityProduct;
+                rowChinh.childNodes[13].childNodes[1].value = data.orderDetail[i].note;
+                rowChinh.childNodes[15].childNodes[1].value = data.orderDetail[i].status;
                 rowChinh.removeAttribute("id");
                 rowChinh.removeAttribute("style");
                 table.appendChild(rowChinh);
@@ -408,6 +414,8 @@ function onClickEditInvoice(e) {
                 rowChinh.childNodes[7].childNodes[3].textContent = data.orderDetail[i].productRomID;
                 rowChinh.childNodes[9].childNodes[1].value = data.orderDetail[i].quantityProduct;
                 rowChinh.childNodes[11].childNodes[1].value = data.orderDetail[i].priceProduce;
+                rowChinh.childNodes[13].childNodes[1].value = data.orderDetail[i].note;
+                rowChinh.childNodes[15].childNodes[1].value = data.orderDetail[i].status;
                 rowChinh.removeAttribute("id");
                 rowChinh.removeAttribute("style");
                 table.appendChild(rowChinh);
@@ -539,11 +547,14 @@ function valueDateInvoiceEdit(
                 }
 
                 console.log($tr.childNodes[11].childNodes[1].value)
+                var e = $tr.childNodes[15].childNodes[1];
                 lstDetails.push({
                     "romId" : $tr.childNodes[7].childNodes[3].innerText,
                     "colorId" : $tr.childNodes[5].childNodes[3].innerText,
                     "quantityInvoice" : $tr.childNodes[9].childNodes[1].value,
-                    "moneyInvoice" : $tr.childNodes[11].childNodes[1].value
+                    "moneyInvoice" : $tr.childNodes[11].childNodes[1].value,
+                    "note" : $tr.childNodes[13].childNodes[1].value,
+                    "status" : e.options[e.selectedIndex].value
                 });
                 tong+=Number($tr.childNodes[11].childNodes[1].value);
             }
@@ -560,7 +571,7 @@ function valueDateInvoiceEdit(
                 }
             }
         }
-        if(Number(getInvoicePaid.value) -  Number(tong)  < 0){
+        if(Number(getInvoicePaid.value) -  Number(tong) + Number(getInvoiceDiscount.value)   < 0 ){
             toastDanger("Lỗi", "Tổng tiền trả NCC ít hơn tổng tiền sản phẩm");
             return;
         }

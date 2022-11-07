@@ -225,6 +225,17 @@ public class OrderServiceimpl implements IOrderService {
     @Override
     public String confirmOrder(OrderRequest request) throws ParseException {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
+        List<OrdersDetailEntity> list = ordersDetailRepo.findByDeleteFlagIsFalseAndOrdersEntity(entity);
+        for (OrdersDetailEntity detail: list
+             ) {
+            ProductPropertyEntity propertyEntity = propertyProductRepo.findById(detail.getIdPropertyProduct()).get();
+            if(propertyEntity.getQuantity() - detail.getQuantity() < 0){
+                return "false";
+            }else {
+                propertyEntity.setQuantity(propertyEntity.getQuantity() - detail.getQuantity());
+                propertyProductRepo.save(propertyEntity);
+            }
+        }
         entity.setAddress(request.getRecipientAddress());
         entity.setReceiveDate(request.getDeliveryDate());
         entity.setStatus(String.valueOf(StatusOrder.CHO_XUAT_HANG.getIndex()));
@@ -247,9 +258,8 @@ public class OrderServiceimpl implements IOrderService {
     public String exportOrder(OrderRequest request) {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
         entity.setAddress(request.getRecipientAddress());
-
         entity.setReceiveDate(request.getDeliveryDate());
-        entity.setStatus("2");
+        entity.setStatus(String.valueOf(StatusOrder.CHO_GIAO_HANG.getIndex()));
         ordersRepo.save(entity);
         return "ok";
     }

@@ -291,14 +291,12 @@
                                                 <span>Bộ nhớ trong</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <th:block th:each="rom , iterator : ${listRom}">
-                                                    <input class="form-check-input" type="checkbox" th:value="${rom.getName()}" th:id="'rom' + ${iterator.index}">
-                                                    <label class="form-check-label" th:for="'rom' + ${iterator.index}" style="margin-right: 50px" th:text="${rom.getName()}">
-                                                    </label>
-                                                     <div th:if="${iterator.index % 2 == 1}">
-                                                         <br>
-                                                     </div>
-                                                </th:block>
+                                                <select  id="ip-add-product-rom" multiple class="form-control select2"
+                                                        data-status="add">
+                                                    <th:block th:each="rom : ${listRom}">
+                                                        <option th:value="${rom.getName()}" th:text="${rom.getName()} "></option>
+                                                    </th:block>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
@@ -531,14 +529,12 @@
                                                 <span>Bộ nhớ trong</span>
                                             </div>
                                             <div class="col-lg-7">
-                                                <th:block th:each="rom , iterator : ${listRom}">
-                                                    <input class="form-check-input" type="checkbox" value="8" th:value="${rom.getName()}" th:id="'edit-rom' + ${iterator.index}">
-                                                    <label class="form-check-label" th:for="'edit-rom' + ${iterator.index}" style="margin-right: 50px" th:text="${rom.getName()}">
-                                                    </label>
-                                                    <div th:if="${iterator.index % 2 == 1}">
-                                                        <br>
-                                                    </div>
-                                                </th:block>
+                                                <select  id="ip-edit-product-rom" multiple="multiple" class="form-control select2"
+                                                         data-status="add">
+                                                    <th:block th:each="rom : ${listRom}">
+                                                        <option th:value="${rom.getName()}" th:text="${rom.getName()} "></option>
+                                                    </th:block>
+                                                </select>
                                             </div>
                                         </div>
 
@@ -675,6 +671,16 @@
                                             </select>
                                         </div>
                                     </div>
+
+
+                                    <div class="mb-3 row">
+                                        <div class="col-lg-5">
+                                            <span>Imei hiện đã lưu</span>
+                                        </div>
+                                        <div class="col-lg-7">
+                                            <input class="form-control" readonly id="product-detai-imei">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div style="margin-left: 50px">
@@ -701,6 +707,15 @@
                                             </div>
                                             <div class="col-lg-7">
                                                 <input class="form-control" id="product-detai-price">
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row" id="divImei" hidden>
+                                            <div class="col-lg-5">
+                                                <span>Nhập thêm imei</span>
+                                            </div>
+                                            <div class="col-lg-7">
+                                                <input type="file" class="form-control" id="product-detai-imei-add">
                                             </div>
                                         </div>
                                     </div>
@@ -978,20 +993,21 @@
             // get element ram
             let productRam = document.getElementById('ip-edit-product-ram').value;
 
-            // get element rom
+            let rom = document.getElementById('ip-edit-product-rom').options;
             let formRom8Gb = {};
-            let check = 0;
             let romRequestAdds = [];
-            for (let i = 0; i < listRom.length; i++) {
-                if(document.getElementById('edit-rom' + i).checked){
+            let check = 0;
+            var opt;
+            for (let i = 0; i < rom.length; i++) {
+                opt = rom[i];
+                if (opt.selected) {
                     formRom8Gb = {
-                        "nameRom" : document.getElementById('edit-rom' + i).value
+                        "nameRom" : opt.value
                     }
                     romRequestAdds.push(formRom8Gb)
-                    formRom8Gb = {};
+                    formRom8Gb = {}
                     check++;
                 }
-
             }
             let objectProduct = validateObjectProductEdit(
                 getElementProductName,
@@ -1062,14 +1078,16 @@
             // get element ram
             let productRam = document.getElementById('ip-add-product-ram').value;
 
-            // get element rom
+            let rom = document.getElementById('ip-add-product-rom').options;
             let formRom8Gb = {};
             let romRequestAdds = [];
             let check = 0;
-            for (let i = 0; i < listRom.length; i++) {
-                if(document.getElementById('rom' + i).checked){
+            var opt;
+            for (let i = 0; i < rom.length; i++) {
+                opt = rom[i];
+                if (opt.selected) {
                     formRom8Gb = {
-                        "nameRom" : document.getElementById('rom' + i).value
+                        "nameRom" : opt.value
                     }
                     romRequestAdds.push(formRom8Gb)
                     formRom8Gb = {}
@@ -1345,7 +1363,8 @@
 
 
             //get element sim
-            let getElementProductSim = document.getElementById('ip-edit-product-sim')
+            let getElementProductRom = document.getElementById('ip-edit-product-rom')
+            let rom = document.getElementById('ip-edit-product-rom').options;
 
             //get element pin sac
             let getElementProductPin = document.getElementById('ip-edit-product-pin')
@@ -1378,16 +1397,29 @@
                 success: function (data) {
                     console.log(data)
                     // set rom cho check box
-                    for (let i = 0; i < listRom.length; i++) {
-                        $("#edit-rom" + i).prop('checked', false);
-                        for (let j = 0; j < data.romRespones.length; j++) {
-                            if($("#edit-rom" + i).val() === data.romRespones[j].name){
-                                $("#edit-rom" + i).prop('checked', true);
-                                romDetail.innerHTML+='<option value="'+data.romRespones[j].id+'" >'+data.romRespones[j].name+' GB</option>'
+                    // for (let i = 0; i < listRom.length; i++) {
+                    //     $("#edit-rom" + i).prop('checked', false);
+                    //     for (let j = 0; j < data.romRespones.length; j++) {
+                    //         if($("#edit-rom" + i).val() === data.romRespones[j].name){
+                    //             $("#edit-rom" + i).prop('checked', true);
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+                    var arrOpt = [];
+                    for (let j = 0; j < data.romRespones.length; j++) {
+                        for (let i = 0; i < rom.length; i++) {
+                            opt = rom[i]
+                            if(opt.value === data.romRespones[j].name){
+                                arrOpt.push(opt.value);
+                                romDetail.innerHTML+='<option value="'+data.romRespones[j].id+'" >'+data.romRespones[j].name+'</option>'
                                 break;
                             }
                         }
                     }
+
+                    $('#ip-edit-product-rom').val(arrOpt).change();
+
                     if(data.status === 'ON'){
                         document.getElementById("btn-submit-edit-product-status").innerHTML = "Ngừng kinh doanh"
                     }else {
@@ -1400,7 +1432,13 @@
                         $("#product-detai-qty").val(data.romRespones[0].productPropertyResponeList[0].quantity);
                         $("#product-detai-priceString").val(data.romRespones[0].productPropertyResponeList[0].priceString);
                         $("#product-detai-price").val(data.romRespones[0].productPropertyResponeList[0].price);
+                        $("#product-detai-imei").val(data.romRespones[0].productPropertyResponeList[0].countImei);
                         $("#name-product-detail").val(data.nameProduct);
+                        if(data.romRespones[0].productPropertyResponeList[0].countImei < data.romRespones[0].productPropertyResponeList[0].quantity){
+                            $("#divImei").removeAttr('hidden');
+                        }else {
+                            $("#divImei").attr('hidden', true);
+                        }
                         console.log(data.romRespones[0].productPropertyResponeList[0].status);
                         $("#btn-submit-edit-product-detail-status").val("");
                         if(data.romRespones[0].productPropertyResponeList[0].status === 'ON'){
@@ -1409,9 +1447,46 @@
                             document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Kinh doanh lại"
                         }
                         document.getElementById("updateDetail").style.display = "block";
-                    }else {
+                    }
+                    let checkDetail = true;
+                    for (let pp = 0; pp < data.romRespones.length; pp++){
+                        if(data.romRespones[pp].productPropertyResponeList.length > 0   ){
+                            for (let i = 0; i < data.romRespones[pp].productPropertyResponeList.length; i++) {
+                                colorRom.innerHTML+='<option value="'+data.romRespones[pp].productPropertyResponeList[i].colorId+'" >'+data.romRespones[pp].productPropertyResponeList[i].colorName+'</option>';
+                                $("#product-detai-qty").val(data.romRespones[pp].productPropertyResponeList[i].quantity);
+                                $("#product-detai-priceString").val(data.romRespones[pp].productPropertyResponeList[i].priceString);
+                                $("#product-detai-price").val(data.romRespones[pp].productPropertyResponeList[i].price);
+                                $("#product-detai-imei").val(data.romRespones[pp].productPropertyResponeList[i].countImei);
+                                $("#name-product-detail").val(data.nameProduct);
+                                if(data.romRespones[pp].productPropertyResponeList[i].countImei < data.romRespones[pp].productPropertyResponeList[i].quantity){
+                                    $("#divImei").removeAttr('hidden');
+                                }else {
+                                    $("#divImei").attr('hidden', true);
+                                }
+                                console.log(data.romRespones[pp].productPropertyResponeList[i].status);
+                                $("#btn-submit-edit-product-detail-status").val("");
+                                if(data.romRespones[pp].productPropertyResponeList[i].status === 'ON'){
+                                    document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Ngừng kinh doanh"
+                                }else {
+                                    document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Kinh doanh lại"
+                                }
+                                document.getElementById("updateDetail").style.display = "block";
+                                checkDetail = false;
+                                break;
+                            }
+                            if(!checkDetail){
+                                break;
+                            }
+
+                        }
+                    }
+                    if(checkDetail){
                         document.getElementById("updateDetail").style.display = "none";
                     }
+
+                    // else {
+                    //     document.getElementById("updateDetail").style.display = "none";
+                    // }
 
 
 
@@ -1809,6 +1884,12 @@
                     $("#product-detai-qty").val(data.quantity);
                     $("#product-detai-price").val(data.price);
                     $("#product-detai-priceString").val(data.priceString);
+                    $("#product-detai-imei").val(data.countImei)
+                    if(data.countImei < data.quantity){
+                        $("#divImei").removeAttr('hidden');
+                    }else {
+                        $("#divImei").attr('hidden', true);
+                    }
                 },
                 error : function (error) {
                     console.log(error)
@@ -1853,6 +1934,12 @@
                     $("#product-detai-priceString").val(data[0].priceString);
                     for (var  i = 0; i < data.length; i++){
                         colorRom.innerHTML+='<option value="'+data[i].colorId+'" >'+data[i].colorName+'</option>'
+                    }
+                    $("#product-detai-imei").val(data[0].countImei);
+                    if(data[0].countImei < data[0].quantity){
+                        $("#divImei").removeAttr('hidden');
+                    }else {
+                        $("#divImei").attr('hidden', true);
                     }
 
                 },
@@ -1907,15 +1994,30 @@
                 return;
             }
             var romId = $("#rom-product-detail").find(":selected").val();
-            console.log(romId);
             var colorId = $("#color-rom").find(":selected").val();
-            console.log(colorId);
 
             var request = {
                 "romId" : romId,
                 "colorId" : colorId,
                 "quantity" : $("#product-detai-qty").val(),
                 "price" : $("#product-detai-price").val()
+            }
+            var formData = new FormData();
+            formData.append('formData', $('#product-detai-imei-add')[0].files[0]);
+            if($('#product-detai-imei-add')[0].files[0] !== undefined){
+                $.ajax({
+                    url : 'api/product-property/' + romId + '/' + colorId,
+                    type : 'POST',
+                    data : formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    success : function(data) {
+                        toastSuccess("Thành công", "Cập nhập Imei thành công");
+                    },
+                    error : function (error) {
+                        toastDanger("Thất bại", "Lỗi hệ thống");
+                    }
+                });
             }
             $.ajax({
                 url : "api/product-property",

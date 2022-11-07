@@ -1,6 +1,8 @@
 package com.example.world_phone.service.impl;
 
 
+import com.example.world_phone.common.StatusOrderInvoice;
+import com.example.world_phone.common.StatusOrderInvoiceDetail;
 import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.dto.request.orderinvoice.OrderInvoiceRequest;
 import com.example.world_phone.dto.request.orderinvoicedetail.OrderInvoiceDetailRequest;
@@ -113,6 +115,10 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
             for (OrderInvoiceDetailRequest req: list
             ) {
                 InvoiceOrderDetailEntity entityDetail = mapToEntity(req);
+                if(!entityDetail.getStatus().equals(StatusOrderInvoiceDetail.DA_NHAP.getIndex())){
+                    entity.setStatus(StatusOrderInvoice.GIAO_THIEU.getIndex());
+                    orderRepo.save(entity);
+                }
                 entityDetail.setInvoiceOrderEntity(entity);
                 entityDetail.setMoneyInvoice(req.getMoneyInvoice());
                 boolean check = true;
@@ -178,17 +184,21 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
     @Override
     public String updateNhapDetail(List<OrderInvoiceDetailRequest> list, InvoiceOrderEntity entity) {
         List<InvoiceOrderDetailEntity> entityList = detailRepo.findByInvoiceOrderEntity(entity.getId());
+        boolean checkStatus = true;
         for (OrderInvoiceDetailRequest req: list
         ) {
             InvoiceOrderDetailEntity entityDetail = mapToEntity(req);
             entityDetail.setInvoiceOrderEntity(entity);
             entityDetail.setMoneyInvoice(req.getMoneyInvoice());
             boolean check = true;
+            if(!req.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
+                checkStatus = false;
+            }
             for (InvoiceOrderDetailEntity e: entityList
             ) {
                 if(e.getColorEntity().getId() == entityDetail.getColorEntity().getId() && e.getRomEntity().getId() == entityDetail.getRomEntity().getId()){
                     List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(e.getRomEntity().getId(), e.getColorEntity().getId());
-                    if(list1.size() > 0){
+                    if(list1.size() > 0 && !req.equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
                         list1.get(0).setQuantity(list1.get(0).getQuantity() - e.getQuantityInvoice() + req.getQuantityInvoice());
                         propertyProductRepo.save(list1.get(0));
                     }
@@ -215,6 +225,13 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
                 detailRepo.save(entityDetail);
             }
 
+        }
+        if(checkStatus){
+            entity.setStatus(StatusOrderInvoice.DA_NHAN.getIndex());
+            orderRepo.save(entity);
+        }else {
+            entity.setStatus(StatusOrderInvoice.GIAO_THIEU.getIndex());
+            orderRepo.save(entity);
         }
         for (InvoiceOrderDetailEntity e: entityList
         ) {
@@ -254,6 +271,8 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
         respone.setQuantityProduct(String.valueOf(entity.getQuantityInvoice()));
         respone.setColorName(entity.getColorEntity().getValueColor());
         respone.setProductRomName(entity.getRomEntity().getName());
+        respone.setNote(entity.getNote());
+        respone.setStatus(entity.getStatus());
         return respone;
     }
 
@@ -273,6 +292,8 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
         if(romEntity == null){
             throw new WorldPhoneExp(ConstansErrorCode.ROM_NOT_EXIST);
         }
+        entity.setStatus(request.getStatus());
+        entity.setNote(request.getNote());
         entity.setRomEntity(romEntity);
         entity.setCreateBy((String) sessionUtil.getObject("username"));
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));

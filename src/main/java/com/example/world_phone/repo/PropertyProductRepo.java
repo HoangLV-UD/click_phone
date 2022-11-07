@@ -25,4 +25,6 @@ public interface PropertyProductRepo extends JpaRepository<ProductPropertyEntity
 
 
     List<ProductPropertyEntity> findByDeleteFlagIsFalse();
+
+
 }
