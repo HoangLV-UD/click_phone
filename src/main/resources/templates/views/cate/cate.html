@@ -65,7 +65,7 @@
                             <table class="table-borderless w-100">
                                 <tr>
                                     <th style="width: 140px"><label class="form-label" for="name">Tên Danh mục</label><span class="required"> *</span></th>
-                                    <td><input class="form-control" type="text" name="name" id="name" onblur="onType(this)"></td>
+                                    <td><input class="form-control" type="text" name="categoryName" id="name" onblur="onType(this)"></td>
                                 </tr>
                             </table>
                         </div>
@@ -227,7 +227,8 @@
         let formData = $('#formAdd').serializeArray();
         console.log(formData);
         $.each(formData, function (i, v) {
-            data["" + v.name + ""] = v.value;
+            // data["" + v.name + ""] = v.value;
+            data[v.name] = v.value;
             console.log(v.name);
             console.log(v.value);
         });
