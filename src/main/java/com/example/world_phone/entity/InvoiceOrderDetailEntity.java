@@ -27,6 +27,26 @@ public class InvoiceOrderDetailEntity extends BaseEntity{
     @Column(name = "status")
     private String status;
 
+    @Basic
+    @Column(name = "NCC_ID")
+    private Long nccId;
+
+
+    @Basic
+    @Column(name = "NGAY_HEN_NHAP")
+    private String ngayHenNhap;
+
+
+    @Basic
+    @Column(name = "SL_THUC_NHAP")
+    private Long slThucNhap;
+
+
+    @Basic
+    @Column(name = "SL_CON_THIEU")
+    private String slConThieu;
+
+
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ROM_ID", referencedColumnName = "ID")
     private RomEntity romEntity;
@@ -101,5 +121,37 @@ public class InvoiceOrderDetailEntity extends BaseEntity{
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getNccId() {
+        return nccId;
+    }
+
+    public void setNccId(Long nccId) {
+        this.nccId = nccId;
+    }
+
+    public String getNgayHenNhap() {
+        return ngayHenNhap;
+    }
+
+    public void setNgayHenNhap(String ngayHenNhap) {
+        this.ngayHenNhap = ngayHenNhap;
+    }
+
+    public Long getSlThucNhap() {
+        return slThucNhap;
+    }
+
+    public void setSlThucNhap(Long slThucNhap) {
+        this.slThucNhap = slThucNhap;
+    }
+
+    public String getSlConThieu() {
+        return slConThieu;
+    }
+
+    public void setSlConThieu(String slConThieu) {
+        this.slConThieu = slConThieu;
     }
 }
