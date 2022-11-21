@@ -40,6 +40,6 @@ public class    InvoiceController {
         model.addAttribute("lstInvoiceOrder", lstInvoiceOrder);
         model.addAttribute("lstSupplier", lstSupplier);
 //        model.addAttribute("lstProduct", lstProduct);
-        return "views/invoice-order/008_import_invoice";
+        return "views/invoice-order/nhaphang";
     }
 }

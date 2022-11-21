@@ -410,7 +410,7 @@ function onClickEditInvoice(e) {
                 rowChinh.childNodes[1].textContent = data.orderDetail[i].productName;
                 rowChinh.childNodes[5].childNodes[1].textContent =  data.orderDetail[i].colorName;
                 rowChinh.childNodes[5].childNodes[3].textContent = data.orderDetail[i].colorId;
-                rowChinh.childNodes[7].childNodes[1].textContent =  data.orderDetail[i].productRomName + ' GB';
+                rowChinh.childNodes[7].childNodes[1].textContent =  data.orderDetail[i].productRomName;
                 rowChinh.childNodes[7].childNodes[3].textContent = data.orderDetail[i].productRomID;
                 rowChinh.childNodes[9].childNodes[1].value = data.orderDetail[i].quantityProduct;
                 rowChinh.childNodes[11].childNodes[1].value = data.orderDetail[i].priceProduce;

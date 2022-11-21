@@ -115,19 +115,40 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
             for (OrderInvoiceDetailRequest req: list
             ) {
                 InvoiceOrderDetailEntity entityDetail = mapToEntity(req);
-                if(!entityDetail.getStatus().equals(StatusOrderInvoiceDetail.DA_NHAP.getIndex())){
+                if(!entityDetail.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
                     entity.setStatus(StatusOrderInvoice.GIAO_THIEU.getIndex());
-                    orderRepo.save(entity);
+                    entity = orderRepo.save(entity);
                 }
                 entityDetail.setInvoiceOrderEntity(entity);
-                entityDetail.setMoneyInvoice(req.getMoneyInvoice());
+                entityDetail.setMoneyInvoice(req.getMoneyInvoice() == null ? 0 : req.getMoneyInvoice());
                 boolean check = true;
                 for (InvoiceOrderDetailEntity e: entityList
                 ) {
                     if(e.getColorEntity().getId() == entityDetail.getColorEntity().getId() && e.getRomEntity().getId() == entityDetail.getRomEntity().getId()){
                         entityDetail.setId(e.getId());
                         detailRepo.save(entityDetail);
-                        List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(e.getRomEntity().getId(), e.getColorEntity().getId());
+                        if (entityDetail.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
+                            List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(e.getRomEntity().getId(), e.getColorEntity().getId());
+                            if(list1.size() == 0){
+                                ProductPropertyEntity propertyEntity = new ProductPropertyEntity();
+                                propertyEntity.setQuantity(entityDetail.getQuantityInvoice());
+                                propertyEntity.setPrice(0);
+                                propertyEntity.setStatus("OFF");
+                                propertyEntity.setRomEntity(entityDetail.getRomEntity());
+                                propertyEntity.setColorEntity(entityDetail.getColorEntity());
+                                propertyProductRepo.save(propertyEntity);
+                            }else {
+                                list1.get(0).setQuantity(list1.get(0).getQuantity() + entityDetail.getQuantityInvoice());
+                                propertyProductRepo.save(list1.get(0));
+                            }
+                            check = false;
+                        }
+                        break;
+                    }
+                }
+                if(check){
+                    List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(entityDetail.getRomEntity().getId(), entityDetail.getColorEntity().getId());
+                    if (entityDetail.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
                         if(list1.size() == 0){
                             ProductPropertyEntity propertyEntity = new ProductPropertyEntity();
                             propertyEntity.setQuantity(entityDetail.getQuantityInvoice());
@@ -140,23 +161,6 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
                             list1.get(0).setQuantity(list1.get(0).getQuantity() + entityDetail.getQuantityInvoice());
                             propertyProductRepo.save(list1.get(0));
                         }
-                        check = false;
-                        break;
-                    }
-                }
-                if(check){
-                    List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(entityDetail.getRomEntity().getId(), entityDetail.getColorEntity().getId());
-                    if(list1.size() == 0){
-                        ProductPropertyEntity propertyEntity = new ProductPropertyEntity();
-                        propertyEntity.setQuantity(entityDetail.getQuantityInvoice());
-                        propertyEntity.setPrice(0);
-                        propertyEntity.setStatus("OFF");
-                        propertyEntity.setRomEntity(entityDetail.getRomEntity());
-                        propertyEntity.setColorEntity(entityDetail.getColorEntity());
-                        propertyProductRepo.save(propertyEntity);
-                    }else {
-                        list1.get(0).setQuantity(list1.get(0).getQuantity() + entityDetail.getQuantityInvoice());
-                        propertyProductRepo.save(list1.get(0));
                     }
                     detailRepo.save(entityDetail);
                 }
@@ -197,10 +201,12 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
             for (InvoiceOrderDetailEntity e: entityList
             ) {
                 if(e.getColorEntity().getId() == entityDetail.getColorEntity().getId() && e.getRomEntity().getId() == entityDetail.getRomEntity().getId()){
-                    List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(e.getRomEntity().getId(), e.getColorEntity().getId());
-                    if(list1.size() > 0 && !req.equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
-                        list1.get(0).setQuantity(list1.get(0).getQuantity() - e.getQuantityInvoice() + req.getQuantityInvoice());
-                        propertyProductRepo.save(list1.get(0));
+                    if (entityDetail.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
+                        List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(e.getRomEntity().getId(), e.getColorEntity().getId());
+                        if(list1.size() > 0 && !req.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
+                            list1.get(0).setQuantity(list1.get(0).getQuantity() - e.getQuantityInvoice() + req.getQuantityInvoice());
+                            propertyProductRepo.save(list1.get(0));
+                        }
                     }
                     entityDetail.setId(e.getId());
                     detailRepo.save(entityDetail);
@@ -209,19 +215,22 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
                 }
             }
             if(check){
-                List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(entityDetail.getRomEntity().getId(), entityDetail.getColorEntity().getId());
-                if(list1.size() == 0){
-                    ProductPropertyEntity propertyEntity = new ProductPropertyEntity();
-                    propertyEntity.setQuantity(entityDetail.getQuantityInvoice());
-                    propertyEntity.setPrice(0);
-                    propertyEntity.setStatus("OFF");
-                    propertyEntity.setRomEntity(entityDetail.getRomEntity());
-                    propertyEntity.setColorEntity(entityDetail.getColorEntity());
-                    propertyProductRepo.save(propertyEntity);
-                }else {
-                    list1.get(0).setQuantity(list1.get(0).getQuantity() + entityDetail.getQuantityInvoice());
-                    propertyProductRepo.save(list1.get(0));
+                if (entityDetail.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
+                    List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(entityDetail.getRomEntity().getId(), entityDetail.getColorEntity().getId());
+                    if(list1.size() == 0){
+                        ProductPropertyEntity propertyEntity = new ProductPropertyEntity();
+                        propertyEntity.setQuantity(entityDetail.getQuantityInvoice());
+                        propertyEntity.setPrice(0);
+                        propertyEntity.setStatus("OFF");
+                        propertyEntity.setRomEntity(entityDetail.getRomEntity());
+                        propertyEntity.setColorEntity(entityDetail.getColorEntity());
+                        propertyProductRepo.save(propertyEntity);
+                    }else {
+                        list1.get(0).setQuantity(list1.get(0).getQuantity() + entityDetail.getQuantityInvoice());
+                        propertyProductRepo.save(list1.get(0));
+                    }
                 }
+
                 detailRepo.save(entityDetail);
             }
 

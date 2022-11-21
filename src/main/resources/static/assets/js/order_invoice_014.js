@@ -40,22 +40,24 @@ function onClickSubmitEditOrderInvoice(e) {
         note = getNote.value;
     }
     let lstDetails = [];
-    let getTrProduct = document.getElementsByClassName('tr-order-edit-product');
+    let getTrProduct = document.getElementsByClassName('edit-product1');
     if (getTrProduct !== null && getTrProduct !== undefined) {
+        let count = 0;
         for (const $tr of getTrProduct) {
+            if(count === 0){
+                count ++;
+                continue;
+            }
 
-            if($tr.childNodes[9].childNodes[1].value <= 0){
+            if (Number($tr.childNodes[9].childNodes[1].value) <= 0) {
+                toastDanger("Lỗi", "Vui lòng nhập số lượng lớn hơn 0");
                 continue;
             }
             lstDetails.push({
-                "romId" : $tr.childNodes[7].childNodes[1].value,
-                "quantityInvoice" : $tr.childNodes[9].childNodes[1].value,
-                "colorId" : $tr.childNodes[5].childNodes[1].value
+                "romId" : $tr.childNodes[7].childNodes[3].innerText,
+                "quantityInvoice": $tr.childNodes[9].childNodes[1].value,
+                "colorId" : $tr.childNodes[5].childNodes[3].innerText,
             });
-
-            console.log($tr.childNodes[5].childNodes[1].value) // color
-            console.log($tr.childNodes[7].childNodes[1].value) // rom
-            console.log($tr.childNodes[9].childNodes[1].value) // quantity
 
         }
     }
@@ -174,6 +176,13 @@ function copy_row1(e){
 }
 
 function onClickEditOrderInvoice(e) {
+    const rowMain = document.getElementById("rowMain1");
+    const rowClone = rowMain.cloneNode(true);
+    const  table = document.getElementById("bodyEditProductOrderInvoice");
+    while (table.lastElementChild) {
+        table.removeChild(table.lastElementChild);
+    }
+    table.appendChild(rowClone);
     $.ajax({
         url: '/api/order-invoice/' + e.dataset.id,
         success: function (data) {
@@ -195,30 +204,17 @@ function onClickEditOrderInvoice(e) {
             }
             $('#ip-edit-order-invoice-note').val(data.note);
             $('.edit-quantity-product').val(0);
-            let getTrProduct = document.getElementsByClassName('tr-order-edit-product');
-            let table = document.getElementById("bodyEditProductOrderInvoice");
-            if (getTrProduct !== null && getTrProduct !== undefined) {
-                var count = data.orderDetail.length;
-                 for (const detail of data.orderDetail) {
-                    for (const $tr of getTrProduct) {
-                         if($tr.childNodes[1].childNodes[1].textContent === detail.productName && count > 0){
-                             var trClone = $tr.cloneNode(true);
-
-                             trClone.childNodes[5].childNodes[1].removeAttribute('id');
-                             console.log(detail.colorId)
-                             trClone.childNodes[5].childNodes[1].value = detail.colorId;
-
-                             console.log(trClone.childNodes[5].childNodes[1])
-                             trClone.childNodes[9].childNodes[1].value = detail.quantityProduct;
-                             trClone.childNodes[7].childNodes[1].value = detail.productRomID;
-                             copy_row1(trClone);
-                             count--;
-                             break;
-                         }else {
-
-                         }
-                    }
-                 }
+            for (let i = 0; i < data.orderDetail.length; i++){
+                const rowChinh = rowClone.cloneNode(true);
+                rowChinh.childNodes[1].textContent = data.orderDetail[i].productName;
+                rowChinh.childNodes[5].childNodes[1].textContent =  data.orderDetail[i].colorName;
+                rowChinh.childNodes[5].childNodes[3].textContent = data.orderDetail[i].colorId;
+                rowChinh.childNodes[7].childNodes[1].textContent =  data.orderDetail[i].productRomName;
+                rowChinh.childNodes[7].childNodes[3].textContent = data.orderDetail[i].productRomID;
+                rowChinh.childNodes[9].childNodes[1].value = data.orderDetail[i].quantityProduct;
+                rowChinh.removeAttribute("id");
+                rowChinh.removeAttribute("style");
+                table.appendChild(rowChinh);
             }
 
             console.log(data.status)

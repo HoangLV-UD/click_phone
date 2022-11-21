@@ -4,6 +4,7 @@ import com.example.world_phone.common.StatusOrderInvoice;
 import com.example.world_phone.common.StatusOrderInvoiceDetail;
 import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.dto.request.orderinvoice.OrderInvoiceRequest;
+import com.example.world_phone.dto.request.orderinvoicedetail.OrderInvoiceDetailRequest;
 import com.example.world_phone.dto.respone.order_invoice.OrderInvoiceRespone;
 import com.example.world_phone.entity.InvoiceOrderDetailEntity;
 import com.example.world_phone.entity.InvoiceOrderEntity;
@@ -71,6 +72,12 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
     @Override
     public String createNhap(OrderInvoiceRequest request) {
         if(request.getId().equals("0")){
+            for (OrderInvoiceDetailRequest req: request.getDetailRequest()
+            ) {
+                if(req.getStatus().equals("")){
+
+                }
+            }
             InvoiceOrderEntity entity = new InvoiceOrderEntity();
             entity.setTotalMoney(request.getTotalMoney());
             entity.setNote(request.getNote());

@@ -136,7 +136,7 @@ public class OrderServiceimpl implements IOrderService {
         java.sql.Date date=new java.sql.Date(millis);
         OrdersEntity entity = new OrdersEntity();
         if(request.getOrderType().equals("COUNTER")){
-            entity.setStatus(String.valueOf(StatusOrder.HOAN_THANH.getIndex()));
+            entity.setStatus(String.valueOf(StatusOrder.CHO_XUAT_HANG.getIndex()));
             entity.setTypeOrder(0);
         }else {
             entity.setStatus(String.valueOf(StatusOrder.CHO_GIAO_HANG.getIndex()));
@@ -257,6 +257,11 @@ public class OrderServiceimpl implements IOrderService {
     @Override
     public String exportOrder(OrderRequest request) {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
+        if(entity.getTypeOrder() == 0){
+            entity.setStatus(String.valueOf(StatusOrder.HOAN_THANH.getIndex()));
+            ordersRepo.save(entity);
+            return "ok";
+        }
         entity.setAddress(request.getRecipientAddress());
         entity.setReceiveDate(request.getDeliveryDate());
         entity.setStatus(String.valueOf(StatusOrder.CHO_GIAO_HANG.getIndex()));

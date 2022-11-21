@@ -1410,9 +1410,10 @@
                     for (let j = 0; j < data.romRespones.length; j++) {
                         for (let i = 0; i < rom.length; i++) {
                             opt = rom[i]
-                            if(opt.value === data.romRespones[j].name){
+                            if(opt.value === data.romRespones[j].name.replace(' GB', '')){
                                 arrOpt.push(opt.value);
                                 romDetail.innerHTML+='<option value="'+data.romRespones[j].id+'" >'+data.romRespones[j].name+'</option>'
+                                console.log(data.romRespones[j].id + '       ' + data.romRespones[j].name)
                                 break;
                             }
                         }
@@ -1425,29 +1426,29 @@
                     }else {
                         document.getElementById("btn-submit-edit-product-status").innerHTML = "Kinh doanh lại"
                     }
-                    if(data.romRespones[0].productPropertyResponeList.length > 0){
-                        for (let i = 0; i < data.romRespones[0].productPropertyResponeList.length; i++) {
-                            colorRom.innerHTML+='<option value="'+data.romRespones[0].productPropertyResponeList[i].colorId+'" >'+data.romRespones[0].productPropertyResponeList[i].colorName+'</option>'
-                        }
-                        $("#product-detai-qty").val(data.romRespones[0].productPropertyResponeList[0].quantity);
-                        $("#product-detai-priceString").val(data.romRespones[0].productPropertyResponeList[0].priceString);
-                        $("#product-detai-price").val(data.romRespones[0].productPropertyResponeList[0].price);
-                        $("#product-detai-imei").val(data.romRespones[0].productPropertyResponeList[0].countImei);
-                        $("#name-product-detail").val(data.nameProduct);
-                        if(data.romRespones[0].productPropertyResponeList[0].countImei < data.romRespones[0].productPropertyResponeList[0].quantity){
-                            $("#divImei").removeAttr('hidden');
-                        }else {
-                            $("#divImei").attr('hidden', true);
-                        }
-                        console.log(data.romRespones[0].productPropertyResponeList[0].status);
-                        $("#btn-submit-edit-product-detail-status").val("");
-                        if(data.romRespones[0].productPropertyResponeList[0].status === 'ON'){
-                            document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Ngừng kinh doanh"
-                        }else {
-                            document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Kinh doanh lại"
-                        }
-                        document.getElementById("updateDetail").style.display = "block";
-                    }
+                    // if(data.romRespones[0].productPropertyResponeList.length > 0){
+                    //     for (let i = 0; i < data.romRespones[0].productPropertyResponeList.length; i++) {
+                    //         colorRom.innerHTML+='<option value="'+data.romRespones[0].productPropertyResponeList[i].colorId+'" >'+data.romRespones[0].productPropertyResponeList[i].colorName+'</option>'
+                    //     }
+                    //     $("#product-detai-qty").val(data.romRespones[0].productPropertyResponeList[0].quantity);
+                    //     $("#product-detai-priceString").val(data.romRespones[0].productPropertyResponeList[0].priceString);
+                    //     $("#product-detai-price").val(data.romRespones[0].productPropertyResponeList[0].price);
+                    //     $("#product-detai-imei").val(data.romRespones[0].productPropertyResponeList[0].countImei);
+                    //     $("#name-product-detail").val(data.nameProduct);
+                    //     if(data.romRespones[0].productPropertyResponeList[0].countImei < data.romRespones[0].productPropertyResponeList[0].quantity){
+                    //         $("#divImei").removeAttr('hidden');
+                    //     }else {
+                    //         $("#divImei").attr('hidden', true);
+                    //     }
+                    //     console.log(data.romRespones[0].productPropertyResponeList[0].status);
+                    //     $("#btn-submit-edit-product-detail-status").val("");
+                    //     if(data.romRespones[0].productPropertyResponeList[0].status === 'ON'){
+                    //         document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Ngừng kinh doanh"
+                    //     }else {
+                    //         document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Kinh doanh lại"
+                    //     }
+                    //     document.getElementById("updateDetail").style.display = "block";
+                    // }
                     let checkDetail = true;
                     for (let pp = 0; pp < data.romRespones.length; pp++){
                         if(data.romRespones[pp].productPropertyResponeList.length > 0   ){

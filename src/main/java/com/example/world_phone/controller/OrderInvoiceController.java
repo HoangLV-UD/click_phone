@@ -10,7 +10,6 @@ import com.example.world_phone.service.IOrderInvoiceService;
 import com.example.world_phone.service.IProductService;
 import com.example.world_phone.service.ISupplierService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +49,6 @@ public class OrderInvoiceController {
         model.addAttribute("lstInvoiceOrder", lstInvoiceOrder);
         model.addAttribute("lstSupplier", lstSupplier);
 //        model.addAttribute("lstProduct", lstProduct);
-        return "views/invoice-order/order_invoice";
+        return "views/invoice-order/datncc";
     }
 }

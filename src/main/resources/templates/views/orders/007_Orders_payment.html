@@ -730,9 +730,9 @@
             errorMessage += 'Ngày giao hàng không hợp lệ!\n';
             flag = false;
         } else if ($('#btnSave').find('span').text() === 'Xác nhận đơn hàng' && moment($('#deliveryDate').val(),"DD/MM/YYYY") <= moment()) {
-            deliveryDate.addClass('error');
-            errorMessage += 'Ngày giao hàng phải sau ngày hiện tại!\n';
-            flag = false;
+            // deliveryDate.addClass('error');
+            // errorMessage += 'Ngày giao hàng phải sau ngày hiện tại!\n';
+            // flag = false;
         }
         //
         // const phoneNumber = $('#recipientPhone');
@@ -1267,7 +1267,7 @@
         data["recipientName"] = $('input[name=recipientName]').val();
         data["recipientPhone"] = $('input[name=recipientPhone]').val();
         data["recipientAddress"] = $('textarea[name=recipientAddress]').val();
-        data["deliveryDate"] = moment($('input[name=deliveryDate]').val(), 'DD-MM-YYYY').format('YYYY-MM-DD');
+        //data["deliveryDate"] = moment($('input[name=deliveryDate]').val(), 'DD-MM-YYYY').format('YYYY-MM-DD');
         data["voucherId"] = $('#inputVoucher').val();
         data["orderType"] = $('#create-order-type').prop('checked') ? "ORDER_ONLINE" : "COUNTER";
 
