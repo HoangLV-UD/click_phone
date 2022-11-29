@@ -1410,7 +1410,8 @@
                     for (let j = 0; j < data.romRespones.length; j++) {
                         for (let i = 0; i < rom.length; i++) {
                             opt = rom[i]
-                            if(opt.value === data.romRespones[j].name.replace(' GB', '')){
+                            console.log(opt)
+                            if(opt.value === data.romRespones[j].name){
                                 arrOpt.push(opt.value);
                                 romDetail.innerHTML+='<option value="'+data.romRespones[j].id+'" >'+data.romRespones[j].name+'</option>'
                                 console.log(data.romRespones[j].id + '       ' + data.romRespones[j].name)
@@ -1473,7 +1474,6 @@
                                 }
                                 document.getElementById("updateDetail").style.display = "block";
                                 checkDetail = false;
-                                break;
                             }
                             if(!checkDetail){
                                 break;
