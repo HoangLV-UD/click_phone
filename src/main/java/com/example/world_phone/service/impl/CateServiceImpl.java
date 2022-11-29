@@ -44,7 +44,7 @@ public class CateServiceImpl implements ICateService {
     public String save(CategoryDTO request) {
         Date now = new Date();
         CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setName(request.getCategoryName());
+        categoryEntity.setName(request.getName());
         categoryEntity.setCreateDate(new Timestamp(now.getTime()));
         categoryEntity.setCreateBy("Admin");
         categoryEntity.setModifierBy("Admin");
@@ -59,7 +59,7 @@ public class CateServiceImpl implements ICateService {
     public String edit(CategoryDTO request) {
         Date now = new Date();
         CategoryEntity entity = repo.getById(Long.valueOf(request.getId()));
-        entity.setName(request.getCategoryName());
+        entity.setName(request.getName());
         entity.setModifierBy("Admin");
         entity.setModifierDate(new Timestamp(now.getTime()));
         repo.save(entity);

@@ -67,13 +67,13 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public String updateCategory(CategoryDTO categoryDto) {
-        if(categoryDto.getCategoryName().trim().length() == 0){
+        if(categoryDto.getName().trim().length() == 0){
             throw new WorldPhoneExp(ConstansErrorCode.CATEGORY_NAME);
         }else {
 
            if(categoryRepo.findByIdAndDeleteFlagIsFalse(Long.valueOf(categoryDto.getId())).size() > 0){
               CategoryEntity categoryEntity = categoryRepo.findByIdAndDeleteFlagIsFalse(Long.valueOf(categoryDto.getId())).get(0);
-               categoryEntity.setName(categoryDto.getCategoryName());
+               categoryEntity.setName(categoryDto.getName());
 
                categoryEntity.setId(Long.valueOf(categoryDto.getId()));
                categoryRepo.save(categoryEntity);

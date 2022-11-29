@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class CategoryDTO {
     private String id;
-    private String categoryName;
+    private String name;
 //    private String parentId;
 //    private List<CategoryDTO> categoryChild;
 }

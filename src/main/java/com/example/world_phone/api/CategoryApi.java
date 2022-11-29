@@ -48,7 +48,7 @@ public class CategoryApi {
         CategoryEntity categoryEntity = categoryService.findById(categoryId);
         CategoryDTO categoryDto = CategoryDTO.builder()
                 .id(categoryId)
-                .categoryName(categoryEntity.getName())
+                .name(categoryEntity.getName())
                 .build();
         return categoryDto;
     }
