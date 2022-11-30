@@ -21,7 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -114,6 +116,9 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
             log.error(String.valueOf(new WorldPhoneExp(ConstansErrorCode.ROM_NOT_EXIST).getErrorMessage().getVn()));
             return "false";
         }
+        if(entityList.get(0).getPrice() == 0){
+            return "false";
+        }
         if(request.getStatus().equalsIgnoreCase("Ngừng kinh doanh")){
             entityList.get(0).setStatus(ConstansStatus.OFF);
         }else {
@@ -131,16 +136,31 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
             for (ProductPropertyEntity a: entityList
             ) {
                 long quantity = a.getQuantity();
-                for (String ime: imei
+                List<ImeiEntity> imeiEntityList = imeiRepo.findByDeleteFlagIsFalseAndPropertyProductId(a.getId());
+                List<String> imeiValue = imeiEntityList.stream().map(ImeiEntity:: getValue).collect(Collectors.toList());
+                imeiValue.addAll(imei);
+                Set<String> setImei = new HashSet<>(imeiValue);
+                int sizeImei = (int) (quantity - imeiEntityList.size());
+                for (String ime: setImei
                 ) {
-                    if(quantity > 0){
+                    int check  = 0;
+                    for (ImeiEntity entity:imeiEntityList
+                         ) {
+                        if(ime.equals(entity.getValue())){
+                            check = 1;
+                            break;
+                        }
+                    }
+                    if(sizeImei > 0 && check == 0){
                         ImeiEntity imeiEntity = new ImeiEntity();
                         imeiEntity.setValue(ime);
                         imeiEntity.setPropertyProductId(a.getId());
                         imeiEntity.setStatus(StatusImei.CHUA_BAN.getValue());
                         imeiRepo.save(imeiEntity);
-                        quantity--;
+                        sizeImei--;
                     }
+
+
                 }
             }
             return true;

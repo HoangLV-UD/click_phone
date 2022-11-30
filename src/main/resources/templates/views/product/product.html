@@ -1396,16 +1396,6 @@
                 method: 'GET',
                 success: function (data) {
                     console.log(data)
-                    // set rom cho check box
-                    // for (let i = 0; i < listRom.length; i++) {
-                    //     $("#edit-rom" + i).prop('checked', false);
-                    //     for (let j = 0; j < data.romRespones.length; j++) {
-                    //         if($("#edit-rom" + i).val() === data.romRespones[j].name){
-                    //             $("#edit-rom" + i).prop('checked', true);
-                    //             break;
-                    //         }
-                    //     }
-                    // }
                     var arrOpt = [];
                     for (let j = 0; j < data.romRespones.length; j++) {
                         for (let i = 0; i < rom.length; i++) {
@@ -1465,7 +1455,7 @@
                                 }else {
                                     $("#divImei").attr('hidden', true);
                                 }
-                                console.log(data.romRespones[pp].productPropertyResponeList[i].status);
+
                                 $("#btn-submit-edit-product-detail-status").val("");
                                 if(data.romRespones[pp].productPropertyResponeList[i].status === 'ON'){
                                     document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Ngừng kinh doanh"
@@ -1484,13 +1474,6 @@
                     if(checkDetail){
                         document.getElementById("updateDetail").style.display = "none";
                     }
-
-                    // else {
-                    //     document.getElementById("updateDetail").style.display = "none";
-                    // }
-
-
-
                     if (getElementProductName !== null) {
                         getElementProductName.value = data.nameProduct;
                     }
@@ -1541,13 +1524,13 @@
                                 //dataImageUploadEdit.push(data.image[i].img_link);
                             }
                         }
-                        console.log(dataImageUploadEdit.length)
+
                     }
 
                     CKEDITOR.instances['productEditDescription'].setData(data.note);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR)
+
                 }
             })
         }
@@ -1584,7 +1567,7 @@
                                 window.location.href = "/product";
                             },
                             error: function (error) {
-                                console.log(error);
+
                             }
                         })
                     );
@@ -1603,7 +1586,7 @@
         function onClickUpdateProductStatus(e) {
             let id = e.dataset.id;
             var check = document.getElementById("btn-submit-edit-product-status").innerText;
-            console.log(check);
+
             if(check === "Ngừng kinh doanh"){
                 $.ajax({
                     url: `/api/product/status/` + id + `/OFF`,
@@ -1761,7 +1744,7 @@
             }
 
 
-            console.log(lstDetails);
+
             if (lstDetails.length === 0) {
                 toastDanger('Lỗi', 'Vui lòng nhập số lượng ít nhất 1 sản phẩm');
                 return;
@@ -1811,7 +1794,7 @@
                 method: 'GET',
                 success: function (data) {
                     toastSuccess("Thành công","Thêm sản phẩm để đặt thành công");
-                    console.log(data);
+
                     const selectTemp = document.getElementById("romProduct");
                     const selectColor = document.getElementById("color");
                     for (let i = 0; i < data.romRespones.length; i++) {
@@ -1862,10 +1845,9 @@
         function changeColor(){
             document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "";
             var romId = $("#rom-product-detail").find(":selected").val();
-            console.log(romId);
+
             var colorId = $("#color-rom").find(":selected").val();
             var status = document.getElementById("btn-submit-edit-product-detail-status").innerText;
-            console.log(colorId);
             var request = {
                 "romId" : romId,
                 "colorId" : colorId
@@ -1902,7 +1884,6 @@
         function changeRom(){
             document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "";
             var romId = $("#rom-product-detail").find(":selected").val();
-            console.log(romId);
 
             var request = {
                 "romId" : romId
@@ -1917,7 +1898,6 @@
                 contentType: 'application/json',
                 data: JSON.stringify(request),
                 success : function (data) {
-                    console.log(data)
                     if(data === 'false'){
                         toastDanger("Lỗi", "Sản phẩm này chưa có màu, số lượng với giá, vui lòng chọn loại khác");
                         $("#product-detai-qty").val(0);
@@ -1954,9 +1934,6 @@
         function onClickUpdateProductStatusDetail() {
             var romId = $("#rom-product-detail").find(":selected").val();
             var colorId = $("#color-rom").find(":selected").val();
-            console.log(document.getElementById("btn-submit-edit-product-detail-status").innerText)
-            console.log(romId);
-            console.log(colorId);
 
             var request = {
                 "romId" : romId,
