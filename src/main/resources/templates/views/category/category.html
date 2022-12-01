@@ -45,7 +45,7 @@
 
                             <input type="hidden" class="check-item" th:value="${category.getCategoryId()}">
 
-                            <td class="text-center" th:text="${category.getCategoryName()}">tên danh mục</td>
+                            <td class="text-center" th:text="${category.getName()}">tên danh mục</td>
                         </tr>
                         </tbody>
                     </table>
@@ -97,7 +97,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title mt-0">Cập nhật loai he dieu hanh</h5>
+                    <h5 class="modal-title mt-0">Cập nhật danh mục</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formEdit">
@@ -105,7 +105,7 @@
                         <div class="row">
                             <table class="table-borderless w-100">
                                 <tr>
-                                    <th><label class="form-label" for="name-edit">Tên loai he dieu hanh</label><span class="required"> *</span></th>
+                                    <th><label class="form-label" for="name-edit">Tên danh mục</label><span class="required"> *</span></th>
                                     <td><input class="form-control" type="text" value="0" name="name" id="name-edit" onblur="onType(this)"></td>
                                 </tr>
                             </table>
@@ -312,6 +312,7 @@
 
     //API add Staff
     function addStaff(data) {
+        console.log(data)
         $.ajax({
             url: '/api/category',
             type: 'POST',
@@ -356,7 +357,11 @@
         let formData = $('#formEdit').serializeArray();
         $.each(formData, function (i, v) {
             data["" + v.name + ""] = v.value;
+            if(v.name === 'categoryName'){
+                data["name"] = v.value;
+            }
         });
+        console.log(data)
 
         if(validateForm('edit')) {
             editStaff(data);
@@ -413,7 +418,7 @@
             success: function (result) {
                 // Input image
                 console.log(result);
-                $('#name-edit').val(result.categoryName);
+                $('#name-edit').val(result.name);
                 $('#id-edit').val(result.categoryId);
                 $('.modal-edit-staff').modal('show');
             },

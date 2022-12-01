@@ -42,30 +42,24 @@ public class CateServiceImpl implements ICateService {
 
     @Override
     public String save(CategoryDTO request) {
-        CategoryEntity entity = new CategoryEntity();
-        entity.setName(request.getCategoryName());
-        entity.setCreateDate(new Timestamp(new Date().getTime()));
-        entity.setDeleteFlag(false);
-        repo.save(entity);
+        Date now = new Date();
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setName(request.getName());
+        categoryEntity.setCreateDate(new Timestamp(now.getTime()));
+        categoryEntity.setCreateBy("Admin");
+        categoryEntity.setModifierBy("Admin");
+        categoryEntity.setModifierDate(new Timestamp(now.getTime()));
+        categoryEntity.setStatus("1");
+        categoryEntity.setDeleteFlag(false);
+        repo.save(categoryEntity);
         return "ok";
     }
-//        Date now = new Date();
-//        CategoryEntity categoryEntity = new CategoryEntity();
-//        categoryEntity.setName(request.getCategoryName());
-//        categoryEntity.setCreateDate(new Timestamp(now.getTime()));
-//        categoryEntity.setCreateBy("Admin");
-//        categoryEntity.setModifierBy("Admin");
-//        categoryEntity.setModifierDate(new Timestamp(now.getTime()));
-//        categoryEntity.setStatus("1");
-//        categoryEntity.setDeleteFlag(false);
-//        repo.save(categoryEntity);
-//        return "ok";
 
     @Override
     public String edit(CategoryDTO request) {
         Date now = new Date();
         CategoryEntity entity = repo.getById(Long.valueOf(request.getId()));
-        entity.setName(request.getCategoryName());
+        entity.setName(request.getName());
         entity.setModifierBy("Admin");
         entity.setModifierDate(new Timestamp(now.getTime()));
         repo.save(entity);
