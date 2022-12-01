@@ -25,9 +25,9 @@ public class OrderInvoiceApi {
 
     @PostMapping("")
     public ResponseEntity<?> createOrderInvoice(@RequestBody OrderInvoiceRequest request){
-//        if (convertUtil.strToDate(request.getReceiveDate(), "dd-MM-yyyy").compareTo(new Date()) < 0) {
-//            throw new WorldPhoneExp(ConstansErrorCode.VOUCHER_DATE_NOT_PAST);
-//        }
+        if (convertUtil.strToDate(request.getReceiveDate(), "dd-MM-yyyy").compareTo(new Date()) < 0) {
+            throw new WorldPhoneExp(ConstansErrorCode.VOUCHER_DATE_NOT_PAST);
+        }
         if(request.getDetailRequest().size() == 0){
             throw new WorldPhoneExp(ConstansErrorCode.INVOICE_NOT_DETAIL);
         }
