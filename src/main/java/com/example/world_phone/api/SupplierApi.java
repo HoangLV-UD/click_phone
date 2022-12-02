@@ -32,6 +32,9 @@ public class SupplierApi {
 
     @PostMapping()
     private ResponseEntity addSupplier(@RequestBody SupplierRequestDTO requestDTO){
+        if(requestDTO.getAddress() == null || requestDTO.getAddress().length() == 0 || requestDTO.getName() == null || requestDTO.getName().length() == 0){
+            return ResponseEntity.badRequest().body(requestDTO);
+        }
         if(service.addSupplier(requestDTO) != null){
             return ResponseEntity.ok().body(requestDTO);
         }else {
@@ -41,6 +44,9 @@ public class SupplierApi {
 
     @PutMapping()
     private ResponseEntity updateSupplier(@RequestBody EditSupplierDto requestDTO){
+        if(requestDTO.getAddress() == null || requestDTO.getAddress().length() == 0 || requestDTO.getName() == null || requestDTO.getName().length() == 0){
+            return ResponseEntity.badRequest().body(requestDTO);
+        }
         if(service.updateSupplier(requestDTO) != null){
             return ResponseEntity.ok().body(requestDTO);
         }else {
