@@ -188,6 +188,7 @@ public class ProductServiceImpl implements IProductService {
         List<ProductResponse> list = new ArrayList<>();
         for (ProductEntity e: entities
              ) {
+            int check = 0;
             ProductResponse response = mapToRespone(e);
             List<RomEntity> romEntityList = e.getRomEntities();
             List<RomRespone> romRespones = new ArrayList<>();
@@ -198,29 +199,38 @@ public class ProductServiceImpl implements IProductService {
                 romRespone.setId(String.valueOf(r.getId()));
                 List<ProductPropertyRespone> productPropertyResponeList = new ArrayList<>();
                 List<ProductPropertyEntity> productPropertyEntityList = propertyProductRepo.findByRomAAndStatus(r.getId());
-                for (ProductPropertyEntity p: productPropertyEntityList
-                ) {
-                    Long imei = imeiRepo.countByPropertyProductId(p.getId());
-                    ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
+                if(productPropertyEntityList != null && productPropertyEntityList.size() > 0 ){
+                    for (ProductPropertyEntity p: productPropertyEntityList
+                    ) {
+                        if(p.getQuantity()  > 0){
+                            Long imei = imeiRepo.countByPropertyProductId(p.getId());
+                            ProductPropertyRespone productPropertyRespone = new ProductPropertyRespone();
+                            productPropertyRespone.setQuantity(p.getQuantity());
+                            productPropertyRespone.setId(String.valueOf(p.getId()));
+                            productPropertyRespone.setPrice(p.getPrice());
+                            productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
+                            productPropertyRespone.setColorName(p.getColorEntity().getValueColor());
+                            productPropertyRespone.setStatus(p.getStatus());
+                            List<ImeiEntity> list1 = imeiRepo.findByDeleteFlagIsFalseAndPropertyProductId(p.getId());
+                            productPropertyRespone.setImeiResponses(list1.stream().map(this::mapToImei).collect(Collectors.toList()));
+                            productPropertyRespone.setCountImei(imei == null ? 0L : imei);
+                            if(list1.size() > 0){
+                                check = 1;
+                                productPropertyResponeList.add(productPropertyRespone);
+                            }
+                        }
 
-                    productPropertyRespone.setQuantity(p.getQuantity());
-                    productPropertyRespone.setId(String.valueOf(p.getId()));
-                    productPropertyRespone.setPrice(p.getPrice());
-                    productPropertyRespone.setPriceString(convertUtil.moneyToStringFormat(p.getPrice()));
-                    productPropertyRespone.setColorName(p.getColorEntity().getValueColor());
-                    productPropertyRespone.setStatus(p.getStatus());
-                    List<ImeiEntity> list1 = imeiRepo.findByDeleteFlagIsFalseAndPropertyProductId(p.getId());
-                    productPropertyRespone.setImeiResponses(list1.stream().map(this::mapToImei).collect(Collectors.toList()));
-                    productPropertyRespone.setCountImei(imei == null ? 0L : imei);
-                    if(list1.size() > 0){
-                        productPropertyResponeList.add(productPropertyRespone);
                     }
+                    romRespone.setProductPropertyResponeList(productPropertyResponeList);
+                    romRespones.add(romRespone);
                 }
-                romRespone.setProductPropertyResponeList(productPropertyResponeList);
-                romRespones.add(romRespone);
+
             }
-            response.setRomRespones(romRespones);
-            list.add(response);
+            if(check == 1){
+                response.setRomRespones(romRespones);
+                list.add(response);
+            }
+
         }
 
         return list;

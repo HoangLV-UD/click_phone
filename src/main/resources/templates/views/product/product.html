@@ -1441,29 +1441,45 @@
                     //     document.getElementById("updateDetail").style.display = "block";
                     // }
                     let checkDetail = true;
-                    for (let pp = 0; pp < data.romRespones.length; pp++){
+                    for (let pp = 0; pp < 1; pp++){
                         if(data.romRespones[pp].productPropertyResponeList.length > 0   ){
                             for (let i = 0; i < data.romRespones[pp].productPropertyResponeList.length; i++) {
                                 colorRom.innerHTML+='<option value="'+data.romRespones[pp].productPropertyResponeList[i].colorId+'" >'+data.romRespones[pp].productPropertyResponeList[i].colorName+'</option>';
-                                $("#product-detai-qty").val(data.romRespones[pp].productPropertyResponeList[i].quantity);
-                                $("#product-detai-priceString").val(data.romRespones[pp].productPropertyResponeList[i].priceString);
-                                $("#product-detai-price").val(data.romRespones[pp].productPropertyResponeList[i].price);
-                                $("#product-detai-imei").val(data.romRespones[pp].productPropertyResponeList[i].countImei);
-                                $("#name-product-detail").val(data.nameProduct);
-                                if(data.romRespones[pp].productPropertyResponeList[i].countImei < data.romRespones[pp].productPropertyResponeList[i].quantity){
-                                    $("#divImei").removeAttr('hidden');
-                                }else {
-                                    $("#divImei").attr('hidden', true);
-                                }
+                                if(i == 0){
+                                    $("#product-detai-qty").val(data.romRespones[pp].productPropertyResponeList[i].quantity);
+                                    $("#product-detai-priceString").val(data.romRespones[pp].productPropertyResponeList[i].priceString);
+                                    $("#product-detai-price").val(data.romRespones[pp].productPropertyResponeList[i].price);
+                                    $("#product-detai-imei").val(data.romRespones[pp].productPropertyResponeList[i].countImei);
+                                    $("#name-product-detail").val(data.nameProduct);
+                                    if(data.romRespones[pp].productPropertyResponeList[i].countImei < data.romRespones[pp].productPropertyResponeList[i].quantity){
+                                        $("#divImei").removeAttr('hidden');
+                                    }else {
+                                        $("#divImei").attr('hidden', true);
+                                    }
 
-                                $("#btn-submit-edit-product-detail-status").val("");
-                                if(data.romRespones[pp].productPropertyResponeList[i].status === 'ON'){
-                                    document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Ngừng kinh doanh"
-                                }else {
-                                    document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Kinh doanh lại"
+                                    $("#btn-submit-edit-product-detail-status").val("");
+                                    if(data.romRespones[pp].productPropertyResponeList[i].status === 'ON'){
+                                        document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Ngừng kinh doanh"
+                                    }else {
+                                        document.getElementById("btn-submit-edit-product-detail-status").innerHTML = "Kinh doanh lại"
+                                    }
+                                    document.getElementById("updateDetail").style.display = "block";
+                                    checkDetail = false;
                                 }
+                            }
+                            if(!checkDetail){
+                                break;
+                            }
+
+                        }
+                    }
+                    for (let pp = 0; pp < data.romRespones.length; pp++){
+                        if(data.romRespones[pp].productPropertyResponeList.length > 0   ){
+                            for (let i = 0; i < data.romRespones[pp].productPropertyResponeList.length; i++) {
+                                $("#name-product-detail").val(data.nameProduct)
                                 document.getElementById("updateDetail").style.display = "block";
                                 checkDetail = false;
+
                             }
                             if(!checkDetail){
                                 break;
