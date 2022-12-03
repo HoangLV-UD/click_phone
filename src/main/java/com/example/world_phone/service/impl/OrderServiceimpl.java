@@ -1,5 +1,6 @@
 package com.example.world_phone.service.impl;
 
+import com.example.world_phone.common.StatusImei;
 import com.example.world_phone.common.StatusOrder;
 import com.example.world_phone.dto.request.order.OrderRequest;
 import com.example.world_phone.dto.request.orderdetail.OrderDetailRequest;
@@ -47,6 +48,8 @@ public class OrderServiceimpl implements IOrderService {
 
     private final VoucherRepo voucherRepo;
 
+
+    private final ImeiRepo imeiRepo;
     @Override
     public List<OrderRespone> findAllOrder() {
         List<OrdersEntity> entities = ordersRepo.findByDeleteFlagIsFalse();
@@ -283,11 +286,19 @@ public class OrderServiceimpl implements IOrderService {
         ordersEntity.setStatus(String.valueOf(StatusOrder.HUY.getIndex()));
         ordersRepo.save(ordersEntity);
         List<OrdersDetailEntity> list = ordersDetailRepo.findByDeleteFlagIsFalseAndOrdersEntity(ordersEntity);
+
         for (OrdersDetailEntity detail: list
              ) {
             ProductPropertyEntity propertyEntity = propertyProductRepo.getById(detail.getIdPropertyProduct());
             propertyEntity.setQuantity(detail.getQuantity() + propertyEntity.getQuantity());
             propertyProductRepo.save(propertyEntity);
+            List<ImeiEntity> imeiEntityList = imeiRepo.findByDeleteFlagIsFalseAndPropertyProductIdAndOrderDetailId(propertyEntity.getId(), detail.getId());
+            for (ImeiEntity entity : imeiEntityList){
+                entity.setStatus(StatusImei.CHUA_BAN.getValue());
+                entity.setOrderDetailId(null);
+                imeiRepo.save(entity);
+
+            }
         }
         return "ok";
     }
