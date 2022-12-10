@@ -1,14 +1,20 @@
 package com.example.world_phone.api;
 
+import com.example.world_phone.constant.ConstansErrorCode;
 import com.example.world_phone.dto.request.order.OrderRequest;
 import com.example.world_phone.dto.respone.order.OrderRespone;
+import com.example.world_phone.exception.WorldPhoneExp;
 import com.example.world_phone.service.IOrderDetailService;
 import com.example.world_phone.service.IOrderService;
+import com.example.world_phone.until.ConvertUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Description:
@@ -24,6 +30,8 @@ public class OrderApi {
     private final IOrderService orderService;
 
     private final IOrderDetailService detailService;
+
+    private final ConvertUtil convertUtil;
 
     @PostMapping("")
     public ResponseEntity<?> addOrder(@RequestBody OrderRequest request){
@@ -49,6 +57,13 @@ public class OrderApi {
 
     @PostMapping("confirm-order-sale-person")
     public ResponseEntity<?> confirmSaleOrders(@RequestBody OrderRequest request) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+        DateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = formatter.parse(request.getDeliveryDate().toString());
+
+//        if (convertUtil.strToDate(formatter1.format(formatter.parse(request.getDeliveryDate().toString())), "dd-MM-yyyy").compareTo(new Date()) < 0) {
+//            throw new WorldPhoneExp(ConstansErrorCode.VOUCHER_DATE_NOT_PAST);
+//        }
         String respone = orderService.confirmOrder(request);
         if(respone.equals("ok")){
             return ResponseEntity.ok().body(respone);

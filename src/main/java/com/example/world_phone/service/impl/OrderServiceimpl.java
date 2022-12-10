@@ -203,14 +203,19 @@ public class OrderServiceimpl implements IOrderService {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
         entity.setTotalMoney(Long.valueOf(request.getTotalMoney()));
         ordersRepo.save(entity);
+        for (OrdersDetailEntity entityDetail : entity.getOrdersDetailEntities()){
+            entityDetail.setDeleteFlag(true);
+            ordersDetailRepo.save(entityDetail);
+        }
         for (OrderDetailRequest detail : request.getDetailRequest()
              ) {
 
             if(detail.getId() != null && !detail.getId().equals("")){
                 String id = detail.getId().replace("orderDetail", "");
-                OrdersDetailEntity detailEntity = ordersDetailRepo.findByDeleteFlagIsFalseAndId(Long.valueOf(id));
+                OrdersDetailEntity detailEntity = ordersDetailRepo.findByDeleteFlagIsTrueAndId(Long.valueOf(id));
                 detailEntity.setQuantity(Long.valueOf(detail.getQuantity()));
                 detailEntity.setPrice(Long.valueOf(detail.getPrice()));
+                detailEntity.setDeleteFlag(false);
                 ordersDetailRepo.save(detailEntity);
             }else {
                 OrdersDetailEntity detailEntity = new OrdersDetailEntity();
@@ -218,6 +223,7 @@ public class OrderServiceimpl implements IOrderService {
                 detailEntity.setIdPropertyProduct(Long.valueOf(detail.getProductId().replace("productDetail", "")));
                 detailEntity.setQuantity(Long.valueOf(detail.getQuantity()));
                 detailEntity.setPrice(Long.valueOf(detail.getPrice()));
+                detailEntity.setDeleteFlag(false);
                 ordersDetailRepo.save(detailEntity);
             }
         }

@@ -238,6 +238,40 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public List<ProductResponse> getNameNhapHang(String name) {
+        List<ProductEntity> entities = productRepo.findByName(name);
+        if(entities.size() == 0){
+            throw new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST);
+        }
+
+        List<ProductResponse> list = new ArrayList<>();
+        for (ProductEntity e: entities
+        ) {
+            ProductResponse response = mapToRespone(e);
+            List<RomEntity> romEntityList = e.getRomEntities();
+            List<RomRespone> romRespones = new ArrayList<>();
+            for (RomEntity r: romEntityList
+            ) {
+                RomRespone romRespone = new RomRespone();
+                romRespone.setName(r.getName());
+                romRespone.setId(String.valueOf(r.getId()));
+                List<ProductPropertyRespone> productPropertyResponeList = new ArrayList<>();
+                List<ProductPropertyEntity> productPropertyEntityList = propertyProductRepo.findByRomAAndStatus(r.getId());
+
+                romRespone.setProductPropertyResponeList(productPropertyResponeList);
+                romRespones.add(romRespone);
+
+
+            }
+                response.setRomRespones(romRespones);
+                list.add(response);
+
+        }
+
+        return list;
+    }
+
+    @Override
     public String deleteProduct(Long id) {
         ProductEntity entity = productRepo.findByIdAndDeleteFlagIsFalse(id);
         if(entity == null){
