@@ -22,6 +22,7 @@ public class ChipPhucApi {
 
     @PostMapping
     public ResponseEntity<?> addScreen(@RequestBody ChipRequest request) {
+        System.out.println("hihihi");
         String status = service.createChip(request);
         if (status.equalsIgnoreCase("ok")) {
             return ResponseEntity.ok().body(request);
