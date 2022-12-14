@@ -31,7 +31,10 @@ public class IRomValueServiceImpl implements IRomValueService {
         List<RomValueEntity> entities = repo.findByDeleteFlagIsFalse();
         for (RomValueEntity e: entities
              ) {
-            list.add(new RomRespone(e.getId(), e.getName() + " " + e.getLoaiRomEntity().getName(), e.getLoaiRomEntity().getId()));
+            if(!e.getLoaiRomEntity().isDeleteFlag()){
+                list.add(new RomRespone(e.getId(), e.getName() + " " + e.getLoaiRomEntity().getName(), e.getLoaiRomEntity().getId()));
+            }
+
         }
         return list;
     }

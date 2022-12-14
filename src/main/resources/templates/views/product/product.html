@@ -2026,6 +2026,9 @@
                     $("#product-detai-priceString").val(data.priceString)
                     $("#product-detai-priceString").val(data.priceString);
                     toastSuccess("Thành công", "Cập nhập thành công");
+                    setTimeout(function () {
+                        location.reload()
+                    }, 2000)
                 },
                 error : function (error) {
                     console.log(error)

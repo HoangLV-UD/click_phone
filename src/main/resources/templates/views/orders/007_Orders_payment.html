@@ -729,12 +729,12 @@
             deliveryDate.addClass('error');
             errorMessage += 'Ngày giao hàng không hợp lệ!\n';
             flag = false;
-        } else if ($('#btnSave').find('span').text() === 'Xác nhận đơn hàng' && moment($('#deliveryDate').val(),"DD/MM/YYYY") <= moment()) {
+        } else if ($('#btnSave').find('span').text() === 'Xác nhận đơn hàng' && moment($('#deliveryDate').val(),"DD/MM/YYYY") < moment((new Date(),"DD/MM/YYYY"))){
             deliveryDate.addClass('error');
             errorMessage += 'Ngày giao hàng phải sau ngày hiện tại!\n';
             flag = false;
         }
-        if(moment($('#deliveryDate').val(),"DD/MM/YYYY") <= moment()){
+        if(moment($('#deliveryDate').val(),"DD/MM/YYYY") < moment((new Date(),"DD/MM/YYYY"))){
             deliveryDate.addClass('error');
             errorMessage += 'Ngày giao hàng phải sau ngày hiện tại!\n';
             flag = false;
