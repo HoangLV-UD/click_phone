@@ -17,6 +17,8 @@ import java.util.List;
 public interface OrdersDetailRepo extends JpaRepository<OrdersDetailEntity, Long> {
     List<OrdersDetailEntity> findByDeleteFlagIsFalseAndOrdersEntity(OrdersEntity ordersEntity);
 
+    OrdersDetailEntity findByDeleteFlagIsTrueAndId(Long id);
+
     OrdersDetailEntity findByDeleteFlagIsFalseAndId(Long id);
 
 }

@@ -203,14 +203,19 @@ public class OrderServiceimpl implements IOrderService {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
         entity.setTotalMoney(Long.valueOf(request.getTotalMoney()));
         ordersRepo.save(entity);
+        for (OrdersDetailEntity entityDetail : entity.getOrdersDetailEntities()){
+            entityDetail.setDeleteFlag(true);
+            ordersDetailRepo.save(entityDetail);
+        }
         for (OrderDetailRequest detail : request.getDetailRequest()
              ) {
 
             if(detail.getId() != null && !detail.getId().equals("")){
                 String id = detail.getId().replace("orderDetail", "");
-                OrdersDetailEntity detailEntity = ordersDetailRepo.findByDeleteFlagIsFalseAndId(Long.valueOf(id));
+                OrdersDetailEntity detailEntity = ordersDetailRepo.findByDeleteFlagIsTrueAndId(Long.valueOf(id));
                 detailEntity.setQuantity(Long.valueOf(detail.getQuantity()));
                 detailEntity.setPrice(Long.valueOf(detail.getPrice()));
+                detailEntity.setDeleteFlag(false);
                 ordersDetailRepo.save(detailEntity);
             }else {
                 OrdersDetailEntity detailEntity = new OrdersDetailEntity();
@@ -218,6 +223,7 @@ public class OrderServiceimpl implements IOrderService {
                 detailEntity.setIdPropertyProduct(Long.valueOf(detail.getProductId().replace("productDetail", "")));
                 detailEntity.setQuantity(Long.valueOf(detail.getQuantity()));
                 detailEntity.setPrice(Long.valueOf(detail.getPrice()));
+                detailEntity.setDeleteFlag(false);
                 ordersDetailRepo.save(detailEntity);
             }
         }
@@ -228,17 +234,6 @@ public class OrderServiceimpl implements IOrderService {
     @Override
     public String confirmOrder(OrderRequest request) throws ParseException {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
-        List<OrdersDetailEntity> list = ordersDetailRepo.findByDeleteFlagIsFalseAndOrdersEntity(entity);
-        for (OrdersDetailEntity detail: list
-             ) {
-            ProductPropertyEntity propertyEntity = propertyProductRepo.findById(detail.getIdPropertyProduct()).get();
-            if(propertyEntity.getQuantity() - detail.getQuantity() < 0){
-                return "false";
-            }else {
-                propertyEntity.setQuantity(propertyEntity.getQuantity() - detail.getQuantity());
-                propertyProductRepo.save(propertyEntity);
-            }
-        }
         entity.setAddress(request.getRecipientAddress());
         entity.setReceiveDate(request.getDeliveryDate());
         entity.setStatus(String.valueOf(StatusOrder.CHO_XUAT_HANG.getIndex()));
@@ -260,11 +255,26 @@ public class OrderServiceimpl implements IOrderService {
     @Override
     public String exportOrder(OrderRequest request) {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
+        List<OrdersDetailEntity> list = ordersDetailRepo.findByDeleteFlagIsFalseAndOrdersEntity(entity);
+        for (OrdersDetailEntity detail: list
+        ) {
+            ProductPropertyEntity propertyEntity = propertyProductRepo.findById(detail.getIdPropertyProduct()).get();
+            if(propertyEntity.getQuantity() - detail.getQuantity() < 0){
+                return "false";
+            }else {
+                propertyEntity.setQuantity(propertyEntity.getQuantity() - detail.getQuantity());
+                if(propertyEntity.getQuantity() == 0){
+                    propertyEntity.setStatus("OFF");
+                }
+                propertyProductRepo.save(propertyEntity);
+            }
+        }
         if(entity.getTypeOrder() == 0){
             entity.setStatus(String.valueOf(StatusOrder.HOAN_THANH.getIndex()));
             ordersRepo.save(entity);
             return "ok";
         }
+
         entity.setAddress(request.getRecipientAddress());
         entity.setReceiveDate(request.getDeliveryDate());
         entity.setStatus(String.valueOf(StatusOrder.CHO_GIAO_HANG.getIndex()));

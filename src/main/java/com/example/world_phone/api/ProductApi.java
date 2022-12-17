@@ -81,6 +81,16 @@ public class ProductApi {
     }
 
 
+    @GetMapping("/search1/{keyword}")
+    public ResponseEntity<List<ProductResponse>> searchProductByKeywordNhapHang(@PathVariable("keyword") String keyword) {
+        List<ProductResponse> productResponse = productService.getNameNhapHang(keyword);
+        if (Objects.nonNull(productResponse)) {
+            return ResponseEntity.ok(productResponse);
+        }
+        return ResponseEntity.badRequest().body(new ArrayList<>());
+    }
+
+
 
 
 }

@@ -1396,6 +1396,7 @@
                 method: 'GET',
                 success: function (data) {
                     console.log(data)
+                    $("#product-detai-imei").val(0);
                     var arrOpt = [];
                     for (let j = 0; j < data.romRespones.length; j++) {
                         for (let i = 0; i < rom.length; i++) {
@@ -1919,6 +1920,7 @@
                         $("#product-detai-qty").val(0);
                         $("#product-detai-price").val(0);
                         $("#product-detai-priceString").val('0 đ');
+                        $("#product-detai-imei").val(0);
                         return;
                     }
                     if(data[0].status === 'ON'){
@@ -2025,6 +2027,9 @@
                     $("#product-detai-priceString").val(data.priceString)
                     $("#product-detai-priceString").val(data.priceString);
                     toastSuccess("Thành công", "Cập nhập thành công");
+                    // setTimeout(function () {
+                    //     location.reload()
+                    // }, 2000)
                 },
                 error : function (error) {
                     console.log(error)

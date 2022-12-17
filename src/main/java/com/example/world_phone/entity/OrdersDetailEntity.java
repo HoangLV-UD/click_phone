@@ -1,5 +1,7 @@
 package com.example.world_phone.entity;
 
+import com.example.world_phone.dto.respone.ThongKeDto;
+
 import javax.persistence.*;
 
 /**
@@ -12,6 +14,31 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ordersdetail", schema = "world_phone", catalog = "")
+@NamedNativeQuery(
+        name = "thong_ke",
+        query =
+                "select distinct  p.IMAGE_KEY as img, p.NAME as nameProduct, r.NAME as romProduct, c.value_color as colorProduct, pp.PRICE as priceProduct, SUM(o.QUANTITY) as quantityDaBan from orders a\n" +
+                        "inner join ordersdetail o on a.ID = o.ORDER_ID\n" +
+                        "inner join property_product pp on o.PRODUCT_PROPERTY_ID = pp.ID\n" +
+                        "inner join rom r on pp.ROM_ID = r.ID\n" +
+                        "inner join color c on pp.COLOR_ID = c.ID\n" +
+                        "inner join product p on r.PRODUCT_ID = p.ID where o.DELETE_FLAG = false and MONTH(o.CREATE_DATE) = :month and YEAR(o.CREATE_DATE) = :year group by o.PRICE limit 10;\n",
+        resultSetMapping = "stock_akhir_dto"
+)
+@SqlResultSetMapping(
+        name = "stock_akhir_dto",
+        classes = @ConstructorResult(
+                targetClass = ThongKeDto.class,
+                columns = {
+                        @ColumnResult(name = "img", type = String.class),
+                        @ColumnResult(name = "nameProduct", type = String.class),
+                        @ColumnResult(name = "romProduct", type = String.class),
+                        @ColumnResult(name = "colorProduct", type = String.class),
+                        @ColumnResult(name = "priceProduct", type = String.class),
+                        @ColumnResult(name = "quantityDaBan", type = String.class)
+                }
+        )
+)
 public class OrdersDetailEntity extends BaseEntity{
     @Id
     @Column(name = "ID")

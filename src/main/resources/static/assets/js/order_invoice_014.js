@@ -96,7 +96,8 @@ function onClickSubmitEditOrderInvoice(e) {
             }, 2000)
         },
         error: function (error) {
-            toastDanger('Lỗi', error);
+            console.log(error.responseJSON)
+            toastDanger('Lỗi', error.responseJSON.vn + '\n Gửi mã lỗi này cho bộ phận IT để có thể kiểm tra ' + error.responseJSON.code);
         }
     })
 }

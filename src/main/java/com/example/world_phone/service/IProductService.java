@@ -18,6 +18,8 @@ public interface IProductService {
 
     List<ProductResponse> getName(String name);
 
+    List<ProductResponse> getNameNhapHang(String name);
+
     String deleteProduct(Long id);
 
     String editStatusProduct(Long id, String value);

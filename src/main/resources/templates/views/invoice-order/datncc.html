@@ -548,7 +548,7 @@
             })
             $('.add-product:not(:first)').remove();
             $.ajax({
-                url: `/api/product/search/${keyword}`,
+                url: `/api/product/search1/${keyword}`,
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (res) {
