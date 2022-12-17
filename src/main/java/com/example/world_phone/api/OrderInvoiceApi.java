@@ -25,7 +25,7 @@ public class OrderInvoiceApi {
 
     @PostMapping("")
     public ResponseEntity<?> createOrderInvoice(@RequestBody OrderInvoiceRequest request){
-        if (convertUtil.strToDate(request.getReceiveDate(), "dd-MM-yyyy").compareTo(new Date()) < 0) {
+        if (request.getReceiveDate() != null && convertUtil.strToDate(request.getReceiveDate(), "dd-MM-yyyy").compareTo(new Date()) < 0) {
             throw new WorldPhoneExp(ConstansErrorCode.VOUCHER_DATE_NOT_PAST);
         }
         if(request.getDetailRequest().size() == 0){
@@ -72,7 +72,11 @@ public class OrderInvoiceApi {
 
     @GetMapping("{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Long id){
+        if(id == 0){
+            return ResponseEntity.ok().body(null);
+        }
         OrderInvoiceRespone respone = orderInvoiceService.findById(id);
+
         if(respone != null){
             return ResponseEntity.ok().body(respone);
         }
