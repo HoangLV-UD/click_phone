@@ -12,13 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 03/07/2022
- * Project_name: com.example.world_phone.service.impl
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -31,7 +24,7 @@ public class ChipServiceImpl implements IChipService {
         List<ChipRespone> list = new ArrayList<>();
         List<ChipEntity> entities = repo.findByDeleteFlagIsFalse();
         for (ChipEntity e: entities
-             ) {
+        ) {
             list.add(new ChipRespone(String.valueOf(e.getId()), e.getName()));
         }
         return list;
@@ -63,7 +56,7 @@ public class ChipServiceImpl implements IChipService {
     @Override
     public String deleteChip(Long id) {
         ChipEntity chip = repo.getById(id);
-       chip.setDeleteFlag(true);
+        chip.setDeleteFlag(true);
         repo.save(chip);
         return "ok";
     }
