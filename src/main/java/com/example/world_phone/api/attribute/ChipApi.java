@@ -22,7 +22,7 @@ public class ChipApi {
     private IChipService service;
 
     @GetMapping("/{id}")
-    public ChipRespone findById(@PathVariable("id") String id) {
+    public ChipRespone findByCate(@PathVariable("id") String id) {
         return service.findById(id);
     }
 
