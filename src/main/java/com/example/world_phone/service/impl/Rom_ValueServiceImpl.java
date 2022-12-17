@@ -61,7 +61,7 @@
 //    }
 //
 //    @Override
-//    public Rom_ValueRespone findById(String id) {
+//    public Rom_ValueRespone findByCate(String id) {
 //        RomValueEntity entity = repo.getById(Long.valueOf(id));
 //        return new Rom_ValueRespone(entity.getId(), entity.getName(), entity.getLoaiRomEntity().getId());
 //    }

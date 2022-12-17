@@ -1,6 +1,6 @@
 package com.example.world_phone.service.impl;
 
-import com.example.world_phone.dto.request.attribute.chip.ChipRequest;
+import com.example.world_phone.dto.request.attribute.chip.ChipRequestDto;
 import com.example.world_phone.dto.respone.attribute.chip.ChipRespone;
 import com.example.world_phone.entity.ChipEntity;
 import com.example.world_phone.repo.ChipRepo;
@@ -38,13 +38,13 @@ public class ChipServiceImpl implements IChipService {
     }
 
     @Override
-    public ChipRespone findById(String id) {
+    public ChipRespone findByCate(String id) {
         ChipEntity chip = repo.getById(Long.valueOf(id));
         return new ChipRespone(String.valueOf(chip.getId()), chip.getName());
     }
 
     @Override
-    public String createChip(ChipRequest request) {
+    public String createChip(ChipRequestDto request) {
         ChipEntity chip = new ChipEntity();
         chip.setName(request.getName());
         repo.save(chip);
@@ -52,7 +52,7 @@ public class ChipServiceImpl implements IChipService {
     }
 
     @Override
-    public String updateChip(ChipRequest request) {
+    public String updateChip(ChipRequestDto request) {
         ChipEntity chip = new ChipEntity();
         chip.setName(request.getName());
         chip.setId(Long.valueOf(request.getId()));

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChipRequest {
+public class ChipRequestDto {
     private String id;
     private String name;
 }

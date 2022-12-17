@@ -1,6 +1,6 @@
 package com.example.world_phone.service;
 
-import com.example.world_phone.dto.request.attribute.chip.ChipRequest;
+import com.example.world_phone.dto.request.attribute.chip.ChipRequestDto;
 import com.example.world_phone.dto.respone.attribute.chip.ChipRespone;
 
 import java.util.List;
@@ -15,11 +15,11 @@ import java.util.List;
 public interface IChipService {
     List<ChipRespone> findAll();
 
-    ChipRespone findById(String id);
+    ChipRespone findByCate(String id);
 
-    String createChip(ChipRequest request);
+    String createChip(ChipRequestDto request);
 
-    String updateChip(ChipRequest request);
+    String updateChip(ChipRequestDto request);
 
-    String deleteChip(Long id);
+    String deleteChip(Long idChip);
 }
