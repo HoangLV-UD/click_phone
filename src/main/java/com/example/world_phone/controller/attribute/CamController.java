@@ -1,5 +1,6 @@
 package com.example.world_phone.controller.attribute;
 
+import com.example.world_phone.service.ICamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
