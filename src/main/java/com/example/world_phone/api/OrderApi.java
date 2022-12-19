@@ -35,8 +35,13 @@ public class OrderApi {
 
     @PostMapping("")
     public ResponseEntity<?> addOrder(@RequestBody OrderRequest request){
-        orderService.addOrder(request);
-        return ResponseEntity.ok().body(request);
+         String a = orderService.addOrder(request);
+        if(a.equals("ok")){
+            return ResponseEntity.ok().body(request);
+        }else {
+            return ResponseEntity.badRequest().body(a);
+        }
+
     }
 
     @GetMapping("{id}")

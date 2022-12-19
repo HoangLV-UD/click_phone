@@ -128,7 +128,9 @@ public class OrderServiceimpl implements IOrderService {
     @Override
     public String addOrder(OrderRequest request) {
         CustomerEntity customerEntity = customerRepo.findByPhoneNumber(request.getPhoneNumber());
+
         VoucherEntity voucherEntity = null;
+
         if(customerEntity == null){
             customerEntity = new CustomerEntity();
             customerEntity.setPhoneNumber(request.getPhoneNumber());
@@ -137,12 +139,18 @@ public class OrderServiceimpl implements IOrderService {
         }
         long millis=System.currentTimeMillis();
         java.sql.Date date=new java.sql.Date(millis);
+        if(request.getVoucherId() != null && request.getVoucherId().length() > 0){
+            voucherEntity = voucherRepo.getByEndDate(date,request.getVoucherId());
+            if(voucherEntity == null){
+                return "Voucher không tồn tại";
+            }
+        }
         OrdersEntity entity = new OrdersEntity();
         if(request.getOrderType().equals("COUNTER")){
             entity.setStatus(String.valueOf(StatusOrder.CHO_XUAT_HANG.getIndex()));
             entity.setTypeOrder(0);
         }else {
-            entity.setStatus(String.valueOf(StatusOrder.CHO_GIAO_HANG.getIndex()));
+            entity.setStatus(String.valueOf(StatusOrder.CHO_XUAT_HANG.getIndex()));
             entity.setTypeOrder(1);
         }
         entity.setStatusPay(0);
@@ -167,8 +175,8 @@ public class OrderServiceimpl implements IOrderService {
                 detailEntity.setPrice(propertyEntity.getPrice());
                 tong+=propertyEntity.getPrice();
             }
-            propertyEntity.setQuantity(propertyEntity.getQuantity() - Long.parseLong(detail.getQuantity()));
-            propertyProductRepo.save(propertyEntity);
+            //propertyEntity.setQuantity(propertyEntity.getQuantity() - Long.parseLong(detail.getQuantity()));
+            //propertyProductRepo.save(propertyEntity);
             ordersDetailRepo.save(detailEntity);
         }
         if(request.getVoucherId() != null){

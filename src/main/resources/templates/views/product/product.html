@@ -1915,6 +1915,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify(request),
                 success : function (data) {
+                    console.log(data)
                     if(data === 'false'){
                         toastDanger("Lỗi", "Sản phẩm này chưa có màu, số lượng với giá, vui lòng chọn loại khác");
                         $("#product-detai-qty").val(0);

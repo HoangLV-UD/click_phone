@@ -24,7 +24,6 @@ public class CateController {
     public String index(Model model){
         List<CategoryResponeDto> list = service.findAll();
         model.addAttribute("listcategory", list);
-        System.out.println(list);
         return "views/cate/cate";
     }
 }
