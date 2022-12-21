@@ -1086,7 +1086,7 @@
                     }).then(()=> window.location.reload());
                 },
                 error: function (error) {
-                    console.log(error.status);
+                    console.log(error.responseText);
                     if(Number(error.status) === 200){
                         $('.modal-info-order').modal('hide');
                         confirmListOrderDetail('CONFIRM');
@@ -1104,7 +1104,7 @@
                         })
                         Toast.fire({
                             icon: 'error',
-                            title: "Lỗi hệ thống!\nVui lòng thử lại sau"
+                            title: "Lỗi hệ thống!\n " + error.responseText
                         })
                     }
 

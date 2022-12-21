@@ -414,6 +414,9 @@ function onClickEditInvoice(e) {
             console.log(data)
             for (let i = 0; i < data.orderDetail.length; i++){
                 const rowChinh = rowClone.cloneNode(true);
+                if(Number(data.orderDetail[i].status) === 2){
+                    rowChinh.childNodes[3].childNodes[1].setAttribute("hidden", true);
+                }
                 rowChinh.childNodes[1].textContent = data.orderDetail[i].productName;
                 rowChinh.childNodes[5].childNodes[1].textContent =  data.orderDetail[i].colorName;
                 rowChinh.childNodes[5].childNodes[3].textContent = data.orderDetail[i].colorId;

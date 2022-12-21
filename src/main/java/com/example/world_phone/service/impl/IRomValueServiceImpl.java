@@ -3,7 +3,10 @@ package com.example.world_phone.service.impl;
 import com.example.world_phone.dto.request.attribute.rom.RomRequest;
 import com.example.world_phone.dto.respone.attribute.rom.RomRespone;
 import com.example.world_phone.entity.LoaiRomEntity;
+import com.example.world_phone.entity.RomEntity;
 import com.example.world_phone.entity.RomValueEntity;
+import com.example.world_phone.repo.LoaiRomRepo;
+import com.example.world_phone.repo.RomRepo;
 import com.example.world_phone.repo.RomValueRepo;
 import com.example.world_phone.service.IRomValueService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,10 @@ import java.util.List;
 @Slf4j
 public class IRomValueServiceImpl implements IRomValueService {
     private final RomValueRepo repo;
+
+    private final RomRepo romRepo;
+
+    private final LoaiRomRepo loaiRomRepo;
     @Override
     public List<RomRespone> findAll() {
         List<RomRespone> list = new ArrayList<>();
@@ -54,10 +61,17 @@ public class IRomValueServiceImpl implements IRomValueService {
     @Override
     public String update(RomRequest request) {
         RomValueEntity entity = repo.getById(request.getId());
-        LoaiRomEntity loaiRomEntity = new LoaiRomEntity();
-        loaiRomEntity.setId(request.getLoaiRomId());
+        String old = entity.getName() + " " + entity.getLoaiRomEntity().getName();
+        LoaiRomEntity loaiRomEntity = loaiRomRepo.getById(request.getLoaiRomId());
         entity.setLoaiRomEntity(loaiRomEntity);
         entity.setName(request.getName());
+        String newName = entity.getName() + " " + loaiRomEntity.getName();
+        List<RomEntity> list = romRepo.findByName(old);
+        for (RomEntity entity1 : list){
+            entity1.setName(newName);
+            romRepo.save(entity1);
+        }
+
         repo.save(entity);
         return "ok";
     }
@@ -73,7 +87,6 @@ public class IRomValueServiceImpl implements IRomValueService {
     @Override
     public RomRespone findById(Long id) {
         RomValueEntity entity = repo.getById(id);
-        System.out.println("sssssssssssss"+entity);
         return new RomRespone(entity.getId(), entity.getName(),entity.getLoaiRomEntity().getId());
     }
 }

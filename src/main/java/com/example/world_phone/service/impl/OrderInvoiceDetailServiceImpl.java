@@ -206,6 +206,9 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
                         entityDetail.setId(e.getId());
                         entityDetail.setQuantityInvoice(e.getQuantityInvoice());
                         entityDetail.setStatus(e.getStatus());
+                        if(entityDetail.getMoneyInvoice() <= 0){
+                            entityDetail.setMoneyInvoice(e.getMoneyInvoice());
+                        }
                         detailRepo.save(entityDetail);
                         check = false;
                         break;

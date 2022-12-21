@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 public interface OrdersRepo extends JpaRepository<OrdersEntity, Long> {
 
-    List<OrdersEntity> findByDeleteFlagIsFalse();
+    List<OrdersEntity> findByDeleteFlagIsFalseOrderByCreateDateDesc();
 
 
     OrdersEntity findByCodeOrderAndDeleteFlagIsFalse(String id);
