@@ -261,14 +261,21 @@ function valueDateInvoice(
                     toastDanger("Lỗi", "Vui lòng nhập số lượng lớn hơn 0");
                     return;
                 }
-                if($tr.childNodes[11].childNodes[1].value <= 0){
+
+                var e = $tr.childNodes[15].childNodes[1];
+                if($tr.childNodes[11].childNodes[1].value > 0 && Number(e.options[e.selectedIndex].value) == 3){
+                    toastDanger("Lỗi", "Bạn phải huỷ sản phẩm do NCC hết hàng hoặc để giá tiền bằng 0");
+                    return ;
+                }
+
+                if($tr.childNodes[11].childNodes[1].value > 0 && Number(e.options[e.selectedIndex].value) == 1){
+                    toastDanger("Lỗi", "Sản phẩm đang nhập thì giá tiền bằng 0");
+                    return ;
+                }
+                if($tr.childNodes[11].childNodes[1].value <= 0 && Number(e.options[e.selectedIndex].value) == 2){
                     toastDanger("Lỗi", "Vui lòng nhập giá tiền lớn hơn 0");
                     return;
                 }
-
-                //console.log($tr.childNodes[15].childNodes[1].options[e.selectedIndex].text)
-                var e = $tr.childNodes[15].childNodes[1];
-                console.log(e.options[e.selectedIndex].value)
                 lstDetails.push({
                     "romId" : $tr.childNodes[7].childNodes[3].innerText,
                     "colorId" : $tr.childNodes[5].childNodes[3].innerText,
@@ -542,20 +549,24 @@ function valueDateInvoiceEdit(
                     return;
                 }
                 var e = $tr.childNodes[15].childNodes[1];
-                if($tr.childNodes[11].childNodes[1].value <= 0 ){
-                    if(Number(e.options[e.selectedIndex].value) < 3){
-                        toastDanger("Lỗi", "Vui lòng nhập giá tiền lớn hơn 0");
-                        return;
-                    }
 
-                }
 
                 if($tr.childNodes[11].childNodes[1].value > 0 && Number(e.options[e.selectedIndex].value) == 3){
-                    toastDanger("Lỗi", "Bạn huỷ sản phẩm do NCC hết hàng hoặc để giá tiền bằng 0");
+                    toastDanger("Lỗi", "Bạn phải huỷ sản phẩm do NCC hết hàng hoặc để giá tiền bằng 0");
                     return ;
                 }
 
-                console.log($tr.childNodes[11].childNodes[1].value)
+                if($tr.childNodes[11].childNodes[1].value > 0 && Number(e.options[e.selectedIndex].value) == 1){
+                    toastDanger("Lỗi", "Sản phẩm đang nhập thì giá tiền bằng 0");
+                    return ;
+                }
+
+                if($tr.childNodes[11].childNodes[1].value <= 0 && Number(e.options[e.selectedIndex].value) == 2){
+                    toastDanger("Lỗi", "Vui lòng nhập giá tiền lớn hơn 0");
+                    return;
+                }
+
+
                 lstDetails.push({
                     "romId" : $tr.childNodes[7].childNodes[3].innerText,
                     "colorId" : $tr.childNodes[5].childNodes[3].innerText,

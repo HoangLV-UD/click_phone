@@ -151,14 +151,7 @@ function onClickCancelOrderInvoice(e) {
             }, 2000)
         },
         error: function (error) {
-            if (error.responseJSON.vn === null || error.responseJSON.vn === undefined) {
-                let message = error.responseJSON.message + '';
-                message = message.substring(message.indexOf(':') + 1)
-                console.log(message)
-                toastDanger('Lỗi', message);
-                return;
-            }
-            toastDanger('Lỗi', error.responseJSON.vn);
+            toastDanger('Lỗi', error.responseText);
         }
     })
 }

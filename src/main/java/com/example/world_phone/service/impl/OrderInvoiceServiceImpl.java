@@ -229,6 +229,9 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
     public String changeStatus(Long id, String message) {
         InvoiceOrderEntity entity = orderRepo.findByIdAndDeleteFlagIsFalse(id);
         if(message.equals("true")){
+            if(entity.getStatus().equals(StatusOrderInvoice.DA_NHAN.getIndex()) || entity.getStatus().equals(StatusOrderInvoice.GIAO_THIEU.getIndex())){
+                return "false";
+            }
             entity.setStatus(StatusOrderInvoice.HUY.getIndex());
             orderRepo.save(entity);
         }else {

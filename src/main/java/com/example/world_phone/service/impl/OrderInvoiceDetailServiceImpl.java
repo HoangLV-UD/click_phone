@@ -200,7 +200,16 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
             }
             for (InvoiceOrderDetailEntity e: entityList
             ) {
+
                 if(e.getColorEntity().getId() == entityDetail.getColorEntity().getId() && e.getRomEntity().getId() == entityDetail.getRomEntity().getId()){
+                    if(e.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
+                        entityDetail.setId(e.getId());
+                        entityDetail.setQuantityInvoice(e.getQuantityInvoice());
+                        entityDetail.setStatus(e.getStatus());
+                        detailRepo.save(entityDetail);
+                        check = false;
+                        break;
+                    }
                     if (entityDetail.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
                         List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(e.getRomEntity().getId(), e.getColorEntity().getId());
                         if(list1.size() > 0 && req.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
@@ -264,14 +273,16 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
             if(check){
                 List<ProductPropertyEntity> list1 = propertyProductRepo.findByRomAndColor(e.getRomEntity().getId(), e.getColorEntity().getId());
 
-                list1.get(0).setQuantity(list1.get(0).getQuantity() - e.getQuantityInvoice());
-                if(list1.get(0).getQuantity() <= 0){
-                    list1.get(0).setStatus("OFF");
-                    list1.get(0).setQuantity(0);
-                }
-                propertyProductRepo.save(list1.get(0));
-                e.setDeleteFlag(true);
-                detailRepo.save(e);
+               if(list1 != null && list1.size() > 0 && !e.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
+                   list1.get(0).setQuantity(list1.get(0).getQuantity() - e.getQuantityInvoice());
+                   if(list1.get(0).getQuantity() <= 0){
+                       list1.get(0).setStatus("OFF");
+                       list1.get(0).setQuantity(0);
+                   }
+                   propertyProductRepo.save(list1.get(0));
+                   e.setDeleteFlag(true);
+                   detailRepo.save(e);
+               }
             }
         }
         return "ok";

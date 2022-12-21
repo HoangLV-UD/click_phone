@@ -67,7 +67,7 @@ public class OrderInvoiceApi {
         if(check.equals("ok")){
             return ResponseEntity.ok().body("ok");
         }
-        return ResponseEntity.badRequest().body("false");
+        return ResponseEntity.badRequest().body("Đơn hàng đã nhận không thể ");
     }
 
     @GetMapping("{id}")
