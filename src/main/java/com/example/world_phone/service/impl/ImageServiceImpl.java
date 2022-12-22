@@ -29,7 +29,7 @@ public class ImageServiceImpl implements IImageService {
         }
         for (int i = 1; i < image.size(); i++){
             ImageEntity entity = new ImageEntity();
-            entity.setCreateBy((String) sessionUtil.getObject("username"));
+            entity.setCreateBy("ADMIN");
             entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
             entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
             entity.setModifierBy((String) sessionUtil.getObject("username"));
@@ -49,7 +49,7 @@ public class ImageServiceImpl implements IImageService {
         }
         for (int i = 0; i < image.size(); i++){
             ImageEntity entity = new ImageEntity();
-            entity.setCreateBy((String) sessionUtil.getObject("username"));
+            entity.setCreateBy("ADMIN");
             entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
             entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
             entity.setModifierBy((String) sessionUtil.getObject("username"));

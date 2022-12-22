@@ -353,7 +353,7 @@ public class ProductServiceImpl implements IProductService {
         entity.setCategory(categoryEntity);
         entity.setName(x.getNameProduct());
         entity.setStatus("ON");
-        entity.setCreateBy((String) sessionUtil.getObject("username"));
+        entity.setCreateBy("ADMIN");
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy((String) sessionUtil.getObject("username"));

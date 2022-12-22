@@ -327,7 +327,7 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
         entity.setStatus(request.getStatus());
         entity.setNote(request.getNote());
         entity.setRomEntity(romEntity);
-        entity.setCreateBy((String) sessionUtil.getObject("username"));
+        entity.setCreateBy("ADMIN");
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy((String) sessionUtil.getObject("username"));

@@ -136,7 +136,7 @@ public class RomServiceImpl implements IRomService {
     public  RomEntity mapToEntity(RomRequestAdd a){
         RomEntity entity = new RomEntity();
         entity.setStatus("ON");
-        entity.setCreateBy((String) sessionUtil.getObject("username"));
+        entity.setCreateBy("ADMIN");
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy((String) sessionUtil.getObject("username"));
