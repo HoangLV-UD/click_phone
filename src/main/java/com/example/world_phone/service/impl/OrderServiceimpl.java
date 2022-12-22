@@ -52,7 +52,7 @@ public class OrderServiceimpl implements IOrderService {
     private final ImeiRepo imeiRepo;
     @Override
     public List<OrderRespone> findAllOrder() {
-        List<OrdersEntity> entities = ordersRepo.findByDeleteFlagIsFalse();
+        List<OrdersEntity> entities = ordersRepo.findByDeleteFlagIsFalseOrderByCreateDateDesc();
         List<OrderRespone> respones = new ArrayList<>();
         for (OrdersEntity entity: entities
              ) {
@@ -264,6 +264,9 @@ public class OrderServiceimpl implements IOrderService {
     public String exportOrder(OrderRequest request) {
         OrdersEntity entity = ordersRepo.findByCodeOrderAndDeleteFlagIsFalse(request.getId());
         List<OrdersDetailEntity> list = ordersDetailRepo.findByDeleteFlagIsFalseAndOrdersEntity(entity);
+        if(list == null || list.size() == 0){
+            return "Hoá đơn chưa có sản phẩm nào";
+        }
         for (OrdersDetailEntity detail: list
         ) {
             ProductPropertyEntity propertyEntity = propertyProductRepo.findById(detail.getIdPropertyProduct()).get();

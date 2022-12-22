@@ -21,7 +21,7 @@ public class CamApi {
     }
 
     @PostMapping
-    public ResponseEntity<?> addScreen(@RequestBody CamRequest request) {
+    public ResponseEntity<?> addCam(@RequestBody CamRequest request) {
         String status = service.save(request);
         if (status.equalsIgnoreCase("ok")) {
             return ResponseEntity.ok().body(request);
@@ -30,7 +30,7 @@ public class CamApi {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateScreen(@RequestBody CamRequest request) {
+    public ResponseEntity<?> updateCam(@RequestBody CamRequest request) {
         String status = service.update(request);
         if (status.equalsIgnoreCase("ok")) {
             return ResponseEntity.ok().body(request);
@@ -39,7 +39,7 @@ public class CamApi {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteScreen(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteCam(@PathVariable("id") Long id) {
         String status = service.delete(id);
         if (status.equalsIgnoreCase("ok")) {
             return ResponseEntity.ok().body("ok");

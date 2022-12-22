@@ -87,7 +87,7 @@
                                 <tr th:each="orderInvoice : ${lstInvoiceOrder}" class="text-center">
                                     <td></td>
                                     <td class="text-center">
-                                        <button th:if="${orderInvoice.status != 0}" class="btn btn-danger btn-sm"
+                                        <button th:if="${orderInvoice.status != 2 && orderInvoice.status != 0 && orderInvoice.status != 3}" class="btn btn-danger btn-sm"
                                                 th:data-id="${orderInvoice.id}"
                                                 onclick="onClickCancelOrderInvoice(this)">
                                             Huỷ
