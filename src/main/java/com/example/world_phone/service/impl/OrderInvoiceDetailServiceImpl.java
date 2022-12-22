@@ -84,7 +84,7 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
             boolean check = true;
             for (OrderInvoiceDetailRequest req: list
             ) {
-                if(e.getColorEntity().getId() == Long.valueOf(req.getColorId()) && e.getRomEntity().getId() == Long.valueOf(req.getRomId())){
+                if(String.valueOf(e.getColorEntity().getId()).equals(String.valueOf(Long.valueOf(req.getColorId()))) && String.valueOf(e.getRomEntity().getId()).equals(String.valueOf(Long.valueOf(req.getRomId()))) ){
                     check = false;
                 }
 
@@ -124,7 +124,9 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
                 boolean check = true;
                 for (InvoiceOrderDetailEntity e: entityList
                 ) {
-                    if(e.getColorEntity().getId() == entityDetail.getColorEntity().getId() && e.getRomEntity().getId() == entityDetail.getRomEntity().getId()){
+                    if(String.valueOf(e.getColorEntity().getId()).equals(String.valueOf(entityDetail.getColorEntity().getId()))
+                            && String.valueOf(e.getRomEntity().getId()).equals(String.valueOf(entityDetail.getRomEntity().getId()))){
+
                         entityDetail.setId(e.getId());
                         detailRepo.save(entityDetail);
                         if (entityDetail.getStatus().equals(String.valueOf(StatusOrderInvoiceDetail.DA_NHAP.getIndex()))){
@@ -172,7 +174,7 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
             boolean check = true;
             for (OrderInvoiceDetailRequest req: list
             ) {
-                if(e.getColorEntity().getId() == Long.valueOf(req.getColorId()) && e.getRomEntity().getId() == Long.valueOf(req.getRomId())){
+                if(String.valueOf(e.getColorEntity().getId()).equals(String.valueOf(Long.valueOf(req.getColorId())))  && String.valueOf(e.getRomEntity().getId()).equals(String.valueOf(Long.valueOf(req.getRomId())))){
                     check = false;
                     break;
                 }
@@ -268,7 +270,7 @@ public class OrderInvoiceDetailServiceImpl implements IOrderInvoiceDetailService
             boolean check = true;
             for (OrderInvoiceDetailRequest req: list
             ) {
-                if(e.getColorEntity().getId() == Long.valueOf(req.getColorId()) && e.getRomEntity().getId() == Long.valueOf(req.getRomId())){
+                if(String.valueOf(e.getColorEntity().getId()).equals(String.valueOf(Long.valueOf(req.getColorId())))  && String.valueOf(e.getRomEntity().getId()).equals(String.valueOf(Long.valueOf(req.getRomId())))){
                     check = false;
                     break;
                 }
