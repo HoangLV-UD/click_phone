@@ -111,6 +111,11 @@ public class ProductServiceImpl implements IProductService {
         }
 
         ProductEntity entity = productRepo.findByIdAndDeleteFlagIsFalse(requestEdit.getIdProduct());
+        CategoryEntity categoryEntity = categoryService.findById(String.valueOf(requestEdit.getCategoryId()));
+        if(categoryEntity == null){
+            throw new WorldPhoneExp(ConstansErrorCode.CATEGORY_NOT_EXIST);
+        }
+        entity.setCategory(categoryEntity);
         if(!attributeProductService.updateAttribute(requestEdit.getAttributeRequestedit() , entity.getId()).equals("ok")){
             log.error("update sản phẩm thất bại ở phần attribute");
             return "false";

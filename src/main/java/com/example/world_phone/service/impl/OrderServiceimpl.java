@@ -245,6 +245,20 @@ public class OrderServiceimpl implements IOrderService {
         entity.setAddress(request.getRecipientAddress());
         entity.setReceiveDate(request.getDeliveryDate());
         entity.setStatus(String.valueOf(StatusOrder.CHO_XUAT_HANG.getIndex()));
+        List<OrdersDetailEntity> list = ordersDetailRepo.findByDeleteFlagIsFalseAndOrdersEntity(entity);
+        for (OrdersDetailEntity detail: list
+        ) {
+            ProductPropertyEntity propertyEntity = propertyProductRepo.findById(detail.getIdPropertyProduct()).get();
+            if(propertyEntity.getQuantity() - detail.getQuantity() < 0){
+                return "Sản phẩm đang hết hàng";
+            }else {
+                propertyEntity.setQuantity(propertyEntity.getQuantity() - detail.getQuantity());
+                if(propertyEntity.getQuantity() == 0){
+                    propertyEntity.setStatus("OFF");
+                }
+                propertyProductRepo.save(propertyEntity);
+            }
+        }
         ordersRepo.save(entity);
         return "ok";
     }
@@ -271,7 +285,7 @@ public class OrderServiceimpl implements IOrderService {
         ) {
             ProductPropertyEntity propertyEntity = propertyProductRepo.findById(detail.getIdPropertyProduct()).get();
             if(propertyEntity.getQuantity() - detail.getQuantity() < 0){
-                return "false";
+                return "Sản phẩm đang hết hàng";
             }else {
                 propertyEntity.setQuantity(propertyEntity.getQuantity() - detail.getQuantity());
                 if(propertyEntity.getQuantity() == 0){

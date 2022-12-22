@@ -86,7 +86,7 @@ function saveCategory(){
         success: function (datas) {
             console.log(datas)
             $('#error')[0].style.display = 'none'
-            window.location.href = '/category';
+            window.location.href = '/cate';
         },
         error: function (error) {
             $('#error')[0].style.display = 'unset'
