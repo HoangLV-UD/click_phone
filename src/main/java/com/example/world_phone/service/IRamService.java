@@ -14,7 +14,8 @@ public interface IRamService {
 
     String edit(RamRequest request);
 
+    String delete(Long id);
+
     RamRespone findById(String id);
 
-    String delete(Long id);
 }

@@ -30,7 +30,13 @@ public class RamServiceImpl implements IRamService {
         }
         return list;
     }
-
+    @Override
+    public String edit(RamRequest request) {
+        RamEntity entity = repo.getById(request.getId());
+        entity.setName(request.getName());
+        repo.save(entity);
+        return "ok";
+    }
     @Override
     public String save(RamRequest request) {
         RamEntity entity = new RamEntity();
@@ -43,26 +49,16 @@ public class RamServiceImpl implements IRamService {
         repo.save(entity);
         return "ok";
     }
-
-    @Override
-    public String edit(RamRequest request) {
-        RamEntity entity = repo.getById(request.getId());
-        entity.setName(request.getName());
-        repo.save(entity);
-        return "ok";
-    }
-
-    @Override
-    public RamRespone findById(String id) {
-        RamEntity entity = repo.getById(Long.valueOf(id));
-        return new RamRespone(entity.getId(), entity.getName());
-    }
-
     @Override
     public String delete(Long id) {
         RamEntity entity = repo.getById(id);
         entity.setDeleteFlag(true);
         repo.save(entity);
         return "ok";
+    }
+    @Override
+    public RamRespone findById(String id) {
+        RamEntity entity = repo.getById(Long.valueOf(id));
+        return new RamRespone(entity.getId(), entity.getName());
     }
 }
