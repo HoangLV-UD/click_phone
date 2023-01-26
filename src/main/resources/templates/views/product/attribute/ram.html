@@ -42,7 +42,7 @@
                         <thead class="text-center">
                         <th></th>
                         <th>Chức năng</th>
-                        <th>Tên màn hình</th>
+                        <th>Tên ram</th>
                         </thead>
                         <tbody style="vertical-align: middle;">
                         <tr th:each="ram, iterator : ${list}">
@@ -51,7 +51,7 @@
                             </td>
                             <td class="text-center">
                                 <i class="col-4 fas fa-edit" style="color: darkblue;" title="Cập nhật" onclick="onBtnEdit(this)"></i>
-                                <i class="col-4 fas fa-user-times" style="color: red;" title="Xoá loại màn hình" onclick="onBtnDelete(this)"></i>
+                                <i class="col-4 fas fa-user-times" style="color: red;" title="Xoá loại ram" onclick="onBtnDelete(this)"></i>
                             </td>
 
 
@@ -446,7 +446,7 @@
         })
 
         swalWithBootstrapButtons.fire({
-            title: `Bạn chắc chắn muốn xoá <br> màn hình này chứ?`,
+            title: `Bạn chắc chắn muốn xoá <br> ram này chứ?`,
             text: "Chú ý không thể hoàn tác sau khi thực hiện tác vụ này!",
             icon: 'warning',
             showCancelButton: true,

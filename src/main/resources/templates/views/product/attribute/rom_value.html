@@ -4,7 +4,7 @@
       layout:decorate="~{layout/weblayout}"
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Quản lý Rom_Value - WorlPhone</title>
+    <title>Quản lý bộ nhớ trong - WorlPhone</title>
     <script th:src="@{/system/attribute_screen.js}"></script>
 </head>
 
@@ -12,30 +12,12 @@
 <div layout:fragment="content" class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <div class="col-lg-2 h-100" id="leftKH">
-            <h1 class="heading-page">Hệ rom_value</h1>
-            <div class="card" id="formLeft">
-                <h3 class="leftTitle" style="margin-top: 10px">Loại màn</h3>
-                <div class="boxLeftC">
-                    <select class="roleFilter w-100" multiple style="width: 100%" onchange="onRoleChange(this)">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                <div style="border: 1px solid #e3e3e3;margin: 12px 12px;border-radius: 8px;">
-                </div>
-
-            </div>
-        </div>
         <!-- End-Sidebar -->
         <div class="col-lg-10" id="rightKH">
             <div class="row justify-content-end">
                 <button type="button" class="btn btn-primary col-auto mb-3 me-2 waves-effect waves-light"
                         data-bs-toggle="modal" data-bs-target=".modal-add-staff">
-                    <i class="fas fa-plus me-2"></i>Hệ rom_value
+                    <i class="fas fa-plus me-2"></i>Thêm bộ nhớ trong
                 </button>
             </div>
             <div class="card">
@@ -46,7 +28,7 @@
                         <thead class="text-center">
                         <th></th>
                         <th>Chức năng</th>
-                        <th>Tên Rom_value</th>
+                        <th>dung lượng bộ nhớ</th>
                         <th>Loại</th>
                         </thead>
                         <tbody style="vertical-align: middle;">
@@ -57,7 +39,7 @@
                             <td class="text-center">
                                 <i class="col-4 fas fa-edit" style="color: darkblue;" title="Cập nhật"
                                    onclick="onBtnEdit(this)"></i>
-                                <i class="col-4 fas fa-user-times" style="color: red;" title="Xoá hệ rom_value"
+                                <i class="col-4 fas fa-user-times" style="color: red;" title="Xoá bộ nhớ trong"
                                    onclick="onBtnDelete(this)"></i>
                             </td>
 
@@ -90,7 +72,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title mt-0">Thêm hệ rom_value</h5>
+                    <h5 class="modal-title mt-0">Thêm bộ nhớ trong</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formAdd">
@@ -100,7 +82,7 @@
                                 <table class="table-borderless w-100">
                                     <tr>
                                         <th style="width: 140px"><label class="form-label" for="name">Tên
-                                            Hệ rom_value</label><span class="required"> *</span></th>
+                                            bộ nhớ trong</label><span class="required"> *</span></th>
                                         <td><input class="form-control" type="text" name="name" id="name"
                                                    onblur="onType(this)"></td>
                                     </tr>
@@ -109,7 +91,7 @@
                             <div class="col-6 px-4">
                                 <table class="table-borderless w-100">
                                     <tr>
-                                        <th><label for="loai" class="form-label">Loại Hệ rom_value</label><span
+                                        <th><label for="loai" class="form-label">Loại bộ nhớ trong</label><span
                                                 class="required"> *</span></th>
                                         <td>
                                             <div class="d-flex">
@@ -154,7 +136,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title mt-0">Cập nhật hệ rom_value</h5>
+                    <h5 class="modal-title mt-0">Cập nhật bộ nhớ trong</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="formEdit">
@@ -164,7 +146,7 @@
                             <div class="col-6 px-4">
                                 <table class="table-borderless w-100">
                                     <tr>
-                                        <th><label class="form-label" for="name-edit">Tên hệ rom_value</label><span
+                                        <th><label class="form-label" for="name-edit">Tên bộ nhớ trong</label><span
                                                 class="required"> *</span></th>
                                         <td><input class="form-control" type="text" name="name" id="name-edit"
                                                    onblur="onType(this)"></td>
@@ -178,7 +160,7 @@
                                                 class="required"> *</span></th>
                                         <td>
                                             <select class="form-select" name="loai" id="loai-edit">
-                                                <option value="" disabled selected>-- Chọn loại hệ rom_value --</option>
+                                                <option value="" disabled selected>-- Chọn loại bộ nhớ trong --</option>
 
                                                 <th:block th:each="loairom : ${listrom}">
                                                     <option th:value="${loairom.id}"
@@ -514,7 +496,7 @@
         })
 
         swalWithBootstrapButtons.fire({
-            title: `Bạn chắc chắn muốn xoá <br> hệ rom_value này chứ?`,
+            title: `Bạn chắc chắn muốn xoá <br> bộ nhớ trong này chứ?`,
             text: "Chú ý không thể hoàn tác sau khi thực hiện tác vụ này!",
             icon: 'warning',
             showCancelButton: true,
