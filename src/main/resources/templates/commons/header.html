@@ -1,428 +1,129 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
-<header th:fragment="header" id="page-topbar">
-    <div class="navbar-header mx-auto">
-        <!--  Phone number & Language-->
-        <div class="d-flex">
-            <!-- For small screen -->
-            <div class="navbar-brand-box d-block d-lg-none">
-                <a href="/" class="logo logo-light">
-          <span class="logo-sm">
-            <img th:src="@{/assets/img/logo.png}" alt="" height="30" style="margin: -5px -18px 0 0;">
-          </span>
-                </a>
-            </div>
-            <button type="button"
-                    class="btn btn-sm me-2 font-size-24 d-lg-none header-item waves-effect waves-light"
-                    data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
-                <i class="mdi mdi-menu"></i>
-            </button>
-
-            <!-- For normal screen -->
-            <ul class="list-inline d-none d-lg-block mb-0">
-                <li class="list-inline-item me-3 help-number">
-                    <span class="font-size-13 header-item">Hỗ trợ : 0944485575</span>
-                </li>
-                <!-- List languages-->
-                <li class="list-inline-item">
-                    <div class="dropdown d-none d-lg-block">
-                        <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            <img class="me-2" src="assets/img/vn_flag.jpg" alt="Header Language" height="14"><span
-                                class="mdi mdi-chevron-down">Tiếng việt</span>
-                        </button>
-                        <!--            <div class="dropdown-menu dropdown-menu-end">-->
-
-                        <!--              &lt;!&ndash; item&ndash;&gt;-->
-                        <!--              <a href="javascript:void(0);" class="dropdown-item notify-item">-->
-                        <!--                <img src="assets/img/us_flag.jpg" alt="user-image" class="me-1" height="12"> <span-->
-                        <!--                      class="align-middle"> United States </span>-->
-                        <!--              </a>-->
-
-                        <!--              &lt;!&ndash; item&ndash;&gt;-->
-                        <!--              <a href="javascript:void(0);" class="dropdown-item notify-item">-->
-                        <!--                <img src="assets/img/french_flag.jpg" alt="user-image" class="me-1" height="12">-->
-                        <!--                <span class="align-middle"> French </span>-->
-                        <!--              </a>-->
-
-                        <!--              &lt;!&ndash; item&ndash;&gt;-->
-                        <!--              <a href="javascript:void(0);" class="dropdown-item notify-item">-->
-                        <!--                <img src="assets/img/germany_flag.jpg" alt="user-image" class="me-1" height="12">-->
-                        <!--                <span class="align-middle"> German </span>-->
-                        <!--              </a>-->
-
-                        <!--              &lt;!&ndash; item&ndash;&gt;-->
-                        <!--              <a href="javascript:void(0);" class="dropdown-item notify-item">-->
-                        <!--                <img src="assets/img/italy_flag.jpg" alt="user-image" class="me-1" height="12">-->
-                        <!--                <span class="align-middle"> Italian </span>-->
-                        <!--              </a>-->
-
-                        <!--              &lt;!&ndash; item&ndash;&gt;-->
-                        <!--              <a href="javascript:void(0);" class="dropdown-item notify-item">-->
-                        <!--                <img src="assets/img/spain_flag.jpg" alt="user-image" class="me-1" height="12">-->
-                        <!--                <span class="align-middle"> Spanish </span>-->
-                        <!--              </a>-->
-                        <!--            </div>-->
+<header id="page-topbar" th:fragment="header">
+    <div class="d-flex">
+        <div class="navbar-brand-box text-center">
+            <a href="/" tppabs="https://themesbrand.com/foxia/layouts/blue/index.html" class="logo logo-light">
+                <span class="logo-lg">
+                    <img th:src="@{/assets/img/logo.png}" alt="" height="40" style="margin: -5px -18px 0 0;">
+                </span>
+            </a>
+        </div>
+        <p style="margin-top: 10px">Click Phone</p>
+        <div class="navbar-header">
+            <div class="d-flex ms-auto">
+                <div class="dropdown d-inline-block">
+                    <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="rounded-circle header-profile-user" th:src="${session.user.avatar}" alt="Header Avatar" style="box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;">
+                        <span th:text="${session.user.fullName}" style="color: white"></span>
+                        <i class="mdi mdi-chevron-down"></i>
+                        </span>
+                                            </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="#" onclick="$('.modal-profile').modal('show');">
+                            <i class="dripicons-user font-size-16 align-middle me-2 text-muted"></i>
+                            Thông tin cá nhân
+                        </a>
+                        <a class="dropdown-item" href="#" onclick="$('.modal-password').modal('show');">
+                            <i class="dripicons-lock font-size-16 align-middle me-2 text-muted"></i>
+                            Đổi mật khẩu
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout">
+                            <i class="dripicons-exit font-size-16 align-middle me-2 text-muted"></i>
+                            Đăng xuất
+                        </a>
                     </div>
-                </li>
-                <!-- End List languages-->
-            </ul>
-        </div>
-        <!-- End Phone number & Language-->
-
-        <!-- Search input -->
-        <div class="search-wrap" id="search-wrap">
-            <div class="search-bar">
-                <input class="search-input form-control" placeholder="Search">
-                <a href="#" class="close-search toggle-search" data-target="#search-wrap">
-                    <i class="mdi mdi-close-circle"></i>
-                </a>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="d-flex">
-            <!-- Button Search navbar-->
-            <div class="dropdown d-none d-lg-block">
-                <button type="button" class="btn header-item toggle-search noti-icon waves-effect"
-                        data-target="#search-wrap">
-                    <i class="mdi mdi-magnify"></i>
-                </button>
-            </div>
-            <!-- End Button Search navbar-->
-
-            <!-- Notification-->
-            <div class="dropdown d-inline-block ms-2">
-                <button type="button" class="btn header-item noti-icon waves-effect"
-                        id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                    <i class="mdi mdi-bell-outline"></i>
-                    <span id="countNoti" class="badge bg-danger rounded-pill">3</span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                     aria-labelledby="page-header-notifications-dropdown">
-                    <div class="p-3">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h5 class="m-0 font-size-16"> Thông báo </h5>
-                            </div>
+        <!-- Modal Profile -->
+        <div class="modal fade modal-profile" tabindex="-1" style="display: none; top: 10%;" aria-hidden="true">
+            <div class="modal-dialog modal-l">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title w-100 text-center ps-4 fs-3 fw-bolder" style="color: #655be6;">Thông tin cá nhân</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="my-3 fs-3 fw-bolder" th:switch="${session.user.role}">
+                            <span class="text-primary" th:case="'ROLE_ADMIN'">Quản lý</span>
+                            <span class="text-secondary" th:case="'ROLE_USER'">Nhân viên</span>
                         </div>
+                        <div th:switch="${session.user.role}">
+                            <img th:case="'ROLE_ADMIN'" th:src="${session.user.avatar}" class="rounded-circle border border-3 border-primary" alt="avatar" style="width: 160px; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+                            <img th:case="'ROLE_ACC'" th:src="${session.user.avatar}" class="rounded-circle border border-3 border-warning" alt="avatar" style="width: 160px; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
+                        </div>
+                        <div class="my-3 fs-4 fw-bolder" th:text="${session.user.fullName}"></div>
+                        <div class="my-3" th:text="${#dates.format(session.user.dateOfBirth, 'dd/MM/yyyy')}"></div>
+                        <div class="mb-3" th:switch="${session.user.role}">
+                            <span th:case="'ROLE_ADMIN'">Quản lý</span>
+                            <span th:case="'ROLE_ACC'">Nhân viên kế toán</span>
+                            <span th:case="'ROLE_STOCK'">Nhân viên kiểm kho</span>
+                            <span th:case="'ROLE_USER'">Nhân viên bán hàng</span>
+                        </div>
+                        <a href="#" class="my-3" th:text="${session.user.email}"></a>
+                        <div class="my-3 text-decoration-underline" th:text="${session.user.phoneNumber}"></div>
                     </div>
-                    <div id="container-notify" data-simplebar style="max-height: 530px;">
-                        <a href="" class="text-reset notification-item">
-                            <div class="d-flex">
-                                <div class="avatar-xs me-3">
-                  <span class="avatar-title bg-success rounded-circle font-size-16">
-                    <i class="mdi mdi-message-text-outline"></i>
-                  </span>
-                                </div>
-                                <div class="flex-1">
-                                    <h6 class="mt-0 font-size-15 mb-1">New Message received</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1">You have 87 unread messages</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="" class="text-reset notification-item">
-                            <div class="d-flex">
-                                <div class="avatar-xs me-3">
-                  <span class="avatar-title bg-warning rounded-circle font-size-16">
-                    <i class="mdi mdi-cart-outline"></i>
-                  </span>
-                                </div>
-                                <div class="flex-1">
-                                    <h6 class="mt-0 font-size-15 mb-1">Your order is placed</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1">Dummy text of the printing and typesetting industry.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="p-2 border-top">
-                        <a class="btn btn-sm btn-link font-size-14 btn-block" href="/notification">
-                            Xem toàn bộ
-                        </a>
-                        <a class="btn btn-sm btn-link font-size-14 btn-block" onclick="readAllNotification()" href="#">
-                            Đánh dấu tất cả là đã đọc
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- End Notification-->
-
-            <!-- Menu Profile-->
-            <div class="dropdown d-inline-block ms-2">
-                <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" th:src="${session.user.avatar}" alt="Header Avatar" style="box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;">
-                    <span class="d-none d-md-inline-block ms-1">
-            <span th:text="${session.user.fullName}"></span>
-            <i class="mdi mdi-chevron-down"></i>
-          </span>
-                </button>
-                <!-- Menu Profile list-->
-                <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="#" onclick="$('.modal-profile').modal('show');">
-                        <i class="dripicons-user font-size-16 align-middle me-2 text-muted"></i>
-                        Thông tin cá nhân
-                    </a>
-                    <a class="dropdown-item" href="#" onclick="$('.modal-password').modal('show');">
-                        <i class="dripicons-lock font-size-16 align-middle me-2 text-muted"></i>
-                        Đổi mật khẩu
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/logout">
-                        <i class="dripicons-exit font-size-16 align-middle me-2 text-muted"></i>
-                        Đăng xuất
-                    </a>
-                </div>
-                <!-- End Menu Profile list-->
-            </div>
-            <!-- End Menu Profile-->
-
-            <!--      <div class="dropdown d-inline-block">-->
-            <!--        <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">-->
-            <!--          <i class="mdi mdi-spin mdi-cog"></i>-->
-            <!--        </button>-->
-            <!--      </div>-->
-        </div>
-    </div>
-
-    <div class="topnav">
-        <div class="container-fluid">
-            <div class="d-flex">
-                <!-- LOGO -->
-                <div class="navbar-brand-box d-none d-lg-block mx-5">
-                    <a href="/" class="logo logo-light">
-            <span class="logo-lg">
-              <img th:src="@{/assets/img/logo.png}" alt="logo" height="40" style="margin: -15px 10px 0 0;">
-              <span style="font-size: 27px; color: yellow; font-weight: bold;">WorldPhone</span>
-            </span>
-                    </a>
-                </div>
-
-                <!-- Navigator-->
-                <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
-                    <div class="collapse navbar-collapse" id="topnav-menu-content">
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/">
-                                    <i class="dripicons-meter me-2"></i>Tổng quan
-                                </a>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-user-Interface"
-                                   role="button">
-                                    <i class="fas fa-box-open me-2"></i>
-                                    Hàng hoá
-                                    <div class="arrow-down"></div>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="topnav-user-Interface">
-                                    <a th:href="@{/cate}" class="dropdown-item">
-                                        <i class="fas fa-list-ol me-2"></i>
-                                        Danh mục
-                                    </a>
-                                    <a th:href="@{/product}" class="dropdown-item">
-                                        <i class="fas fa-tags me-2"></i>
-                                        Sản phẩm
-                                    </a>
-                                    <a class="dropdown-item" href="#" id="topnav-user-Interface1"
-                                       role="button">
-                                        <i class="fas fa-arrows-alt me-2"></i>
-                                        Thuộc tính
-                                        <div class="arrow-down"></div>
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="topnav-user-Interface1">
-                                        <a th:href="@{/color}" class="dropdown-item">
-                                            <i class="fas fa-list-ol me-2"></i>
-                                            Màu sắc
-                                        </a>
-                                        <a th:href="@{/chip}" class="dropdown-item">
-                                            <i class="fas fa-microchip me-2"></i>
-                                            Chip
-                                        </a>
-                                        <a th:href="@{/cam}" class="dropdown-item">
-                                            <i class="fas fa-camera-retro me-2"></i>
-                                            Camera
-                                        </a>
-                                        <a th:href="@{/os}" class="dropdown-item">
-                                            <i class="fas fa-opera me-2"></i>
-                                            Hệ điều hành
-                                        </a>
-                                        <a th:href="@{/pin}" class="dropdown-item">
-                                            <i class="fas fa-map-pin me-2"></i>
-                                            Pin
-                                        </a>
-                                        <a th:href="@{/ram}" class="dropdown-item">
-                                            <i class="fas fa-ship me-2"></i>
-                                            Ram
-                                        </a>
-                                        <a th:href="@{/screen}" class="dropdown-item">
-                                            <i class="fas fa-assistive-listening-systems me-2"></i>
-                                            Màn hình
-                                        </a>
-                                        <a th:href="@{/romvalue}" class="dropdown-item">
-                                            <i class="fas fa-assistive-listening-systems me-2"></i>
-                                            Bộ nhớ trong
-                                        </a>
-                                    </div>
-
-                                </div>
-
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components"
-                                   role="button">
-                                    <i class="fas fa-exchange-alt me-2"></i>
-                                    Giao dịch
-                                    <div class="arrow-down"></div>
-                                </a>
-
-                                <div class="dropdown-menu" aria-labelledby="topnav-user-Interface">
-                                    <a sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_STOCK')" th:href="@{/invoice}" class="dropdown-item">
-                                        <i class="fas fa-file-invoice-dollar me-2"></i>
-                                        Nhập hàng
-                                    </a>
-                                    <a href="/order-invoice" class="dropdown-item">
-                                        <i class="fas fa-dolly-flatbed me-2"></i>
-                                        Đặt hàng NCC
-                                    </a>
-                                </div>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-advanced-ui" role="button">
-                                    <i class="fas fa-user-tie me-2"></i>
-                                    Đối tác
-                                    <div class="arrow-down"></div>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="topnav-user-Interface">
-                                    <a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" href="/staff" class="dropdown-item">
-                                        <i class="fas fa-user-secret me-2"></i>Nhân viên
-                                    </a>
-                                    <a href="/supplier" class="dropdown-item">
-                                        <i class="fas fa-users me-2"></i>Nhà cung cấp
-                                    </a>
-                                </div>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-selling" role="button">
-                                    <i class="bi bi-bag"></i>&ensp;Bán hàng
-                                    <div class="arrow-down"></div>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="topnav-user-Interface">
-                                    <a href="/orders" class="dropdown-item">
-                                        <i class="fas fa-money-bill-wave me-2"></i>
-                                        Hoá đơn
-                                    </a>
-                                    <a th:href="@{/voucher}" class="dropdown-item">
-                                        <i class="bi bi-card-text me-2"></i>
-                                        Mã giảm giá
-                                    </a>
-                                    <a th:href="@{/promotion}" class="dropdown-item">
-                                        <i class="bi-award-fill"></i>
-                                        Chương trình khuyến mại
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-                <!-- End Navigator-->
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Profile -->
-    <div class="modal fade modal-profile" tabindex="-1" style="display: none; top: 10%;" aria-hidden="true">
-        <div class="modal-dialog modal-l">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title w-100 text-center ps-4 fs-3 fw-bolder" style="color: #655be6;">Thông tin cá nhân</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="my-3 fs-3 fw-bolder" th:switch="${session.user.role}">
-                        <span class="text-primary" th:case="'ROLE_ADMIN'">Quản lý</span>
-                        <span class="text-secondary" th:case="'ROLE_USER'">Nhân viên</span>
-                    </div>
-                    <div th:switch="${session.user.role}">
-                        <img th:case="'ROLE_ADMIN'" th:src="${session.user.avatar}" class="rounded-circle border border-3 border-primary" alt="avatar" style="width: 160px; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
-                        <img th:case="'ROLE_ACC'" th:src="${session.user.avatar}" class="rounded-circle border border-3 border-warning" alt="avatar" style="width: 160px; box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;">
-                    </div>
-                    <div class="my-3 fs-4 fw-bolder" th:text="${session.user.fullName}"></div>
-                    <div class="my-3" th:text="${#dates.format(session.user.dateOfBirth, 'dd/MM/yyyy')}"></div>
-                    <div class="mb-3" th:switch="${session.user.role}">
-                        <span th:case="'ROLE_ADMIN'">Quản lý</span>
-                        <span th:case="'ROLE_ACC'">Nhân viên kế toán</span>
-                        <span th:case="'ROLE_STOCK'">Nhân viên kiểm kho</span>
-                        <span th:case="'ROLE_USER'">Nhân viên bán hàng</span>
-                    </div>
-                    <a href="#" class="my-3" th:text="${session.user.email}"></a>
-                    <div class="my-3 text-decoration-underline" th:text="${session.user.phoneNumber}"></div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- End Modal Profile -->
+        <!-- End Modal Profile -->
 
-    <!-- Modal Change password -->
-    <div class="modal fade modal-password" tabindex="-1" style="display: none; top: 10%;" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title w-100 text-center ps-4 fs-3 fw-bolder" style="color: #655be6;">Đổi mật khẩu</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#formPassword').trigger('reset')"></button>
-                </div>
-                <form id="formPassword" class="modal-body text-center">
-                    <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="old-pass" name="passwordOld" placeholder="Mật khẩu cũ">
-                        <label for="old-pass">Mật khẩu cũ</label>
+        <!-- Modal Change password -->
+        <div class="modal fade modal-password" tabindex="-1" style="display: none; top: 10%;" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title w-100 text-center ps-4 fs-3 fw-bolder" style="color: #655be6;">Đổi mật khẩu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#formPassword').trigger('reset')"></button>
                     </div>
-                    <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="new-pass" name="passwordNew" placeholder="Mật khẩu mới">
-                        <label for="new-pass">Mật khẩu mới</label>
+                    <form id="formPassword" class="modal-body text-center">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="old-pass" name="passwordOld" placeholder="Mật khẩu cũ">
+                            <label for="old-pass">Mật khẩu cũ</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="new-pass" name="passwordNew" placeholder="Mật khẩu mới">
+                            <label for="new-pass">Mật khẩu mới</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="confirm-pass" name="passwordComfirm" placeholder="Xác nhận mật khẩu">
+                            <label for="confirm-pass">Xác nhận mật khẩu</label>
+                        </div>
+                        <input type="hidden" name="id" id="iduser" th:value="${session.user.id}">
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="$('#formPassword').trigger('reset')">
+                            <i class="fas fa-ban me-2"></i>
+                            Đóng
+                        </button>
+                        <button type="button" id="btnChangePassword1" class="btn btn-primary waves-effect waves-light">
+                            <i class="fas fa-save pe-2"></i>
+                            Xác nhận
+                        </button>
                     </div>
-                    <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="confirm-pass" name="passwordComfirm" placeholder="Xác nhận mật khẩu">
-                        <label for="confirm-pass">Xác nhận mật khẩu</label>
-                    </div>
-                    <input type="hidden" name="id" id="iduser" th:value="${session.user.id}">
-                </form>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="$('#formPassword').trigger('reset')">
-                        <i class="fas fa-ban me-2"></i>
-                        Đóng
-                    </button>
-                    <button type="button" id="btnChangePassword1" class="btn btn-primary waves-effect waves-light">
-                        <i class="fas fa-save pe-2"></i>
-                        Xác nhận
-                    </button>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        function readAllNotification(){
-            $.ajax({
-                url: '/api/notification/read-all',
-                success: function (datas) {
-                    loadNotifyHead();
-                },
-                error: function (error) {
-                    console.log(error)
-                },
-                method: 'PUT'
-            })
-        }
-    </script>
-    <!-- End Change password -->
+        <script>
+            function readAllNotification(){
+                $.ajax({
+                    url: '/api/notification/read-all',
+                    success: function (datas) {
+                        loadNotifyHead();
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    },
+                    method: 'PUT'
+                })
+            }
+        </script>
+        <!-- End Change password -->
 </header>
 
 </html>

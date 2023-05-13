@@ -4,56 +4,57 @@
       layout:decorate="~{layout/weblayout}">
 <head>
     <meta charset="UTF-8">
-    <title>Đặt hàng NCC - World Phone</title>
+    <title>Đặt hàng NCC - Click Phone</title>
     <link rel="stylesheet" th:href="@{/assets/css/bootstrap-datepicker.min.css}">
     <link rel="stylesheet" th:href="@{/assets/css/select2.min.css}">
 </head>
 <body>
 <div layout:fragment="content" class="container-fluid" style="max-width: 98%">
     <div class="row container1">
-        <div class="col-lg-2 h-100" id="leftKH">
+        <div class="col-lg-2 h-100" id="leftKH" style="padding-left: 180px">
             <h1 class="heading-page">Đặt hàng NCC</h1>
             <div class="filter-report">
-<!--                <div class="card" style="padding-left: 15px; padding-top: 15px">-->
-<!--                    <h6 class="mx-2 mt-2 fs-14">Trạng thái</h6>-->
-<!--                    <div class="mx-2 mb-2">-->
-<!--                        <div class="form-group form-check">-->
-<!--                            <input class="form-check-input" type="radio" name="status" id="statusAll" value="Tất cả"-->
-<!--                                   onchange="onStatusChange(this)" checked>-->
-<!--                            <label class="form-check-label" for="statusAll">-->
-<!--                                Tất cả-->
-<!--                            </label>-->
-<!--                        </div>-->
-<!--                        <div class="form-group form-check">-->
-<!--                            <input class="form-check-input" type="radio" name="status" id="statusActive"-->
-<!--                                   value="Đã đặt" onchange="onStatusChange(this)">-->
-<!--                            <label class="form-check-label" for="statusActive">-->
-<!--                                Đã đặt-->
-<!--                            </label>-->
-<!--                        </div>-->
-<!--                        <div class="form-group form-check">-->
-<!--                            <input class="form-check-input" type="radio" name="status" id="statusActiveNhan"-->
-<!--                                   value="Đã huỷ" onchange="onStatusChange(this)">-->
-<!--                            <label class="form-check-label" for="statusActiveNhan">-->
-<!--                                Đã nhận-->
-<!--                            </label>-->
-<!--                        </div>-->
-<!--                        <div class="form-group form-check">-->
-<!--                            <input class="form-check-input" type="radio" name="status" id="statusInActive1"-->
-<!--                                   value="Đợi duyệt" onchange="onStatusChange(this)">-->
-<!--                            <label class="form-check-label" for="statusInActive1">-->
-<!--                                Đợi duyệt-->
-<!--                            </label>-->
-<!--                        </div>-->
-<!--                        <div class="form-group form-check">-->
-<!--                            <input class="form-check-input" type="radio" name="status" id="statusInActive"-->
-<!--                                   value="Giao chưa đủ" onchange="onStatusChange(this)">-->
-<!--                            <label class="form-check-label" for="statusInActive">-->
-<!--                                Giao chưa đủ-->
-<!--                            </label>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div class="card" >
+                    <h6 class="mx-2 mt-2 fs-14">Trạng thái</h6>
+                    <div class="mx-2 mb-2">
+                        <div class="form-group form-check">
+                            <input class="form-check-input" type="radio" name="status" id="statusAll" value="Tất cả"
+                                   onchange="onStatusChange(this)" checked>
+                            <label class="form-check-label" for="statusAll">
+                                Tất cả
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <input class="form-check-input" type="radio" name="status" id="statusActive"
+                                   value="Đã đặt" onchange="onStatusChange(this)">
+                            <label class="form-check-label" for="statusActive">
+                                Đã đặt
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <input class="form-check-input" type="radio" name="status" id="statusActiveNhan"
+                                   value="Đã huỷ" onchange="onStatusChange(this)">
+                            <label class="form-check-label" for="statusActiveNhan">
+                                Đã nhận
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <input class="form-check-input" type="radio" name="status" id="statusInActive1"
+                                   value="Đợi duyệt" onchange="onStatusChange(this)">
+                            <label class="form-check-label" for="statusInActive1">
+                                Đợi duyệt
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <input class="form-check-input" type="radio" name="status" id="statusInActive"
+                                   value="Giao chưa đủ" onchange="onStatusChange(this)">
+                            <label class="form-check-label" for="statusInActive">
+                                Giao chưa đủ
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
         <div class="col-lg-10" id="rightKH" style="height: 100%">

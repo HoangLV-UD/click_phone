@@ -6,6 +6,7 @@ import com.example.world_phone.dto.respone.attribute.screen.ScreenReposne;
 import com.example.world_phone.entity.RamEntity;
 import com.example.world_phone.repo.RamRepo;
 import com.example.world_phone.service.IRamService;
+import com.example.world_phone.until.SessionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class RamServiceImpl implements IRamService {
     private final RamRepo repo;
-
+    private final SessionUtil sessionUtil;
     @Override
     public List<RamRespone> findAll() {
         List<RamRespone> list = new ArrayList<>();
@@ -41,7 +42,7 @@ public class RamServiceImpl implements IRamService {
     public String save(RamRequest request) {
         RamEntity entity = new RamEntity();
         entity.setName(request.getName());
-        entity.setCreateBy("ADMIN");
+        entity.setCreateBy((String) sessionUtil.getObject("username"));
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy("ADMIN");

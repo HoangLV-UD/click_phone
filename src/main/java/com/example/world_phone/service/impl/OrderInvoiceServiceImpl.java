@@ -95,7 +95,7 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
             entity.setSupplierEntity(supplierEntity.get());
             StaffEntity staffEntity = staffRepo.findByEmailAndDeleteFlagIsFalse(String.valueOf(sessionUtil.getObject("username"))).get(0);
             entity.setStaffEntity(staffEntity);
-            entity.setCreateBy("ADMIN");
+            entity.setCreateBy((String) sessionUtil.getObject("username"));
             entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
             entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
             entity.setModifierBy("ADMIN");
@@ -318,7 +318,7 @@ public class OrderInvoiceServiceImpl implements IOrderInvoiceService {
         entity.setTotalMoneyThua(0L);
         entity.setTotalMoney(0L);
         entity.setStaffEntity(staffEntity);
-        entity.setCreateBy("ADMIN");
+        entity.setCreateBy((String) sessionUtil.getObject("username"));
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy("ADMIN");

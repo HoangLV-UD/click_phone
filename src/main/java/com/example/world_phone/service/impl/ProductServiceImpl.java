@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,24 +69,30 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public String createProduct(ProductRequestAdd requestProduct) {
+        try {
+
         if(requestProduct.getRomRequestAdds().size() == 0){
             log.error(String.valueOf(new WorldPhoneExp(ConstansErrorCode.ROM_NOT_EXIST).getErrorMessage().getVn()));
             return String.valueOf(new WorldPhoneExp(ConstansErrorCode.ROM_NOT_EXIST).getErrorMessage().getVn());
         }
         ProductEntity entity = mapToRequest(requestProduct);
+        entity.setModifierBy("hoanglvph15717@fpt.edu.vn");
+        entity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
+        entity.setModifierDate(Timestamp.valueOf(LocalDateTime.now()));
+
         entity.setStatus(StatusProduct.NGUNG_KINH_DOANH.getStatus());
         entity = productRepo.save(entity);
         if(!attributeProductService.saveAttribute(requestProduct.getAttributeRequestAdd(), entity.getId()).equals("ok")){
             entity.setDeleteFlag(true);
             entity = productRepo.save(entity);
-            log.error("them moi san pham that bai");
+            log.error("them moi san pham that bai 1");
             return "that bai";
         }
         if(requestProduct.getImage().size() > 1){
             if(!iImageService.createImage(requestProduct.getImage(), entity.getId()).equals("ok")){
                 entity.setDeleteFlag(true);
                 entity = productRepo.save(entity);
-                log.error("them moi san pham that bai");
+                log.error("them moi san pham that bai 2");
                 return "that bai";
             }
         }
@@ -93,10 +100,12 @@ public class ProductServiceImpl implements IProductService {
         if(!romService.createRom(requestProduct.getRomRequestAdds(), entity).equals("ok")){
             entity.setDeleteFlag(true);
             entity = productRepo.save(entity);
-            log.error("them moi san pham that bai");
+            log.error("them moi san pham that bai 3");
             return "that bai";
         }
-
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "ok";
 
     }
@@ -283,7 +292,11 @@ public class ProductServiceImpl implements IProductService {
             return String.valueOf(new WorldPhoneExp(ConstansErrorCode.PRODUCT_NOT_EXIST).getErrorMessage().getVn());
         }
         entity.setDeleteFlag(true);
-        productRepo.save(entity);
+       try {
+           productRepo.save(entity);
+       }catch (Exception e){
+           e.printStackTrace();
+       }
         return "ok";
     }
 
@@ -358,7 +371,7 @@ public class ProductServiceImpl implements IProductService {
         entity.setCategory(categoryEntity);
         entity.setName(x.getNameProduct());
         entity.setStatus("ON");
-        entity.setCreateBy("ADMIN");
+        entity.setCreateBy((String) sessionUtil.getObject("username"));
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy((String) sessionUtil.getObject("username"));

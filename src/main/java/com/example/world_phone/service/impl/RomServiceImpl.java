@@ -90,7 +90,7 @@ public class RomServiceImpl implements IRomService {
     public String saveRom(RomRequest request) {
         RomEntity entity = new RomEntity();
         entity.setName(request.getName());
-        entity.setCreateBy("ADMIN");
+        entity.setCreateBy((String) sessionUtil.getObject("username"));
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy("ADMIN");
@@ -136,7 +136,7 @@ public class RomServiceImpl implements IRomService {
     public  RomEntity mapToEntity(RomRequestAdd a){
         RomEntity entity = new RomEntity();
         entity.setStatus("ON");
-        entity.setCreateBy("ADMIN");
+        entity.setCreateBy((String) sessionUtil.getObject("username"));
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy((String) sessionUtil.getObject("username"));

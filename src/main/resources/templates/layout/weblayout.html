@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">>
 <head>
     <meta charset="utf-8">
     <title>SMW - TECHCAM - ADMIN</title>
@@ -60,6 +60,86 @@
 <div id="layout-wrapper">
     <!--header-->
     <div th:replace="~{commons/header :: header}"></div>
+
+    <div class="vertical-menu" style="width: 10%">
+
+        <div data-simplebar class="h-100">
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+                <!-- Left Menu Start -->
+                <ul class="metismenu list-unstyled" id="side-menu">
+                    <li class="menu-title text-uppercase">Menu</li>
+
+
+                    <li>
+                        <a href="/" class="waves-effect">
+                            <i class="dripicons-meter"></i>
+                            <span> Tổng quan </span>
+                        </a>
+                    </li>
+
+
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="dripicons-message"></i>
+                            <span> Hàng hoá </span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a th:href="@{/cate}" tppabs="https://themesbrand.com/foxia/layouts/blue/email-inbox.html">Danh mục</a></li>
+                            <li><a th:href="@{/product}" tppabs="https://themesbrand.com/foxia/layouts/blue/email-read.html">Sản phẩm</a></li>
+                            <li><a href="javascript: void(0);" class="has-arrow">Thuộc tính</a>
+                                <ul class="sub-menu" aria-expanded="true">
+                                    <li><a th:href="@{/color}">Màu sắc</a></li>
+                                    <li><a th:href="@{/chip}">Chip</a></li>
+                                    <li><a th:href="@{/cam}">Camera</a></li>
+                                    <li><a th:href="@{/os}">Hệ điều hành</a></li>
+                                    <li><a th:href="@{/pin}">Pin</a></li>
+                                    <li><a th:href="@{/ram}">Ram</a></li>
+                                    <li><a th:href="@{/screen}">Màn hình</a></li>
+                                    <li><a th:href="@{/romvalue}">Bộ nhớ trong</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="">
+                        <a href="javascript: void(0);" class="has-arrow waves-effect" aria-expanded="true">
+                            <i class="dripicons-monitor"></i>
+                            <span>Giao dịch</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_STOCK')" th:href="@{/invoice}">Nhập hàng</a></li>
+                            <li><a href="/order-invoice">Đặt hàng NCC</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="">
+                        <a href="javascript: void(0);" class="has-arrow waves-effect" aria-expanded="true">
+                            <i class="dripicons-monitor"></i>
+                            <span>Đối tác</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" href="/staff">Nhân viên</a></li>
+                            <li><a href="/supplier">Nhà cung cấp</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="">
+                        <a href="javascript: void(0);" class="has-arrow waves-effect" aria-expanded="true">
+                            <i class="dripicons-monitor"></i>
+                            <span>Bán hàng</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="/orders">Hoá đơn</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- Sidebar -->
+        </div>
+    </div>
     <div class="main-content">
         <div class="page-content">
             <div layout:fragment="content"></div>

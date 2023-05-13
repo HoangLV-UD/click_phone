@@ -86,19 +86,23 @@ public class SupplierServiceImpl implements ISupplierService {
     @Override
     public EditSupplierDto updateSupplier(EditSupplierDto requestDTO) {
         Optional<SupplierEntity> entity = supplierRepo.findByIdAndDeleteFlagIsFalse(requestDTO.getId());
-        if(entity.isPresent()){
-            if(!entity.get().getPhoneNumber().equals(requestDTO.getPhoneNumber())){
-                if(findByPhone(requestDTO.getPhoneNumber()) == 1){
-                    throw new WorldPhoneExp(ConstansErrorCode.SUPPLIER_PHONE);
+        try {
+            if(entity.isPresent()){
+                if(!entity.get().getPhoneNumber().equals(requestDTO.getPhoneNumber())){
+                    if(findByPhone(requestDTO.getPhoneNumber()) == 1){
+                        throw new WorldPhoneExp(ConstansErrorCode.SUPPLIER_PHONE);
+                    }
+                }else {
+                    entity.get().setAddress(requestDTO.getAddress());
+                    entity.get().setNote(requestDTO.getNote());
+                    entity.get().setName(requestDTO.getName());
+                    entity.get().setPhoneNumber(requestDTO.getPhoneNumber());
+                    supplierRepo.save(entity.get());
+                    return requestDTO;
                 }
-            }else {
-                entity.get().setAddress(requestDTO.getAddress());
-                entity.get().setNote(requestDTO.getNote());
-                entity.get().setName(requestDTO.getName());
-                entity.get().setPhoneNumber(requestDTO.getPhoneNumber());
-                supplierRepo.save(entity.get());
-                return requestDTO;
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return null;
     }

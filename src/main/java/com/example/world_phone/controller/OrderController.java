@@ -10,13 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 21/08/2022
- * Project_name: com.example.world_phone.controller
- */
+
 @Controller
 @RequiredArgsConstructor
 public class OrderController {

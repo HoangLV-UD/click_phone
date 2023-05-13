@@ -27,9 +27,13 @@ public class ProductApi {
 
     @PostMapping()
     public ResponseEntity<?> add(@RequestBody ProductRequestAdd productRequestAdd){
-        String check = productService.createProduct(productRequestAdd);
-        if(check.equals("ok")){
-            return ResponseEntity.ok().body("ok");
+        try {
+            String check = productService.createProduct(productRequestAdd);
+            if(check.equals("ok")){
+                return ResponseEntity.ok().body("ok");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return ResponseEntity.badRequest().body(String.valueOf(new WorldPhoneExp(ConstansErrorCode.PRODUCT_ERROR_CREATE).getErrorMessage().getVn()));
     }

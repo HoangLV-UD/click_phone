@@ -4,15 +4,15 @@
       layout:decorate="~{layout/weblayout}"
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Quản lý màn hình - WorlPhone</title>
+    <title>Quản lý màn hình - ClickPhone</title>
     <script th:src="@{/system/attribute_screen.js}"></script>
 </head>
 
 <body>
-<div layout:fragment="content" class="container-fluid">
+<div layout:fragment="content" class="container-fluid" style="margin-right: 30px">
     <div class="row">
         <!-- Sidebar -->
-        <div class="col-lg-2 h-100" id="leftKH">
+        <div class="col-lg-2 h-100" id="leftKH" style="padding-left: 50px">
             <h1 class="heading-page">Màn hình</h1>
             <div class="card" id="formLeft">
                 <h3 class="leftTitle" style="margin-top: 10px">Loại màn</h3>
@@ -119,8 +119,8 @@
                                                     </th:block>
                                                 </select>
 
-                                                <button onclick="openLoaiScreen()" type="button" class="btn-blue-grey ms-2">
-                                                    <i class="bi bi-plus"></i></button>
+<!--                                                <button onclick="openLoaiScreen()" type="button" class="btn-blue-grey ms-2">-->
+<!--                                                    <i class="bi bi-plus"></i></button>-->
                                             </div>
                                         </td>
                                     </tr>

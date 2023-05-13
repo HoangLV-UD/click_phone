@@ -4,15 +4,19 @@
       layout:decorate="~{layout/weblayout}"
       xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Quản lý bộ nhớ trong - WorlPhone</title>
+    <title>Quản lý bộ nhớ trong - ClickPhone</title>
     <script th:src="@{/system/attribute_screen.js}"></script>
 </head>
 
 <body>
-<div layout:fragment="content" class="container-fluid">
+<div layout:fragment="content" class="container-fluid" style="margin-right: 30px">
     <div class="row">
         <!-- Sidebar -->
         <!-- End-Sidebar -->
+        <div class="col-lg-2 h-100" id="leftKH" style="padding-left: 120px">
+            <h1 class="heading-page">Quản lý bộ nhớ trong</h1>
+
+        </div>
         <div class="col-lg-10" id="rightKH">
             <div class="row justify-content-end">
                 <button type="button" class="btn btn-primary col-auto mb-3 me-2 waves-effect waves-light"
@@ -103,8 +107,8 @@
                                                     </th:block>
                                                 </select>
 
-                                                <button onclick="openLoaiRom()" type="button" class="btn-blue-grey ms-2">
-                                                    <i class="bi bi-plus"></i></button>
+<!--                                                <button onclick="openLoaiRom()" type="button" class="btn-blue-grey ms-2">-->
+<!--                                                    <i class="bi bi-plus"></i></button>-->
                                             </div>
                                         </td>
                                     </tr>

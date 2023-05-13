@@ -7,6 +7,7 @@ import com.example.world_phone.dto.respone.category.CategoryResponeDto;
 import com.example.world_phone.entity.CategoryEntity;
 import com.example.world_phone.repo.CateRepo;
 import com.example.world_phone.service.ICateService;
+import com.example.world_phone.until.SessionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CateServiceImpl implements ICateService {
     private final CateRepo repo;
-
+    private final SessionUtil sessionUtil;
 
     private <R> CategoryResponeDto mapToCategoryResp(CategoryEntity categoryEntity) {
         if (categoryEntity == null) return new CategoryResponeDto();
@@ -46,12 +47,16 @@ public class CateServiceImpl implements ICateService {
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setName(request.getName());
         categoryEntity.setCreateDate(new Timestamp(now.getTime()));
-        categoryEntity.setCreateBy("Admin");
-        categoryEntity.setModifierBy("Admin");
+        categoryEntity.setCreateBy((String) sessionUtil.getObject("username"));
+        categoryEntity.setModifierBy((String) sessionUtil.getObject("username"));
         categoryEntity.setModifierDate(new Timestamp(now.getTime()));
         categoryEntity.setStatus("1");
         categoryEntity.setDeleteFlag(false);
-        repo.save(categoryEntity);
+        try {
+            repo.save(categoryEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "ok";
     }
 
@@ -62,7 +67,11 @@ public class CateServiceImpl implements ICateService {
         entity.setName(request.getName());
         entity.setModifierBy("Admin");
         entity.setModifierDate(new Timestamp(now.getTime()));
-        repo.save(entity);
+        try {
+            repo.save(entity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "ok";
     }
 //        entity.setLoai(request.getLoai());

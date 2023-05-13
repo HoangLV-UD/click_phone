@@ -35,7 +35,11 @@ public class CamServiceImpl implements ICamService {
         CamEntity entity = new CamEntity();
         entity.setCamTruoc(request.getNameTruoc());
         entity.setCamSau(request.getNameSau());
-        repo.save(entity);
+        try {
+            repo.save(entity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "ok";
     }
 
@@ -44,7 +48,11 @@ public class CamServiceImpl implements ICamService {
         CamEntity entity = repo.getById(request.getId());
         entity.setCamTruoc(request.getNameTruoc());
         entity.setCamSau(request.getNameSau());
-        repo.save(entity);
+        try {
+            repo.save(entity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "ok";
     }
 
@@ -52,7 +60,11 @@ public class CamServiceImpl implements ICamService {
     public String delete(Long id) {
         CamEntity entity = repo.getById(id);
         entity.setDeleteFlag(true);
-        repo.save(entity);
+        try {
+            repo.save(entity);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "ok";
     }
 

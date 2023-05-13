@@ -8,15 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 04/12/2022
- * Project_name: com.example.world_phone.repo
- */
+
 public interface ThongKeRepo extends JpaRepository<OrdersDetailEntity, Long> {
-    @Query(name = "thong_ke", nativeQuery = true)
+    @Query(name = "thong_ke", nativeQuery = true )
     List<ThongKeDto> findStockAkhirPerProductIn(
             @Param("month") Integer month,
             @Param("year") Integer year

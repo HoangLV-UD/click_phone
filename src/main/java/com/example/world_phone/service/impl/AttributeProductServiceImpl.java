@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 /**
  * Description:
  *
@@ -56,9 +59,12 @@ public class AttributeProductServiceImpl implements AttributeProductService {
         entity.setRamID(Long.valueOf(requestAdd.getRam()));
         entity.setScreenId(Long.valueOf(requestAdd.getScreen()));
         entity.setProductId(productId);
+        entity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
+        entity.setModifierDate(Timestamp.valueOf(LocalDateTime.now()));
        try {
            repo.save(entity);
        }catch (Exception e){
+           e.printStackTrace();
            return "false";
        }
         return "ok";
@@ -73,6 +79,7 @@ public class AttributeProductServiceImpl implements AttributeProductService {
         entity.setOsId(Long.valueOf(attributeRequestEdit.getOperatingSystem()));
         entity.setCamId(Long.valueOf(attributeRequestEdit.getCam()));
         entity.setChipId(Long.valueOf(attributeRequestEdit.getChip()));
+        entity.setModifierDate(Timestamp.valueOf(LocalDateTime.now()));
         try {
             repo.save(entity);
         }catch (Exception e){

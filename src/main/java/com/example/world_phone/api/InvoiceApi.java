@@ -12,13 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 12/07/2022
- * Project_name: com.example.world_phone.api
- */
 
 @RestController
 @RequestMapping("/api/invoice")

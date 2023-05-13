@@ -4,29 +4,15 @@
       layout:decorate="~{layout/weblayout}">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý nhập hàng - World Phone</title>
+    <title>Quản lý nhập hàng - Click Phone</title>
     <link rel="stylesheet" th:href="@{/assets/css/select2.min.css}">
 </head>
 <body>
-<div layout:fragment="content" class="container-fluid" style="max-width: 98%; height: 80vh">
-    <div class="row container1">
-        <div class="col-lg-2 h-100" id="leftKH">
-            <h1 class="heading-page">Quản lý nhập hàng</h1>
-            <div class="filter-report">
-                <div class="card" style="padding-left: 15px; padding-top: 15px">
-                    <h6 class="mx-2 mt-2 fs-14">Lọc theo:</h6>
-                    <div class="mx-2 mb-2">
-                        <div class="mb-3">
-                            <label>Nhà cung cấp:</label>
-                            <select class="select2 form-select" onchange="onChangeFilerSupplier(this)">
-                                <option value="">Tất cả</option>
-                                <option th:each="supplie : ${lstSupplier}" th:value="${supplie.id}"
-                                        th:text="${supplie.name}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div layout:fragment="content" class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 h-100" id="leftKH" style="padding-left: 50px">
+            <!--            <h1 class="heading-page">Cam</h1>-->
+
         </div>
         <div class="col-lg-10" id="rightKH" style="height: 100%">
             <div class="row justify-content-end">

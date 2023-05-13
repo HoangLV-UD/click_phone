@@ -19,17 +19,12 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 22/08/2022
- * Project_name: com.example.world_phone.service.impl
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -157,6 +152,8 @@ public class OrderServiceimpl implements IOrderService {
         entity.setAddress(request.getRecipientAddress());
         entity.setCustomerEntity(customerEntity);
         entity.setReceiveDate(request.getDeliveryDate());
+        entity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
+        entity.setModifierDate(Timestamp.valueOf(LocalDateTime.now()));
         entity = ordersRepo.save(entity);
         entity.setCodeOrder("HD000" + entity.getId());
         entity = ordersRepo.save(entity);
@@ -165,6 +162,8 @@ public class OrderServiceimpl implements IOrderService {
              ) {
             OrdersDetailEntity detailEntity = new OrdersDetailEntity();
             detailEntity.setQuantity(Long.valueOf(detail.getQuantity()));
+            detailEntity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
+            detailEntity.setModifierDate(Timestamp.valueOf(LocalDateTime.now()));
             detailEntity.setOrdersEntity(entity);
             detailEntity.setIdPropertyProduct(Long.valueOf(detail.getProductId().replace("productDetail", "")));
             ProductPropertyEntity propertyEntity = propertyProductRepo.getById(Long.valueOf(detail.getProductId().replace("productDetail", "")));
@@ -222,6 +221,8 @@ public class OrderServiceimpl implements IOrderService {
                 String id = detail.getId().replace("orderDetail", "");
                 OrdersDetailEntity detailEntity = ordersDetailRepo.findByDeleteFlagIsTrueAndId(Long.valueOf(id));
                 detailEntity.setQuantity(Long.valueOf(detail.getQuantity()));
+                detailEntity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
+                detailEntity.setModifierDate(Timestamp.valueOf(LocalDateTime.now()));
                 detailEntity.setPrice(Long.valueOf(detail.getPrice()));
                 detailEntity.setDeleteFlag(false);
                 ordersDetailRepo.save(detailEntity);
@@ -230,6 +231,8 @@ public class OrderServiceimpl implements IOrderService {
                 detailEntity.setOrdersEntity(entity);
                 detailEntity.setIdPropertyProduct(Long.valueOf(detail.getProductId().replace("productDetail", "")));
                 detailEntity.setQuantity(Long.valueOf(detail.getQuantity()));
+                detailEntity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
+                detailEntity.setModifierDate(Timestamp.valueOf(LocalDateTime.now()));
                 detailEntity.setPrice(Long.valueOf(detail.getPrice()));
                 detailEntity.setDeleteFlag(false);
                 ordersDetailRepo.save(detailEntity);
@@ -299,9 +302,12 @@ public class OrderServiceimpl implements IOrderService {
             ordersRepo.save(entity);
             return "ok";
         }
-
+        entity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
         entity.setAddress(request.getRecipientAddress());
         entity.setReceiveDate(request.getDeliveryDate());
+        entity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
+        entity.setModifierDate(Timestamp.valueOf(LocalDateTime.now()));
+        entity.setReceiveDate(Timestamp.valueOf(LocalDateTime.now()));
         entity.setStatus(String.valueOf(StatusOrder.CHO_GIAO_HANG.getIndex()));
         ordersRepo.save(entity);
         return "ok";

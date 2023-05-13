@@ -23,7 +23,13 @@ public class ThongKeController {
     private ThongKeRepo thongKeRepo;
     @GetMapping("/")
     public String index(Model model){
-        List<ThongKeDto> thongKeDtos = thongKeRepo.findStockAkhirPerProductIn(12, 2022);
-        return "/views/index";
+        try {
+            List<ThongKeDto> thongKeDtos = thongKeRepo.findStockAkhirPerProductIn(12, 2022);
+            return "/views/index";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "/views/index";
+        }
+
     }
 }

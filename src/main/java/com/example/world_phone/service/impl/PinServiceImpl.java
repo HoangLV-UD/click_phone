@@ -5,6 +5,7 @@ import com.example.world_phone.dto.respone.attribute.pin.PinRespone;
 import com.example.world_phone.entity.PinEntity;
 import com.example.world_phone.repo.PinRepo;
 import com.example.world_phone.service.IPinService;
+import com.example.world_phone.until.SessionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.List;
 @Slf4j
 public class PinServiceImpl implements IPinService {
     private final PinRepo repo;
-
+    private final SessionUtil sessionUtil;
     @Override
     public List<PinRespone> findAll() {
 
@@ -35,7 +36,7 @@ public class PinServiceImpl implements IPinService {
     public String addPin(PinRequest request) {
         PinEntity entity = new PinEntity();
         entity.setName(request.getName());
-        entity.setCreateBy("ADMIN");
+        entity.setCreateBy((String) sessionUtil.getObject("username"));
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy("ADMIN");
