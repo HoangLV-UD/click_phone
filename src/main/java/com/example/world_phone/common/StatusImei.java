@@ -1,12 +1,5 @@
 package com.example.world_phone.common;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 22/10/2022
- * Project_name: com.example.world_phone.common
- */
 public enum StatusImei {
     DA_BAN("1"),
     CHUA_BAN("0"),
