@@ -14,13 +14,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 06/07/2022
- * Project_name: com.example.world_phone.service.impl
- */
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
