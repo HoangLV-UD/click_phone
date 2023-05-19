@@ -16,13 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 07/07/2022
- * Project_name: com.example.world_phone.service.impl
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j

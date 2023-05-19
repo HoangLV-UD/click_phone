@@ -1,12 +1,6 @@
 package com.example.world_phone.common;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 11/10/2022
- * Project_name: com.example.world_phone.common
- */
+
 public enum StatusOrder {
     CHO_XAC_NHAN(0),
     CHO_XUAT_HANG(1),

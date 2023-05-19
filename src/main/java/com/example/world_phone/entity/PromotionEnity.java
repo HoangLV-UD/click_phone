@@ -3,13 +3,7 @@ package com.example.world_phone.entity;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 27/07/2022
- * Project_name: com.example.world_phone.entity
- */
+
 
 @Entity
 @Table(name = "promotion", schema = "world_phone", catalog = "")

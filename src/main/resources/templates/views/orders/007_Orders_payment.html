@@ -1241,8 +1241,8 @@
         data["deliveryDate"] = moment($('input[name=deliveryDate]').val(), 'DD-MM-YYYY').format('YYYY-MM-DD');
         data["voucherId"] = $('#inputVoucher').val();
         data["orderType"] = $('#create-order-type').prop('checked') ? "ORDER_ONLINE" : "COUNTER";
+
         data["detailRequest"] = [];
-        // data["RECEIVE_DATE"] = [];
 
         $('#list-order tr:not(:first)').each(function () {
             let productDetails = {};
@@ -2156,7 +2156,7 @@
             type: 'GET',
             contentType: 'application/json',
             success: function (res) {
-                if (res) {
+                if (res !== null && res.length > 0) {
                     let z = 0;
                     for (let i = 0; i < res.length; i++) {
 

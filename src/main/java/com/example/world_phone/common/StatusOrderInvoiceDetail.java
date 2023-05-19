@@ -1,12 +1,6 @@
 package com.example.world_phone.common;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 18/10/2022
- * Project_name: com.example.world_phone.common
- */
+
 public enum StatusOrderInvoiceDetail {
 
 

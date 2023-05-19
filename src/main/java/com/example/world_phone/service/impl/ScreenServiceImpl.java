@@ -44,7 +44,7 @@ public class ScreenServiceImpl implements IScreenService {
         entity.setId(request.getId());
         entity.setLoaiScreenEntity(loaiScreenEntity);
         entity.setName(request.getName());
-        entity.setCreateBy((String) sessionUtil.getObject("username"));
+//        entity.setCreateBy((String) sessionUtil.getObject("username"));
         entity.setCreateDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierDate(new Timestamp(System.currentTimeMillis()));
         entity.setModifierBy("ADMIN");

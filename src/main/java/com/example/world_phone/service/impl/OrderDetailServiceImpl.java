@@ -12,13 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 06/09/2022
- * Project_name: com.example.world_phone.service.impl
- */
+
 @Service
 @RequiredArgsConstructor
 public class OrderDetailServiceImpl implements IOrderDetailService {

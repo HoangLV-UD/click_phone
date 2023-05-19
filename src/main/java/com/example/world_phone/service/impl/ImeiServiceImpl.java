@@ -13,13 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 29/10/2022
- * Project_name: com.example.world_phone.service.impl
- */
+
 @Service
 public class ImeiServiceImpl implements ImeiService {
     @Autowired

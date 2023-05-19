@@ -9,10 +9,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -42,5 +39,16 @@ public abstract class BaseEntity {
 
     @Column(name = "DELETE_FLAG")
     private boolean deleteFlag = false;
+
+    @PrePersist
+    public void prePersist() {
+        createDate = new Timestamp(System.currentTimeMillis());
+        modifierDate = createDate;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        modifierDate = new Timestamp(System.currentTimeMillis());
+    }
 
 }

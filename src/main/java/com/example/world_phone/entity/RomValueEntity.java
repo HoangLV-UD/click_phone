@@ -2,13 +2,7 @@ package com.example.world_phone.entity;
 
 import javax.persistence.*;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 07/07/2022
- * Project_name: com.example.world_phone.entity
- */
+
 @Entity
 @Table(name = "rom_value", schema = "world_phone", catalog = "")
 public class RomValueEntity extends BaseEntity{

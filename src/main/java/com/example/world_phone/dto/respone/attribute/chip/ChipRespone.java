@@ -4,13 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 03/07/2022
- * Project_name: com.example.world_phone.dto.respone.attribute.chip
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

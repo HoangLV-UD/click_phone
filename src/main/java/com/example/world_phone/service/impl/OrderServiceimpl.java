@@ -284,19 +284,19 @@ public class OrderServiceimpl implements IOrderService {
         if(list == null || list.size() == 0){
             return "Hoá đơn chưa có sản phẩm nào";
         }
-        for (OrdersDetailEntity detail: list
-        ) {
-            ProductPropertyEntity propertyEntity = propertyProductRepo.findById(detail.getIdPropertyProduct()).get();
-            if(propertyEntity.getQuantity() - detail.getQuantity() < 0){
-                return "Sản phẩm đang hết hàng";
-            }else {
-                propertyEntity.setQuantity(propertyEntity.getQuantity() - detail.getQuantity());
-                if(propertyEntity.getQuantity() == 0){
-                    propertyEntity.setStatus("OFF");
-                }
-                propertyProductRepo.save(propertyEntity);
-            }
-        }
+//        for (OrdersDetailEntity detail: list
+//        ) {
+//            ProductPropertyEntity propertyEntity = propertyProductRepo.findById(detail.getIdPropertyProduct()).get();
+//            if(propertyEntity.getQuantity() - detail.getQuantity() < 0){
+//                return "Sản phẩm đang hết hàng";
+//            }else {
+//                propertyEntity.setQuantity(propertyEntity.getQuantity() - detail.getQuantity());
+//                if(propertyEntity.getQuantity() == 0){
+//                    propertyEntity.setStatus("OFF");
+//                }
+//                propertyProductRepo.save(propertyEntity);
+//            }
+//        }
         if(entity.getTypeOrder() == 0){
             entity.setStatus(String.valueOf(StatusOrder.HOAN_THANH.getIndex()));
             ordersRepo.save(entity);

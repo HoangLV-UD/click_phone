@@ -8,13 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Description:
- *
- * @author: hieu
- * @since: 04/09/2022
- * Project_name: com.example.world_phone.dto.request.order
- */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
