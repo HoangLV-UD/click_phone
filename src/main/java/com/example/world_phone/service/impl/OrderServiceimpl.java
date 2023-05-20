@@ -302,12 +302,12 @@ public class OrderServiceimpl implements IOrderService {
             ordersRepo.save(entity);
             return "ok";
         }
-        entity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
         entity.setAddress(request.getRecipientAddress());
-        entity.setReceiveDate(request.getDeliveryDate());
+        if(request.getDeliveryDate() != null){
+            entity.setReceiveDate(request.getDeliveryDate());
+        }
         entity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
         entity.setModifierDate(Timestamp.valueOf(LocalDateTime.now()));
-        entity.setReceiveDate(Timestamp.valueOf(LocalDateTime.now()));
         entity.setStatus(String.valueOf(StatusOrder.CHO_GIAO_HANG.getIndex()));
         ordersRepo.save(entity);
         return "ok";
