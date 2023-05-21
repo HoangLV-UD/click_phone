@@ -1956,6 +1956,7 @@
 
         }
 
+        
         function updateDetail(){
             if($("#product-detai-price").val().length === 0){
                 toastDanger("Lỗi", "Không được để trống giá")
@@ -1975,6 +1976,7 @@
                 "price" : $("#product-detai-price").val()
             }
             var formData = new FormData();
+            let status ='';
             formData.append('formData', $('#product-detai-imei-add')[0].files[0]);
             if($('#product-detai-imei-add')[0].files[0] !== undefined){
                 $.ajax({
@@ -1983,15 +1985,57 @@
                     data : formData,
                     processData: false,  // tell jQuery not to process the data
                     contentType: false,  // tell jQuery not to set contentType
-                    success : function(data) {
+                    // statusCode: {
+                    //     400: function() {
+                    //         toastDanger("Phần mềm chỉ hỗi trợ nhập file excel có đuôi xlsx");
+                    //     }
+                    // },
+                    success : function(data, textStatus, xhr) {
+                        $.ajax({
+                        url : "api/product-property",
+                        method : "PUT",
+                        contentType: 'application/json',
+                        data: JSON.stringify(request),
+                        success : function (data) {
+                            console.log(data)
+                            $("#product-detai-qty").val(data.quantity);
+                            $("#product-detai-price").val(data.price);
+                            $("#product-detai-priceString").val(data.priceString)
+                            $("#product-detai-priceString").val(data.priceString);
+                            toastSuccess("Thành công", "Cập nhập thành công");
+                            // setTimeout(function () {
+                            //     location.reload()
+                            // }, 2000)
+                            },
+                            error : function (error) {
+                                console.log(error)
+                                toastDanger("Thất bại", "Lỗi hệ thống");
+                            }
+                        })
                         toastSuccess("Thành công", "Cập nhập Imei thành công");
+                    
                     },
-                    error : function (error) {
-                        toastDanger("Thất bại", "Lỗi hệ thống");
+                    error: function(xhr, textStatus, errorThrown) {
+                        if (xhr.status === 400) {
+                            status = xhr.status;
+                            // const abc = satus;
+                            console.log(222,status);
+                            console.log('Lỗiâ: ' + xhr.status);
+                            toastDanger("Thất bại", "Phần mềm chỉ hỗ trợ nhập file excel có đuôi xlsx");
+                        } else if(xhr.status === 500) {
+                            status = xhr.status;
+                            // const abc = satus;
+                            console.log(222,status);
+                            console.log('Lỗiâ: ' + xhr.status);
+                            toastDanger("Thất bại", "File tải lên không giống file mẫu");
+                        }else {
+                            console.log('Lỗi: ' + xhr.status);
+                            toastDanger("Thất bại", "Phần mềm chỉ hỗ trợ nhập file excel có đuôi xlsx");
+                        }
                     }
                 });
-            }
-            $.ajax({
+            }else{
+                $.ajax({
                 url : "api/product-property",
                 method : "PUT",
                 contentType: 'application/json',
@@ -2012,6 +2056,8 @@
                     toastDanger("Thất bại", "Lỗi hệ thống");
                 }
             })
+            }
+            
         }
 
 

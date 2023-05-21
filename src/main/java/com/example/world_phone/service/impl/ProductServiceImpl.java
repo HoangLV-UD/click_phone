@@ -112,6 +112,7 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public String editProduct(ProductRequestEdit requestEdit) {
+        System.out.println("abc"+ requestEdit.getNote());
         if(requestEdit.getRomRequestAdds().size() == 0){
             throw new WorldPhoneExp(ConstansErrorCode.ROM_NOT_EXIST);
         }
@@ -120,6 +121,7 @@ public class ProductServiceImpl implements IProductService {
         }
 
         ProductEntity entity = productRepo.findByIdAndDeleteFlagIsFalse(requestEdit.getIdProduct());
+        entity.setNote(requestEdit.getNote());
         CategoryEntity categoryEntity = categoryService.findById(String.valueOf(requestEdit.getCategoryId()));
         if(categoryEntity == null){
             throw new WorldPhoneExp(ConstansErrorCode.CATEGORY_NOT_EXIST);

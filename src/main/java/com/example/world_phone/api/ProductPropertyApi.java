@@ -8,6 +8,8 @@ import com.example.world_phone.dto.respone.order_detail.OrderDetailRespone;
 import com.example.world_phone.dto.respone.product.ProductPropertyRespone;
 import com.example.world_phone.service.IProductPropertyService;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,32 +42,48 @@ public class ProductPropertyApi {
     @RequestMapping(value = "/{romId}/{colorId}" , method = RequestMethod.POST, consumes = { "multipart/form-data" })
     public ResponseEntity<?> updatImei(@PathVariable("romId") Long romId
             , @PathVariable("colorId") Long colorId
-            , @ModelAttribute ExcelRequest reapExcelDataFile) throws IOException {
-        XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getFormData().getInputStream());
-        XSSFSheet worksheet = workbook.getSheetAt(0);
-        List<String> list = new ArrayList<>();
-        for(int i=0;i<worksheet.getPhysicalNumberOfRows() ;i++) {
-            XSSFRow row = worksheet.getRow(i);
-            if(list.size() > 0){
-                boolean check = true;
-                for (String a : list){
-                    if(a.equals(row.getCell(0).getRawValue())){
-                        check = false;
-                        break;
-                    }
+            , @ModelAttribute MultipartFile  formData) throws IOException {
+        Cell cellFile;
+        Row rowFile;
+        InputStream input = formData.getInputStream();
+        if(!formData.getOriginalFilename().endsWith("xlsx")){
+            return ResponseEntity.badRequest().body("false");
+        }else{
+            XSSFWorkbook workbook = new XSSFWorkbook(input);
+            XSSFSheet worksheet = workbook.getSheetAt(0);
+            rowFile = worksheet.getRow(1);
+            if(rowFile != null){
+                cellFile = rowFile.getCell(1000);
+                if(!cellFile.toString().equals("DSIM")  ){
+                    System.out.println("sai file mấu");
+                    return ResponseEntity.internalServerError().body("false");
                 }
-                if(check){
+            }else{
+                return ResponseEntity.internalServerError().body("false");
+            }
+            List<String> list = new ArrayList<>();
+            for(int i=0;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+                XSSFRow row = worksheet.getRow(i);
+                if(list.size() > 0){
+                    boolean check = true;
+                    for (String a : list){
+                        if(a.equals(row.getCell(0).getRawValue())){
+                            check = false;
+                            break;
+                        }
+                    }
+                    if(check){
+                        list.add(row.getCell(0).getRawValue());
+                    }
+                }else {
                     list.add(row.getCell(0).getRawValue());
                 }
-            }else {
-                list.add(row.getCell(0).getRawValue());
+            }
+            if(service.addImei(String.valueOf(romId), String.valueOf(colorId), list)){
+                return ResponseEntity.ok().body(new OrderInvoiceRequest());
             }
         }
-        if(service.addImei(String.valueOf(romId), String.valueOf(colorId), list)){
-            return ResponseEntity.ok().body(new OrderInvoiceRequest());
-        }
-
-        return ResponseEntity.badRequest().body(new OrderInvoiceRequest());
+        return ResponseEntity.badRequest().body("false");
     }
 
     @PostMapping("")

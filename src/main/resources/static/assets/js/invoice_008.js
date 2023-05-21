@@ -300,6 +300,9 @@ function valueDateInvoice(
             }
         }
         if(Number(getInvoicePaid.value) -  Number(tong) + Number(getInvoiceDiscount.value)   < 0 ){
+            console.log('1',getInvoicePaid.value);
+            console.log('2', Number(tong));
+            console.log('3',Number(getInvoiceDiscount.value));
             toastDanger("Lỗi", "Tổng tiền trả NCC ít hơn tổng tiền sản phẩm");
             return;
         }

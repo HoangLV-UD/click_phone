@@ -151,6 +151,7 @@ public class ProductPropertyServiceImpl implements IProductPropertyService {
                             break;
                         }
                     }
+                    System.out.println("ime: "+ ime);
                     if(sizeImei > 0 && check == 0){
                         ImeiEntity imeiEntity = new ImeiEntity();
                         imeiEntity.setValue(ime);
