@@ -15,5 +15,6 @@ public interface ThongKeRepo extends JpaRepository<OrdersDetailEntity, Long> {
             @Param("month") Integer month,
             @Param("year") Integer year
     );
+
 }
 

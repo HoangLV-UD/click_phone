@@ -89,9 +89,9 @@ public class SupplierServiceImpl implements ISupplierService {
         try {
             if(entity.isPresent()){
                 if(!entity.get().getPhoneNumber().equals(requestDTO.getPhoneNumber())){
-                    if(findByPhone(requestDTO.getPhoneNumber()) == 1){
-                        throw new WorldPhoneExp(ConstansErrorCode.SUPPLIER_PHONE);
-                    }
+//                    if(findByPhone(requestDTO.getPhoneNumber()) == 1){
+//                        throw new WorldPhoneExp(ConstansErrorCode.SUPPLIER_PHONE);
+//                    }
                 }else {
                     entity.get().setAddress(requestDTO.getAddress());
                     entity.get().setNote(requestDTO.getNote());

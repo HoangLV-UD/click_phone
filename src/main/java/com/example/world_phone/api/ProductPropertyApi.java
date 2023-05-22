@@ -115,9 +115,14 @@ public class ProductPropertyApi {
 
     @PutMapping("/status")
     public ResponseEntity<?> updateProductPropertyStatus(@RequestBody ProductPropertyRequest request){
-        String check = service.udpateStatusProductProperty(request);
-        if(check.equals("ok")){
-            return ResponseEntity.ok().body("ok");
+        try {
+            String check = service.udpateStatusProductProperty(request);
+            if(check.equals("ok")){
+                return ResponseEntity.ok().body("ok");
+            }
+        }catch(Exception e ) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("false");
         }
         return ResponseEntity.badRequest().body("false");
     }
