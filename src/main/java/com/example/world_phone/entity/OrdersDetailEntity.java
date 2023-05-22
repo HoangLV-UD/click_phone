@@ -10,13 +10,13 @@ import javax.persistence.*;
 @Table(name = "ordersdetail", schema = "world_phone", catalog = "")
 @NamedNativeQuery(
         name = "thong_ke",
-        query =
-                "select p.IMAGE_KEY as img, p.NAME as nameProduct, r.NAME as romProduct, c.value_color as colorProduct, pp.PRICE as priceProduct, SUM(o.QUANTITY) as quantityDaBan from orders a\n" +
-                        "inner join ordersdetail o on a.ID = o.ORDER_ID\n" +
-                        "inner join property_product pp on o.PRODUCT_PROPERTY_ID = pp.ID\n" +
-                        "inner join rom r on pp.ROM_ID = r.ID\n" +
-                        "inner join color c on pp.COLOR_ID = c.ID\n" +
-                        "inner join product p on r.PRODUCT_ID = p.ID where o.DELETE_FLAG = false and MONTH(o.CREATE_DATE) = :month and YEAR(o.CREATE_DATE) = :year GROUP BY o.PRICE, p.IMAGE_KEY, p.NAME, r.NAME, pp.PRICE,o.QUANTITY,c.value_color limit 10;\n",
+            query =
+                    "select p.IMAGE_KEY as img, p.NAME as nameProduct, r.NAME as romProduct, c.value_color as colorProduct, pp.PRICE as priceProduct,SUM(o.QUANTITY) as quantityDaBan, a.create_date as dateOrder, (pp.PRICE * o.QUANTITY) as totalPrice from orders a\n" +
+                            "inner join ordersdetail o on a.ID = o.ORDER_ID\n" +
+                            "inner join property_product pp on o.PRODUCT_PROPERTY_ID = pp.ID\n" +
+                            "inner join rom r on pp.ROM_ID = r.ID\n" +
+                            "inner join color c on pp.COLOR_ID = c.ID\n" +
+                            "inner join product p on r.PRODUCT_ID = p.ID where o.DELETE_FLAG = false and MONTH(o.CREATE_DATE) = :month and YEAR(o.CREATE_DATE) = :year GROUP BY o.PRICE, p.IMAGE_KEY, p.NAME, r.NAME, pp.PRICE,o.QUANTITY,c.value_color, dateOrder, totalPrice limit 10;\n",
         resultSetMapping = "stock_akhir_dto"
 )
 @SqlResultSetMapping(
@@ -29,7 +29,9 @@ import javax.persistence.*;
                         @ColumnResult(name = "romProduct", type = String.class),
                         @ColumnResult(name = "colorProduct", type = String.class),
                         @ColumnResult(name = "priceProduct", type = String.class),
-                        @ColumnResult(name = "quantityDaBan", type = String.class)
+                        @ColumnResult(name = "quantityDaBan", type = String.class),
+                        @ColumnResult(name = "totalPrice", type = String.class),
+                        @ColumnResult(name = "dateOrder", type = String.class)
                 }
         )
 )
